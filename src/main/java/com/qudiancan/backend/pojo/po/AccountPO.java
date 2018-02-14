@@ -1,6 +1,8 @@
 package com.qudiancan.backend.pojo.po;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,8 @@ import java.sql.Timestamp;
  */
 @Entity(name = "Account")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountPO {
     @Id
     @GeneratedValue
