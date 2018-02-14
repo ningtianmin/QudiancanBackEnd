@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/qudiancan?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/qudiancan?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
     password: 1234
   redis:
@@ -9,3 +9,8 @@ spring:
       port: 6379
   jpa:
     show-sql: true
+aliyun:
+  accesskeyId: LTAIZR1gysvvVhIR
+  accessKeySecret: 27YXHCymrewIYGsrgnQL7FbjVeJACp
+  smsSignName: 去点餐
+  smsTemplateCode: SMS_125018336
