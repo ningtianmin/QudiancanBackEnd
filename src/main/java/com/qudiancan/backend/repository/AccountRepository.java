@@ -15,4 +15,13 @@ public interface AccountRepository extends JpaRepository<AccountPO, Integer> {
      */
     AccountPO findByPhone(String phone);
 
+    /**
+     * 通过店铺id,登录id,密码查找账户
+     *
+     * @param shopId   店铺id
+     * @param loginId  登录id
+     * @param password 密码
+     * @return 账户
+     */
+    AccountPO findByShopIdAndLoginIdAndPassword(String shopId, String loginId, String password);
 }

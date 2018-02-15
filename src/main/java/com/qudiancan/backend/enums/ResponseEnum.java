@@ -46,7 +46,11 @@ public enum ResponseEnum {
     /**
      * 该店铺ID被占用
      */
-    SHOP_ID_OCCUPIED(2009, "该店铺ID被占用");
+    SHOP_ID_OCCUPIED(2009, "该店铺ID被占用"),
+    /**
+     * 登录失败
+     */
+    SHOP_LOGIN_FAILURE(2010, "登录失败");
 
     private Integer code;
     private String message;

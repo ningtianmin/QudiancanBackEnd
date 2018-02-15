@@ -8,8 +8,10 @@ import com.qudiancan.backend.enums.ShopStatus;
 import com.qudiancan.backend.enums.SmsCaptchaType;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.dto.AccountDTO;
+import com.qudiancan.backend.pojo.dto.AccountTokenDTO;
 import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
+import com.qudiancan.backend.pojo.vo.LoginVO;
 import com.qudiancan.backend.pojo.vo.RegisterVO;
 import com.qudiancan.backend.repository.AccountRepository;
 import com.qudiancan.backend.repository.ShopRepository;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -108,5 +111,22 @@ public class AccountServiceImpl implements AccountService {
                 registerVO.getEmail(), registerVO.getPhone(), null, null, IsCreator.YES.name(), null);
         accountRepository.save(account);
         return new AccountDTO(registerVO.getShopId(), registerVO.getShopId());
+    }
+
+    @Override
+    public AccountTokenDTO login(LoginVO loginVO) {
+        log.info("[登录]{}", loginVO);
+        if (loginVO == null) {
+            throw new ShopException(ResponseEnum.SHOP_NO_PARAM);
+        }
+        AccountPO accountPO = accountRepository.findByShopIdAndLoginIdAndPassword(loginVO.getShopId(), loginVO.getLoginId(), loginVO.getPassword());
+        if (accountPO == null) {
+            log.warn("[登录失败]{}", loginVO);
+            throw new ShopException(ResponseEnum.SHOP_LOGIN_FAILURE);
+        }
+        // 生成token存放于redis
+        String token = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", token), String.valueOf(accountPO.getId()), Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
+        return new AccountTokenDTO(accountPO.getId(), token);
     }
 }

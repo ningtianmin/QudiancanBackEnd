@@ -2,6 +2,8 @@ package com.qudiancan.backend.service;
 
 import com.qudiancan.backend.enums.SmsCaptchaType;
 import com.qudiancan.backend.pojo.dto.AccountDTO;
+import com.qudiancan.backend.pojo.dto.AccountTokenDTO;
+import com.qudiancan.backend.pojo.vo.LoginVO;
 import com.qudiancan.backend.pojo.vo.RegisterVO;
 
 /**
@@ -39,4 +41,16 @@ public interface AccountService {
      * phoneCaptcha 短信验证码
      */
     AccountDTO register(RegisterVO registerVO);
+
+    /**
+     * 店铺后台账户登录
+     *
+     * @param loginVO 用于接收登录所需字段
+     * @return 账户token
+     * @apiNote loginVO:
+     * shopId 店铺id
+     * loginId 登录id
+     * password 密码
+     */
+    AccountTokenDTO login(LoginVO loginVO);
 }

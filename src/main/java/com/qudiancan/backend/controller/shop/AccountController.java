@@ -3,6 +3,8 @@ package com.qudiancan.backend.controller.shop;
 import com.qudiancan.backend.enums.SmsCaptchaType;
 import com.qudiancan.backend.pojo.Response;
 import com.qudiancan.backend.pojo.dto.AccountDTO;
+import com.qudiancan.backend.pojo.dto.AccountTokenDTO;
+import com.qudiancan.backend.pojo.vo.LoginVO;
 import com.qudiancan.backend.pojo.vo.RegisterVO;
 import com.qudiancan.backend.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,5 +33,10 @@ public class AccountController {
     @PostMapping("/register")
     public Response<AccountDTO> register(RegisterVO registerVO) {
         return Response.success(accountService.register(registerVO));
+    }
+
+    @RequestMapping("/login")
+    public Response<AccountTokenDTO> login(LoginVO loginVO) {
+        return Response.success(accountService.login(loginVO));
     }
 }
