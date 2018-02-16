@@ -12,6 +12,14 @@ public enum ResponseEnum {
      */
     OK(1000, "OK"),
     /**
+     * 服务器内部错误
+     */
+    SERVER_INTERNAL_ERROR(1001, "服务器内部错误"),
+    /**
+     * 权限不足
+     */
+    AUTHORITY_NOT_ENOUGH(1002, "权限不足"),
+    /**
      * 该手机号不合法
      */
     SHOP_PHONE_ILLEGAL(2000, "该手机号不合法"),
@@ -50,7 +58,19 @@ public enum ResponseEnum {
     /**
      * 登录失败
      */
-    SHOP_LOGIN_FAILURE(2010, "登录失败");
+    SHOP_LOGIN_FAILURE(2010, "登录失败"),
+    /**
+     * 请传入sessionId
+     */
+    SHOP_NO_SESSION_ID(2011, "请传入sessionId"),
+    /**
+     * sessionId无效
+     */
+    SHOP_INVALID_SESSION_ID(2012, "sessionId无效"),
+    /**
+     * 参数不完整
+     */
+    SHOP_INCOMPLETE_PARAM(2013, "参数不完整");
 
     private Integer code;
     private String message;
