@@ -79,11 +79,13 @@ public class AccountAspect {
         }
         // 验证sessionId的有效性
         String redisSessionKey = String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", sessionId);
+        // TODO: 18/02/16 redis需释放资源
         String redisSessionValue = redisTemplate.opsForValue().get(redisSessionKey);
         if (StringUtils.isEmpty(redisSessionValue)) {
             throw new ShopException(ResponseEnum.SHOP_INVALID_SESSION_ID);
         }
         // 更新redis上sessionId的过期时间
+        // TODO: 18/02/16 redis需释放资源
         redisTemplate.opsForValue().set(redisSessionKey, redisSessionValue, Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
         Integer accountId = Integer.valueOf(redisSessionValue);
         AccountPO accountPO = accountRepository.findOne(accountId);
@@ -102,7 +104,7 @@ public class AccountAspect {
                     Integer requiredAuthorityId = annotation.value().getId();
                     AuthorityPO authorityPO = authorityRepository.findOne(requiredAuthorityId);
                     if (authorityPO == null) {
-                        throw new ShopException(ResponseEnum.SERVER_INTERNAL_ERROR);
+                        throw new ShopException(ResponseEnum.SERVER_INTERNAL_ERROR, "系统权限数据有误");
                     }
                     String accessibleRoleIds = authorityPO.getRoleIds();
                     String accountRoleIds = accountPO.getRoleIds();

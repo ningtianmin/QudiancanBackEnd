@@ -68,12 +68,14 @@ public class AccountServiceImpl implements AccountService {
             throw new ShopException(ResponseEnum.SHOP_SMS_CAPTCHA_FAILURE);
         }
         // 存放验证码在redis
+        // TODO: 18/02/16 redis需释放资源
         redisTemplate.opsForValue().set(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone),
                 captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
     }
 
     @Override
     public boolean verifySmsCaptcha(String phone, String captcha) {
+        // TODO: 18/02/16 redis需释放资源
         String value = redisTemplate.opsForValue().get(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone));
         return !StringUtils.isEmpty(value) && value.equals(captcha);
     }
@@ -126,6 +128,7 @@ public class AccountServiceImpl implements AccountService {
         }
         // 生成token存放于redis
         String token = UUID.randomUUID().toString();
+        // TODO: 18/02/16 redis需释放资源
         redisTemplate.opsForValue().set(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", token), String.valueOf(accountPO.getId()), Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
         return new AccountTokenDTO(accountPO.getId(), token);
     }

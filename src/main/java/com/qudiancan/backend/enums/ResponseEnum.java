@@ -20,6 +20,10 @@ public enum ResponseEnum {
      */
     AUTHORITY_NOT_ENOUGH(1002, "权限不足"),
     /**
+     * 请检查您的请求
+     */
+    BAD_REQUEST(1003, "请检查您的请求"),
+    /**
      * 该手机号不合法
      */
     SHOP_PHONE_ILLEGAL(2000, "该手机号不合法"),
@@ -70,7 +74,15 @@ public enum ResponseEnum {
     /**
      * 参数不完整
      */
-    SHOP_INCOMPLETE_PARAM(2013, "参数不完整");
+    SHOP_INCOMPLETE_PARAM(2013, "参数不完整"),
+    /**
+     * 未知账户
+     */
+    SHOP_UNKNOWN_ACCOUNT(2014, "未知账户"),
+    /**
+     * 参数不正确
+     */
+    SHOP_PARAM_WRONG(2015, "参数不正确");
 
     private Integer code;
     private String message;
