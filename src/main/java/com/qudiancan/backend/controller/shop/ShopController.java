@@ -22,17 +22,31 @@ public class ShopController {
     @Autowired
     private ShopService shopService;
 
+    /**
+     * 获取店铺
+     *
+     * @param session 账户session
+     * @param shopId  店铺id
+     * @return 获取的店铺
+     */
     @GetMapping("/{shopId}")
     @RequiredAuthority(AuthorityEnum.SHOP_SHOP_SHOW)
     public Response<ShopPO> getShop(Session session, @PathVariable String shopId) {
-        log.info("[查看店铺]session:{}", session);
+        log.info("[获取店铺]session:{}", session);
         return Response.success(shopService.getShop(AccountHolder.get().getId(), shopId));
     }
 
-    @PostMapping("/{shopId}/edit")
+    /**
+     * 更新店铺
+     *
+     * @param session 账户session
+     * @param shopVO  店铺信息
+     * @return 更新后的店铺
+     */
+    @PostMapping("/{shopId}")
     @RequiredAuthority(AuthorityEnum.SHOP_SHOP_UPDATE)
-    public Response<ShopPO> updateShop(Session session, ShopVO shopVO) {
+    public Response<ShopPO> updateShop(Session session, @PathVariable String shopId, ShopVO shopVO) {
         log.info("[更新店铺]session:{}", session);
-        return Response.success(shopService.updateShop(AccountHolder.get().getId(), shopVO));
+        return Response.success(shopService.updateShop(AccountHolder.get().getId(), shopId, shopVO));
     }
 }

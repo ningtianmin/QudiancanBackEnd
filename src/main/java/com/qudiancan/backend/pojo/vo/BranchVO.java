@@ -7,7 +7,6 @@ import lombok.Data;
  */
 @Data
 public class BranchVO {
-    private String shopId;
     private String name;
     private String notice;
     private String phone;

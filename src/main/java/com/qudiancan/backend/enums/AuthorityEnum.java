@@ -16,13 +16,25 @@ public enum AuthorityEnum {
      */
     SHOP_SHOP_UPDATE(2, "SHOP_SHOP_UPDATE"),
     /**
+     * 查看门店
+     */
+    SHOP_BRANCH_SHOW(3, "SHOP_BRANCH_SHOW"),
+    /**
      * 创建门店
      */
-    SHOP_BRANCH_CREATE(3, "SHOP_BRANCH_CREATE"),
+    SHOP_BRANCH_CREATE(4, "SHOP_BRANCH_CREATE"),
     /**
      * 更新门店
      */
-    SHOP_BRANCH_UPDATE(4, "SHOP_BRANCH_UPDATE");
+    SHOP_BRANCH_UPDATE(5, "SHOP_BRANCH_UPDATE"),
+    /**
+     * 查看产品类目
+     */
+    BRANCH_CATEGORY_SHOW(6, "BRANCH_CATEGORY_SHOW"),
+    /**
+     * 创建产品类目
+     */
+    BRANCH_CATEGORY_CREATE(7, "BRANCH_CATEGORY_CREATE");
 
     private Integer id;
     private String path;

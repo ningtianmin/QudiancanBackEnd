@@ -23,34 +23,23 @@ public interface AccountService {
      *
      * @param phone   手机号
      * @param captcha 验证码
-     * @return 验证通过返回true
+     * @return 验证结果
      */
     boolean verifySmsCaptcha(String phone, String captcha);
 
     /**
-     * 店铺后台账户注册
+     * 账户注册
      *
-     * @param registerVO 用于接收注册所需字段值
-     * @return 账户登录ID
-     * @apiNote registerVO:
-     * shopId 店铺id
-     * password 账户密码
-     * name 账户名,默认为手机号
-     * email 账户邮箱
-     * phone 账户手机号
-     * phoneCaptcha 短信验证码
+     * @param registerVO 注册信息
+     * @return 注册的账户
      */
     AccountDTO register(RegisterVO registerVO);
 
     /**
-     * 店铺后台账户登录
+     * 账户登录
      *
-     * @param loginVO 用于接收登录所需字段
+     * @param loginVO 登录信息
      * @return 账户token
-     * @apiNote loginVO:
-     * shopId 店铺id
-     * loginId 登录id
-     * password 密码
      */
     AccountTokenDTO login(LoginVO loginVO);
 }

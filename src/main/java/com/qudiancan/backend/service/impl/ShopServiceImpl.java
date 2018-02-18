@@ -12,6 +12,7 @@ import com.qudiancan.backend.service.util.ShopServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -28,25 +29,27 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopPO getShop(Integer accountId, String shopId) {
+        log.info("[获取店铺]accountId:{},shopId:{}", accountId, shopId);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId");
+        }
         AccountPO accountPO = accountRepository.findOne(accountId);
         if (Objects.isNull(accountPO)) {
-            log.warn("[获取店铺失败]accountId:{},shopId:{}", accountId, shopId);
             throw new ShopException(ResponseEnum.SHOP_UNKNOWN_ACCOUNT);
         }
         if (!accountPO.getShopId().equals(shopId)) {
-            log.warn("[获取店铺失败]accountId:{},shopId:{}", accountId, shopId);
-            throw new ShopException(ResponseEnum.BAD_REQUEST);
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         return shopRepository.findOne(shopId);
     }
 
     @Override
-    public ShopPO updateShop(Integer accountId, ShopVO shopVO) {
-        log.info("[更新店铺]accountId:{},shopVO:{}", accountId, shopVO);
-        if (accountId == null || shopVO == null) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG);
+    public ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO) {
+        log.info("[更新店铺]accountId:{},shopId:{},shopVO:{}", accountId, shopId, shopVO);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(shopVO)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId, shopVO");
         }
-        ShopPO shopPO = getShop(accountId, shopVO.getShopId());
+        ShopPO shopPO = getShop(accountId, shopId);
         // 检查字段
         ShopServiceUtil.checkShopVO(shopVO);
 

@@ -24,18 +24,36 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @RequestMapping("/register/send_sms_captcha")
+    /**
+     * 发送账户注册验证码
+     *
+     * @param phone 手机号
+     * @return 发送状态
+     */
+    @PostMapping("/register/send_sms_captcha")
     public Response sendSmsCaptcha(String phone) {
         accountService.sendSmsCaptcha(phone, SmsCaptchaType.REGISTER);
         return Response.success();
     }
 
+    /**
+     * 账户注册
+     *
+     * @param registerVO 注册信息
+     * @return 注册的账户
+     */
     @PostMapping("/register")
     public Response<AccountDTO> register(RegisterVO registerVO) {
         return Response.success(accountService.register(registerVO));
     }
 
-    @RequestMapping("/login")
+    /**
+     * 账户登录
+     *
+     * @param loginVO 登录信息
+     * @return 账户token
+     */
+    @PostMapping("/login")
     public Response<AccountTokenDTO> login(LoginVO loginVO) {
         return Response.success(accountService.login(loginVO));
     }

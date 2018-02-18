@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void sendSmsCaptcha(String phone, SmsCaptchaType smsCaptchaType) {
-        log.info("[发送验证码]{},{}", phone, smsCaptchaType);
+        log.info("[发送手机验证码]phone:{},smsCaptchaType:{}", phone, smsCaptchaType);
         // 验证字段合法性和有效性
         if (!AccountServiceUtil.checkPhoneValidity(phone)) {
             throw new ShopException(ResponseEnum.SHOP_PHONE_ILLEGAL);
@@ -54,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
         // 逻辑验证
         if (SmsCaptchaType.REGISTER.equals(smsCaptchaType)) {
             if (accountRepository.findByPhone(phone) != null) {
-                log.warn("[发送验证码失败]{},{}", phone, smsCaptchaType);
+                log.warn("[发送手机验证码失败]{},{}", phone, smsCaptchaType);
                 throw new ShopException(ResponseEnum.SHOP_PHONE_OCCUPIED);
             }
         }
@@ -64,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             smsService.sendCaptcha(phone, captcha);
         } catch (ClientException e) {
-            log.warn("[发送验证码失败]{}", e);
+            log.warn("[发送手机验证码失败]{}", e);
             throw new ShopException(ResponseEnum.SHOP_SMS_CAPTCHA_FAILURE);
         }
         // 存放验证码在redis
@@ -83,9 +84,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public AccountDTO register(RegisterVO registerVO) {
-        log.info("[注册]{}", registerVO);
+        log.info("[账户注册]registerVO:{}", registerVO);
         // 验证字段合法性和有效性
-        if (registerVO == null) {
+        if (Objects.isNull(registerVO)) {
             throw new ShopException(ResponseEnum.SHOP_NO_PARAM);
         }
         if (!verifySmsCaptcha(registerVO.getPhone(), registerVO.getPhoneCaptcha())) {
@@ -94,12 +95,12 @@ public class AccountServiceImpl implements AccountService {
         AccountServiceUtil.checkRegisterVO(registerVO);
 
         // 逻辑验证
-        if (shopRepository.findOne(registerVO.getShopId()) != null) {
-            log.warn("[注册失败]{}", registerVO);
+        if (Objects.nonNull(shopRepository.findOne(registerVO.getShopId()))) {
+            log.warn("[账户注册失败]{}", registerVO);
             throw new ShopException(ResponseEnum.SHOP_ID_OCCUPIED);
         }
-        if (accountRepository.findByPhone(registerVO.getPhone()) != null) {
-            log.warn("[注册失败]{}", registerVO);
+        if (Objects.nonNull(accountRepository.findByPhone(registerVO.getPhone()))) {
+            log.warn("[账户注册失败]{}", registerVO);
             throw new ShopException(ResponseEnum.SHOP_PHONE_OCCUPIED);
         }
 
@@ -117,13 +118,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountTokenDTO login(LoginVO loginVO) {
-        log.info("[登录]{}", loginVO);
-        if (loginVO == null) {
-            throw new ShopException(ResponseEnum.SHOP_NO_PARAM);
+        log.info("[账户登录]loginVO:{}", loginVO);
+        if (Objects.isNull(loginVO)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "loginVO");
         }
         AccountPO accountPO = accountRepository.findByShopIdAndLoginIdAndPassword(loginVO.getShopId(), loginVO.getLoginId(), loginVO.getPassword());
         if (accountPO == null) {
-            log.warn("[登录失败]{}", loginVO);
+            log.warn("[账户登录失败]{}", loginVO);
             throw new ShopException(ResponseEnum.SHOP_LOGIN_FAILURE);
         }
         // 生成token存放于redis

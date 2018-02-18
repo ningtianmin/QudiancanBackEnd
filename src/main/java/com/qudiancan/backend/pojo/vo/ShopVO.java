@@ -7,7 +7,6 @@ import lombok.Data;
  */
 @Data
 public class ShopVO {
-    private String shopId;
     private String name;
     private String holderType;
     private String holderName;

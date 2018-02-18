@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,10 +30,10 @@ public class BranchServiceImpl implements BranchService {
     private BranchRepository branchRepository;
 
     @Override
-    public BranchPO createBranch(Integer accountId, BranchVO branchVO) {
-        log.info("[创建门店]accountId:{},branchVO:{}", accountId, branchVO);
-        if (accountId == null || branchVO == null) {
-            throw new ShopException(ResponseEnum.SHOP_NO_PARAM);
+    public BranchPO createBranch(Integer accountId, String shopId, BranchVO branchVO) {
+        log.info("[创建门店]accountId:{},shopId:{},branchVO:{}", accountId, shopId, branchVO);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchVO)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchVO");
         }
         // 检查字段
         BranchServiceUtil.checkBranchVO(branchVO);
@@ -42,30 +42,27 @@ public class BranchServiceImpl implements BranchService {
         if (Objects.isNull(accountPO)) {
             throw new ShopException(ResponseEnum.BAD_REQUEST, "账户不存在");
         }
-        if (!accountPO.getShopId().equals(branchVO.getShopId())) {
-            throw new ShopException(ResponseEnum.BAD_REQUEST);
+        if (!accountPO.getShopId().equals(shopId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         if (Objects.nonNull(branchRepository.findByName(branchVO.getName()))) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "该门店名已存在");
         }
 
         // 保存门店
-        BranchPO branchPO = new BranchPO(null, branchVO.getShopId(), branchVO.getName(), branchVO.getNotice(), branchVO.getPhone(), branchVO.getAddress(),
+        BranchPO branchPO = new BranchPO(null, shopId, branchVO.getName(), branchVO.getNotice(), branchVO.getPhone(), branchVO.getAddress(),
                 branchVO.getLongitude(), branchVO.getLatitude(), branchVO.getIntroduction(), BranchStatus.NORMAL.name(), null);
         return branchRepository.save(branchPO);
     }
 
     @Override
-    public BranchPO updateBranch(Integer accountId, Integer branchId, BranchVO branchVO) {
-        log.info("[更新门店]accountId:{},branchId:{},branchVO:{}", accountId, branchId, branchVO);
+    public BranchPO updateBranch(Integer accountId, String shopId, Integer branchId, BranchVO branchVO) {
+        log.info("[更新门店]accountId:{},shopId:{},branchId:{},branchVO:{}", accountId, shopId, branchId, branchVO);
         // 检查字段
-        if (accountId == null || branchId == null || branchVO == null) {
-            throw new ShopException(ResponseEnum.BAD_REQUEST);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(branchVO)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId, shopId,branchId, branchVO");
         }
         BranchServiceUtil.checkBranchVO(branchVO);
-        if (StringUtils.isEmpty(branchVO.getShopId())) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "shopId");
-        }
         // 逻辑验证
         AccountPO accountPO = accountRepository.findOne(accountId);
         BranchPO branchPO = branchRepository.findOne(branchId);
@@ -75,16 +72,8 @@ public class BranchServiceImpl implements BranchService {
         if (Objects.isNull(branchPO)) {
             throw new ShopException(ResponseEnum.BAD_REQUEST, "门店不存在");
         }
-        if (!accountPO.getShopId().equals(branchVO.getShopId())) {
-            throw new ShopException(ResponseEnum.BAD_REQUEST);
-        }
-        if (!branchPO.getShopId().equals(branchVO.getShopId())) {
-            throw new ShopException(ResponseEnum.BAD_REQUEST);
-        }
-        boolean managedBranch = !StringUtils.isEmpty(accountPO.getBranchIds()) &&
-                Arrays.stream(accountPO.getBranchIds().split(",")).anyMatch(String.valueOf(branchId)::equals);
-        if (!managedBranch) {
-            throw new ShopException(ResponseEnum.BAD_REQUEST, "无法管理该门店");
+        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         // 持久化
         branchPO.setAddress(branchVO.getAddress());
@@ -95,5 +84,32 @@ public class BranchServiceImpl implements BranchService {
         branchPO.setNotice(branchVO.getNotice());
         branchPO.setPhone(branchVO.getPhone());
         return branchRepository.save(branchPO);
+    }
+
+    @Override
+    public BranchPO getBranch(Integer accountId, String shopId, Integer branchId) {
+        log.info("[获取门店]accountId:{},shopId:{},branchId:{}", accountId, shopId, branchId);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId");
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        BranchPO branchPO = branchRepository.findOne(branchId);
+        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        return branchPO;
+    }
+
+    @Override
+    public List<BranchPO> listBranch(Integer accountId, String shopId) {
+        log.info("[获取门店列表]accountId:{},shopId:{}", accountId, shopId);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId");
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        if (Objects.isNull(accountPO) || !shopId.equals(accountPO.getShopId())) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        return branchRepository.findByShopId(shopId);
     }
 }
