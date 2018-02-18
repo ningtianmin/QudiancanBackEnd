@@ -25,7 +25,7 @@ public class BranchController {
     @Autowired
     private BranchService branchService;
 
-    @PostMapping("/{shopId}/branches")
+    @PostMapping("/{shopId}/branches/new")
     @RequiredAuthority(AuthorityEnum.SHOP_BRANCH_CREATE)
     public Response<BranchPO> createBranch(Session session, BranchVO branchVO) {
         log.info("[创建门店]session:{},branchVO:{}", session, branchVO);
