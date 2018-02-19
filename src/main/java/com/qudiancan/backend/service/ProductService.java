@@ -1,6 +1,8 @@
 package com.qudiancan.backend.service;
 
+import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.ProductCategoryPO;
+import com.qudiancan.backend.pojo.vo.BranchProductVO;
 import com.qudiancan.backend.pojo.vo.ProductCategoryVO;
 
 import java.util.List;
@@ -52,4 +54,38 @@ public interface ProductService {
      * @return 更新后的产品类目
      */
     ProductCategoryPO updateProductCategory(Integer accountId, String shopId, Integer branchId, Integer categoryId, ProductCategoryVO productCategoryVO);
+
+    /**
+     * 创建门店产品
+     *
+     * @param accountId       账户id
+     * @param shopId          店铺id
+     * @param branchId        门店id
+     * @param branchProductVO 门店产品信息
+     * @return 创建的门店产品
+     */
+    BranchProductPO createBranchProduct(Integer accountId, String shopId, Integer branchId, BranchProductVO branchProductVO);
+
+    /**
+     * 获取门店产品
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @param productId 产品id
+     * @return 获取的门店产品
+     */
+    BranchProductPO getBranchProduct(Integer accountId, String shopId, Integer branchId, Integer productId);
+
+    /**
+     * 更新产品
+     *
+     * @param accountId       账户id
+     * @param shopId          店铺id
+     * @param branchId        门店id
+     * @param productId       产品id
+     * @param branchProductVO 产品信息
+     * @return 更新后的产品
+     */
+    BranchProductPO updateBranchProduct(Integer accountId, String shopId, Integer branchId, Integer productId, BranchProductVO branchProductVO);
 }

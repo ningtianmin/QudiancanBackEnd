@@ -34,7 +34,19 @@ public enum AuthorityEnum {
     /**
      * 创建产品类目
      */
-    BRANCH_CATEGORY_CREATE(7, "BRANCH_CATEGORY_CREATE");
+    BRANCH_CATEGORY_CREATE(7, "BRANCH_CATEGORY_CREATE"),
+    /**
+     * 创建产品
+     */
+    BRANCH_PRODUCT_CREATE(8, "BRANCH_PRODUCT_CREATE"),
+    /**
+     * 查看产品
+     */
+    BRANCH_PRODUCT_SHOW(9, "BRANCH_PRODUCT_SHOW"),
+    /**
+     * 更新产品
+     */
+    BRANCH_PRODUCT_UPDATE(10, "BRANCH_PRODUCT_UPDATE");
 
     private Integer id;
     private String path;
