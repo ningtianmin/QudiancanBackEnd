@@ -1,6 +1,7 @@
 package com.qudiancan.backend.service.impl;
 
 import com.qudiancan.backend.enums.BranchStatus;
+import com.qudiancan.backend.enums.IsCreator;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.po.AccountPO;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +30,17 @@ public class BranchServiceImpl implements BranchService {
     private AccountRepository accountRepository;
     @Autowired
     private BranchRepository branchRepository;
+
+    @Override
+    public boolean canManageBranch(Integer accountId, String shopId, Integer branchId) {
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        BranchPO branchPO = branchRepository.findOne(branchId);
+        return (Objects.nonNull(accountPO) && !StringUtils.isEmpty(shopId) && Objects.nonNull(branchPO)) &&
+                (shopId.equals(accountPO.getShopId()) && shopId.equals(branchPO.getShopId())) &&
+                ((IsCreator.YES.name().equals(accountPO.getIsCreator())) ||
+                        (!StringUtils.isEmpty(accountPO.getBranchIds()) &&
+                                Arrays.stream(accountPO.getBranchIds().split(",")).anyMatch(String.valueOf(branchPO.getId())::equals)));
+    }
 
     @Override
     public BranchPO createBranch(Integer accountId, String shopId, BranchVO branchVO) {
@@ -72,7 +85,7 @@ public class BranchServiceImpl implements BranchService {
         if (Objects.isNull(branchPO)) {
             throw new ShopException(ResponseEnum.BAD_REQUEST, "门店不存在");
         }
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         // 持久化
@@ -92,9 +105,8 @@ public class BranchServiceImpl implements BranchService {
         if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId");
         }
-        AccountPO accountPO = accountRepository.findOne(accountId);
         BranchPO branchPO = branchRepository.findOne(branchId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         return branchPO;

@@ -1,15 +1,10 @@
 package com.qudiancan.backend.service.util;
 
-import com.qudiancan.backend.enums.IsCreator;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
-import com.qudiancan.backend.pojo.po.AccountPO;
-import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.vo.BranchVO;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -44,14 +39,6 @@ public class BranchServiceUtil {
         if (!AccountServiceUtil.checkPhoneValidity(branchVO.getPhone())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "phone");
         }
-    }
-
-    public static boolean canManageBranch(AccountPO accountPO, String shopId, BranchPO branchPO) {
-        return (Objects.nonNull(accountPO) && !StringUtils.isEmpty(shopId) && Objects.nonNull(branchPO)) &&
-                (shopId.equals(accountPO.getShopId()) && shopId.equals(branchPO.getShopId())) &&
-                ((IsCreator.YES.name().equals(accountPO.getIsCreator())) ||
-                        (!StringUtils.isEmpty(accountPO.getBranchIds()) &&
-                                Arrays.stream(accountPO.getBranchIds().split(",")).anyMatch(String.valueOf(branchPO.getId())::equals)));
     }
 
     public static boolean checkLongitudeValidity(String longitude) {

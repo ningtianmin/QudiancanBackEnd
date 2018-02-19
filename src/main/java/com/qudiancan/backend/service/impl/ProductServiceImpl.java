@@ -3,12 +3,16 @@ package com.qudiancan.backend.service.impl;
 import com.qudiancan.backend.enums.BranchProductStatus;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
-import com.qudiancan.backend.pojo.po.*;
+import com.qudiancan.backend.pojo.po.BranchProductPO;
+import com.qudiancan.backend.pojo.po.DepartmentPO;
+import com.qudiancan.backend.pojo.po.ProductCategoryPO;
 import com.qudiancan.backend.pojo.vo.BranchProductVO;
 import com.qudiancan.backend.pojo.vo.ProductCategoryVO;
-import com.qudiancan.backend.repository.*;
+import com.qudiancan.backend.repository.BranchProductRepository;
+import com.qudiancan.backend.repository.DepartmentRepository;
+import com.qudiancan.backend.repository.ProductCategoryRepository;
+import com.qudiancan.backend.service.BranchService;
 import com.qudiancan.backend.service.ProductService;
-import com.qudiancan.backend.service.util.BranchServiceUtil;
 import com.qudiancan.backend.service.util.ProductServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,15 +30,13 @@ import java.util.Objects;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
     private ProductCategoryRepository productCategoryRepository;
-    @Autowired
-    private BranchRepository branchRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
     @Autowired
     private BranchProductRepository branchProductRepository;
+    @Autowired
+    private BranchService branchService;
 
     @Override
     public List<ProductCategoryPO> listProductCategory(Integer accountId, String shopId, Integer branchId) {
@@ -43,8 +45,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId");
         }
         // 逻辑验证
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchRepository.findOne(branchId))) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         return productCategoryRepository.findByBranchId(branchId);
@@ -57,9 +58,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,productCategoryVO");
         }
         ProductServiceUtil.checkProductCategoryVO(productCategoryVO);
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        BranchPO branchPO = branchRepository.findOne(branchId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         // 持久化
@@ -72,8 +71,7 @@ public class ProductServiceImpl implements ProductService {
         if (Objects.isNull(accountId) | StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(categoryId)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,categoryId");
         }
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchRepository.findOne(branchId))) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         ProductCategoryPO productCategoryPO = productCategoryRepository.findOne(categoryId);
@@ -104,9 +102,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,branchProductVO");
         }
         ProductServiceUtil.checkBranchProductVO(branchProductVO);
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        BranchPO branchPO = branchRepository.findOne(branchId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         ProductCategoryPO productCategoryPO = productCategoryRepository.findOne(branchProductVO.getCategoryId());
@@ -128,9 +124,7 @@ public class ProductServiceImpl implements ProductService {
         if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(productId)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,productId");
         }
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        BranchPO branchPO = branchRepository.findOne(branchId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         BranchProductPO branchProductPO = branchProductRepository.findOne(productId);

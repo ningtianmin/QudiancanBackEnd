@@ -10,6 +10,16 @@ import java.util.List;
  */
 public interface BranchService {
     /**
+     * 判断是否可以管理指定门店
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @return 可以:true,不可以:false
+     */
+    boolean canManageBranch(Integer accountId, String shopId, Integer branchId);
+
+    /**
      * 创建门店
      *
      * @param accountId 账户id

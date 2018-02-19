@@ -2,15 +2,11 @@ package com.qudiancan.backend.service.impl;
 
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
-import com.qudiancan.backend.pojo.po.AccountPO;
-import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.DepartmentPO;
 import com.qudiancan.backend.pojo.vo.DepartmentVO;
-import com.qudiancan.backend.repository.AccountRepository;
-import com.qudiancan.backend.repository.BranchRepository;
 import com.qudiancan.backend.repository.DepartmentRepository;
+import com.qudiancan.backend.service.BranchService;
 import com.qudiancan.backend.service.DepartmentService;
-import com.qudiancan.backend.service.util.BranchServiceUtil;
 import com.qudiancan.backend.service.util.DepartmentServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +22,9 @@ import java.util.Objects;
 @Slf4j
 public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private BranchRepository branchRepository;
-    @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private BranchService branchService;
 
     @Override
     public DepartmentPO createDepartment(Integer accountId, String shopId, Integer branchId, DepartmentVO departmentVO) {
@@ -39,9 +33,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,  shopId,  branchId,  departmentVO");
         }
         DepartmentServiceUtil.checkDepartmentVO(departmentVO);
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        BranchPO branchPO = branchRepository.findOne(branchId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         if (Objects.nonNull(departmentRepository.findByBranchIdAndName(branchId, departmentVO.getName()))) {
@@ -56,9 +48,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(departmentId)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,departmentId");
         }
-        AccountPO accountPO = accountRepository.findOne(accountId);
-        BranchPO branchPO = branchRepository.findOne(branchId);
-        if (!BranchServiceUtil.canManageBranch(accountPO, shopId, branchPO)) {
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         DepartmentPO departmentPO = departmentRepository.findOne(departmentId);

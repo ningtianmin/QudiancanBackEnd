@@ -58,7 +58,19 @@ public enum AuthorityEnum {
     /**
      * 更新出品部门
      */
-    BRANCH_DEPARTMENT_UPDATE(13, "BRANCH_DEPARTMENT_UPDATE");;
+    BRANCH_DEPARTMENT_UPDATE(13, "BRANCH_DEPARTMENT_UPDATE"),
+    /**
+     * 创建桌台类型
+     */
+    BRANCH_TABLE_CATEGORY_CREATE(14, "BRANCH_TABLE_CATEGORY_CREATE"),
+    /**
+     * 查看桌台类型
+     */
+    BRANCH_TABLE_CATEGORY_SHOW(15, "BRANCH_TABLE_CATEGORY_SHOW"),
+    /**
+     * 更新桌台类型
+     */
+    BRANCH_TABLE_CATEGORY_UPDATE(16, "BRANCH_TABLE_CATEGORY_UPDATE");
 
     private Integer id;
     private String path;
