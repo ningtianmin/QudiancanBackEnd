@@ -70,7 +70,19 @@ public enum AuthorityEnum {
     /**
      * 更新桌台类型
      */
-    BRANCH_TABLE_CATEGORY_UPDATE(16, "BRANCH_TABLE_CATEGORY_UPDATE");
+    BRANCH_TABLE_CATEGORY_UPDATE(16, "BRANCH_TABLE_CATEGORY_UPDATE"),
+    /**
+     * 创建桌台
+     */
+    BRANCH_TABLE_CREATE(17, "BRANCH_TABLE_CREATE"),
+    /**
+     * 获取桌台
+     */
+    BRANCH_TABLE_SHOW(18, "BRANCH_TABLE_SHOW"),
+    /**
+     * 更新桌台
+     */
+    BRANCH_TABLE_UPDATE(19, "BRANCH_TABLE_UPDATE");
 
     private Integer id;
     private String path;

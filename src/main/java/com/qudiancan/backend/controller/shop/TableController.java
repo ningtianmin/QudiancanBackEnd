@@ -5,7 +5,9 @@ import com.qudiancan.backend.common.RequiredAuthority;
 import com.qudiancan.backend.enums.AuthorityEnum;
 import com.qudiancan.backend.pojo.Response;
 import com.qudiancan.backend.pojo.Session;
+import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
+import com.qudiancan.backend.pojo.vo.BranchTableVO;
 import com.qudiancan.backend.pojo.vo.TableCategoryVO;
 import com.qudiancan.backend.service.TableService;
 import lombok.extern.slf4j.Slf4j;
@@ -70,5 +72,56 @@ public class TableController {
     public Response<TableCategoryPO> updateTableCategory(Session session, @PathVariable String shopId, @PathVariable Integer branchId, @PathVariable Integer tableCategoryId, TableCategoryVO tableCategoryVO) {
         log.info("[更新桌台类型]session:{}", session);
         return Response.success(tableService.updateTableCategory(AccountHolder.get().getId(), shopId, branchId, tableCategoryId, tableCategoryVO));
+    }
+
+    /**
+     * 创建桌台
+     *
+     * @param session       账户session
+     * @param shopId        店铺id
+     * @param branchId      门店id
+     * @param branchTableVO 桌台信息
+     * @return 创建的桌台
+     */
+    @PostMapping("/{shopId}/branches/{branchId}/tables")
+    @RequiredAuthority(AuthorityEnum.BRANCH_TABLE_CREATE)
+    public Response<BranchTablePO> createBranchTable(Session session, @PathVariable String shopId, @PathVariable Integer branchId, BranchTableVO branchTableVO) {
+        log.info("[创建桌台]session:{}", session);
+        return Response.success(tableService.createBranchTable(AccountHolder.get().getId(), shopId, branchId, branchTableVO));
+    }
+
+    /**
+     * 获取桌台
+     *
+     * @param session       账户session
+     * @param shopId        店铺id
+     * @param branchId      门店id
+     * @param branchTableId 桌台id
+     * @return 获取的桌台
+     */
+    @GetMapping("/{shopId}/branches/{branchId}/tables/{branchTableId}")
+    @RequiredAuthority(AuthorityEnum.BRANCH_TABLE_SHOW)
+    public Response<BranchTablePO> getBranchTable(Session session, @PathVariable String shopId,
+                                                  @PathVariable Integer branchId, @PathVariable Integer branchTableId) {
+        log.info("[获取桌台]session:{}", session);
+        return Response.success(tableService.getBranchTable(AccountHolder.get().getId(), shopId, branchId, branchTableId));
+    }
+
+    /**
+     * 更新桌台
+     *
+     * @param session       账户session
+     * @param shopId        店铺id
+     * @param branchId      门店id
+     * @param branchTableId 桌台id
+     * @param branchTableVO 桌台信息
+     * @return 更新后的桌台
+     */
+    @PostMapping("/{shopId}/branches/{branchId}/tables/{branchTableId}")
+    @RequiredAuthority(AuthorityEnum.BRANCH_TABLE_UPDATE)
+    public Response<BranchTablePO> updateBranchTable(Session session, @PathVariable String shopId, @PathVariable Integer branchId,
+                                                     @PathVariable Integer branchTableId, BranchTableVO branchTableVO) {
+        log.info("[更新桌台]session:{}", session);
+        return Response.success(tableService.updateBranchTable(AccountHolder.get().getId(), shopId, branchId, branchTableId, branchTableVO));
     }
 }

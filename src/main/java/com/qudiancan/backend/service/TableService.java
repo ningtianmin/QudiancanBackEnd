@@ -1,6 +1,8 @@
 package com.qudiancan.backend.service;
 
+import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
+import com.qudiancan.backend.pojo.vo.BranchTableVO;
 import com.qudiancan.backend.pojo.vo.TableCategoryVO;
 
 import java.util.List;
@@ -41,4 +43,38 @@ public interface TableService {
      * @return 更新后的桌台类型
      */
     TableCategoryPO updateTableCategory(Integer accountId, String shopId, Integer branchId, Integer tableCategoryId, TableCategoryVO tableCategoryVO);
+
+    /**
+     * 创建桌台
+     *
+     * @param accountId     账户id
+     * @param shopId        店铺id
+     * @param branchId      门店id
+     * @param branchTableVO 桌台信息
+     * @return 创建的桌台
+     */
+    BranchTablePO createBranchTable(Integer accountId, String shopId, Integer branchId, BranchTableVO branchTableVO);
+
+    /**
+     * 获取桌台
+     *
+     * @param accountId     账户id
+     * @param shopId        店铺id
+     * @param branchId      门店id
+     * @param branchTableId 桌台id
+     * @return 获取的桌台
+     */
+    BranchTablePO getBranchTable(Integer accountId, String shopId, Integer branchId, Integer branchTableId);
+
+    /**
+     * 更新桌台
+     *
+     * @param accountId     账户id
+     * @param shopId        店铺id
+     * @param branchId      门店id
+     * @param branchTableId 桌台id
+     * @param branchTableVO 桌台信息
+     * @return 更新后的桌台
+     */
+    BranchTablePO updateBranchTable(Integer accountId, String shopId, Integer branchId, Integer branchTableId, BranchTableVO branchTableVO);
 }

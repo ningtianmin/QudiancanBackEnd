@@ -1,14 +1,19 @@
 package com.qudiancan.backend.service.impl;
 
+import com.qudiancan.backend.enums.BranchTableStatus;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
+import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
+import com.qudiancan.backend.pojo.vo.BranchTableVO;
 import com.qudiancan.backend.pojo.vo.TableCategoryVO;
+import com.qudiancan.backend.repository.BranchTableRepository;
 import com.qudiancan.backend.repository.TableCategoryRepository;
 import com.qudiancan.backend.service.BranchService;
 import com.qudiancan.backend.service.TableService;
 import com.qudiancan.backend.service.util.TableServiceUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -28,6 +33,8 @@ public class TableServiceImpl implements TableService {
     private TableCategoryRepository tableCategoryRepository;
     @Autowired
     private BranchService branchService;
+    @Autowired
+    private BranchTableRepository branchTableRepository;
 
     @Override
     public TableCategoryPO createTableCategory(Integer accountId, String shopId, Integer branchId, TableCategoryVO tableCategoryVO) {
@@ -79,5 +86,66 @@ public class TableServiceImpl implements TableService {
         tableCategoryPO.setName(tableCategoryVO.getName());
         tableCategoryPO.setPosition(tableCategoryVO.getPosition());
         return tableCategoryRepository.save(tableCategoryPO);
+    }
+
+    @Override
+    public BranchTablePO createBranchTable(Integer accountId, String shopId, Integer branchId, BranchTableVO branchTableVO) {
+        log.info("[创建桌台]accountId:{},shopId:{},branchId:{},branchTableVO:{}", accountId, shopId, branchId, branchTableVO);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(branchTableVO)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,branchTableVO");
+        }
+        TableServiceUtil.checkBranchTableVO(branchTableVO);
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        if (Objects.nonNull(branchTableRepository.findByBranchIdAndName(branchId, branchTableVO.getName()))) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "该桌台名称已被占用");
+        }
+        TableCategoryPO tableCategoryPO = tableCategoryRepository.findOne(branchTableVO.getCategoryId());
+        if (Objects.isNull(tableCategoryPO) || !branchId.equals(tableCategoryPO.getBranchId())) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "categoryId");
+        }
+        return branchTableRepository.save(new BranchTablePO(null, branchId, branchTableVO.getCategoryId(), null,
+                branchTableVO.getName(), branchTableVO.getCapacity(), branchTableVO.getPosition(), BranchTableStatus.LEISURE.name()));
+    }
+
+    @Override
+    public BranchTablePO getBranchTable(Integer accountId, String shopId, Integer branchId, Integer branchTableId) {
+        log.info("[获取桌台]accountId:{},shopId:{},branchId:{},branchTableId:{}", accountId, shopId, branchId, branchTableId);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(branchTableId)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,branchTableId");
+        }
+        if (!branchService.canManageBranch(accountId, shopId, branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        BranchTablePO branchTablePO = branchTableRepository.findOne(branchTableId);
+        if (Objects.isNull(branchTablePO) || !branchId.equals(branchTablePO.getBranchId())) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        return branchTablePO;
+    }
+
+    @Override
+    public BranchTablePO updateBranchTable(Integer accountId, String shopId, Integer branchId, Integer branchTableId, BranchTableVO branchTableVO) {
+        log.info("[更新桌台]accountId:{},shopId:{},branchId:{},branchTableId:{},branchTableVO:{}",
+                accountId, shopId, branchId, branchTableId, branchTableVO);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(branchTableId) || Objects.isNull(branchTableVO)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId,branchTableId,branchTableVO");
+        }
+        TableServiceUtil.checkBranchTableVO(branchTableVO);
+        BranchTablePO branchTablePO = branchTableRepository.findOne(branchTableId);
+        if (Objects.isNull(branchTablePO) || !branchId.equals(branchTablePO.getBranchId())) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        BranchTablePO byBranchIdAndName = branchTableRepository.findByBranchIdAndName(branchId, branchTableVO.getName());
+        if (Objects.nonNull(byBranchIdAndName) && !branchTablePO.getName().equals(branchTableVO.getName())) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "该名称已被占用");
+        }
+        TableCategoryPO tableCategoryPO = tableCategoryRepository.findOne(branchTableVO.getCategoryId());
+        if (Objects.isNull(tableCategoryPO) || !branchId.equals(tableCategoryPO.getBranchId())) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        BeanUtils.copyProperties(branchTableVO, branchTablePO);
+        return branchTablePO;
     }
 }
