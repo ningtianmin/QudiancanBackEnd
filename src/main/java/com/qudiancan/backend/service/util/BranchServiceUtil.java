@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
  * @author NINGTIANMIN
  */
 public class BranchServiceUtil {
-    public static final Pattern LONGITUDE_PATTERN = Pattern.compile("^-?((0|1?[0-7]?[0-9]?)(([.][0-9]{1,4})?)|180(([.][0]{1,4})?))$");
-    public static final Pattern LATITUDE_PATTERN = Pattern.compile("^-?((0|[1-8]?[0-9]?)(([.][0-9]{1,4})?)|90(([.][0]{1,4})?))$");
+    public static final Pattern LONGITUDE_PATTERN = Pattern.compile("^-?((0|1?[0-7]?[0-9]?)(([.][0-9]{1,10})?)|180(([.][0]{1,10})?))$");
+    public static final Pattern LATITUDE_PATTERN = Pattern.compile("^-?((0|[1-8]?[0-9]?)(([.][0-9]{1,10})?)|90(([.][0]{1,10})?))$");
 
     public static void checkBranchVO(BranchVO branchVO) {
         if (branchVO == null) {

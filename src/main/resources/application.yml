@@ -14,7 +14,7 @@ spring:
   jpa:
     show-sql: true
 aliyun:
-  accesskeyId:
-  accessKeySecret:
+  accesskeyId: LTAIt0Yu7RPtbgsN
+  accessKeySecret: i7IxVMFxBdiayUZRuEE5qQIpjWNQJg
   smsSignName: 去点餐
   smsTemplateCode: SMS_125018336

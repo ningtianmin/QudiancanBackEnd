@@ -80,7 +80,8 @@ public class TableServiceImpl implements TableService {
         if (Objects.isNull(tableCategoryPO) || !branchId.equals(tableCategoryPO.getBranchId())) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
-        if (Objects.nonNull(tableCategoryRepository.findByBranchIdAndName(branchId, tableCategoryVO.getName()))) {
+        TableCategoryPO byBranchIdAndName = tableCategoryRepository.findByBranchIdAndName(branchId, tableCategoryVO.getName());
+        if (Objects.nonNull(byBranchIdAndName) && !tableCategoryPO.getName().equals(byBranchIdAndName.getName())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "该名称已被占用");
         }
         tableCategoryPO.setName(tableCategoryVO.getName());
