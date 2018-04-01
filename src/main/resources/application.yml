@@ -14,7 +14,12 @@ spring:
   jpa:
     show-sql: true
 aliyun:
-  accesskeyId: LTAIt0Yu7RPtbgsN
-  accessKeySecret: i7IxVMFxBdiayUZRuEE5qQIpjWNQJg
+  accesskeyId:
+  accessKeySecret:
   smsSignName: 去点餐
   smsTemplateCode: SMS_125018336
+wechat:
+  appId:
+  appSecret:
+  grantType: authorization_code
+  apiUrl: https://api.weixin.qq.com

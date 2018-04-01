@@ -24,6 +24,7 @@ public class BranchProductPO {
     private Integer categoryId;
     private Integer departmentId;
     private String name;
+    private String image;
     private String unitName;
     private BigDecimal price;
     private String description;
