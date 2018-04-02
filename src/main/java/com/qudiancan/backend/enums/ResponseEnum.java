@@ -86,7 +86,11 @@ public enum ResponseEnum {
     /**
      * 参数不正确
      */
-    WECHAT_WRONG_PARAM(2016, "参数不正确");
+    WECHAT_WRONG_PARAM(2016, "参数不正确"),
+    /**
+     * 请求错误
+     */
+    WECHAT_BAD_REQUEST(2017, "请求错误");
 
     private Integer code;
     private String message;

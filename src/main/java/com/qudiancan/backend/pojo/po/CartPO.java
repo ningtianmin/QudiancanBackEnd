@@ -1,6 +1,8 @@
 package com.qudiancan.backend.pojo.po;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,8 @@ import javax.persistence.Id;
  */
 @Entity(name = "Cart")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartPO {
     @Id
     @GeneratedValue

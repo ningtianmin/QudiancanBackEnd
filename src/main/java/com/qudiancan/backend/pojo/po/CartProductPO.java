@@ -1,16 +1,21 @@
 package com.qudiancan.backend.pojo.po;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 /**
  * @author NINGTIANMIN
  */
 @Entity(name = "CartProduct")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartProductPO {
     @Id
     @GeneratedValue
@@ -19,4 +24,6 @@ public class CartProductPO {
     private Integer productId;
     private Integer productNum;
     private String productName;
+    private BigDecimal productPrice;
+    private BigDecimal sum;
 }

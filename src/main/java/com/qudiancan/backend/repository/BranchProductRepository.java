@@ -17,4 +17,13 @@ public interface BranchProductRepository extends JpaRepository<BranchProductPO, 
      * @return 产品列表
      */
     List<BranchProductPO> findByBranchIdAndStatus(Integer branchId, String productStatus);
+
+    /**
+     * 通过产品id和产品状态查询产品
+     *
+     * @param productId     产品id
+     * @param productStatus 产品状态
+     * @return 产品
+     */
+    BranchProductPO findByIdAndStatus(Integer productId, String productStatus);
 }
