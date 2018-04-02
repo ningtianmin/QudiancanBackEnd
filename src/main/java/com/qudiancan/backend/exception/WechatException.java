@@ -14,4 +14,9 @@ public class WechatException extends RuntimeException {
         super(responseEnum.getMessage());
         this.code = responseEnum.getCode();
     }
+
+    public WechatException(ResponseEnum responseEnum, String appendInfo) {
+        super(String.format("%s,%s", responseEnum.getMessage(), appendInfo));
+        this.code = responseEnum.getCode();
+    }
 }

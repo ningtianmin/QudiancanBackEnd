@@ -82,7 +82,11 @@ public enum ResponseEnum {
     /**
      * 参数不正确
      */
-    SHOP_PARAM_WRONG(2015, "参数不正确");
+    SHOP_PARAM_WRONG(2015, "参数不正确"),
+    /**
+     * 参数不正确
+     */
+    WECHAT_WRONG_PARAM(2016, "参数不正确");
 
     private Integer code;
     private String message;
