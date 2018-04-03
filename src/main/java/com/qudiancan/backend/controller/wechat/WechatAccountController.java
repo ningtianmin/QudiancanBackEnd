@@ -5,6 +5,7 @@ import com.qudiancan.backend.service.wechat.WechatAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +29,18 @@ public class WechatAccountController {
     public Response<String> getOpenid(String jsCode) {
         log.info("【getOpenid】jsCode：", jsCode);
         return Response.success(wechatAccountService.getOpenid(jsCode));
+    }
+
+    /**
+     * 成为店铺会员
+     *
+     * @param branchId 门店id
+     * @param openid   微信用户openid
+     */
+    @PostMapping("/beShopMember")
+    public Response beShopMember(Integer branchId, String openid) {
+        log.info("【成为店铺会员】branchId：{}，openid：{}", branchId, openid);
+        wechatAccountService.beShopMember(branchId, openid);
+        return Response.success();
     }
 }

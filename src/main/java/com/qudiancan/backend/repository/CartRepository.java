@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CartRepository extends JpaRepository<CartPO, Integer> {
     /**
-     * 通过门店id和微信用户openid获取购物车
+     * 通过门店id和会员id获取购物车
      *
      * @param branchId 门店id
-     * @param openId   微信用户openid
-     * @return 获取购物车
+     * @param memberId 会员id
+     * @return 购物车
      */
-    CartPO findByBranchIdAndWechatId(Integer branchId, String openId);
+    CartPO findByBranchIdAndMemberId(Integer branchId, Integer memberId);
 }

@@ -149,4 +149,13 @@ public class ShopTableServiceImpl implements ShopTableService {
         BeanUtils.copyProperties(branchTableVO, branchTablePO);
         return branchTablePO;
     }
+
+    @Override
+    public BranchTablePO getBranchTable(Integer tableId) {
+        log.info("【获取桌台】tableId：{}", tableId);
+        if (Objects.isNull(tableId)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE, "tableId");
+        }
+        return branchTableRepository.findOne(tableId);
+    }
 }

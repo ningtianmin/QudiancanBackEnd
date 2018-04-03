@@ -7,5 +7,9 @@ public enum ShopBranchTableStatus {
     /**
      * 空闲的
      */
-    LEISURE
+    LEISURE,
+    /**
+     * 占用中
+     */
+    OCCUPIED
 }

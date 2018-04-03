@@ -2,8 +2,8 @@ package com.qudiancan.backend.controller.shop;
 
 import com.qudiancan.backend.enums.SmsCaptchaType;
 import com.qudiancan.backend.pojo.Response;
-import com.qudiancan.backend.pojo.dto.ShopAccountDTO;
-import com.qudiancan.backend.pojo.dto.ShopAccountTokenDTO;
+import com.qudiancan.backend.pojo.dto.shop.ShopAccountDTO;
+import com.qudiancan.backend.pojo.dto.shop.ShopAccountTokenDTO;
 import com.qudiancan.backend.pojo.vo.shop.LoginVO;
 import com.qudiancan.backend.pojo.vo.shop.RegisterVO;
 import com.qudiancan.backend.service.shop.ShopAccountService;

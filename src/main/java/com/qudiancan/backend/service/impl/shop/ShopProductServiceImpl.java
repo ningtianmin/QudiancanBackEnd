@@ -3,7 +3,7 @@ package com.qudiancan.backend.service.impl.shop;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.enums.shop.ShopBranchProductStatus;
 import com.qudiancan.backend.exception.ShopException;
-import com.qudiancan.backend.pojo.dto.ShopProductDTO;
+import com.qudiancan.backend.pojo.dto.shop.ShopProductDTO;
 import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.DepartmentPO;
 import com.qudiancan.backend.pojo.po.ProductCategoryPO;

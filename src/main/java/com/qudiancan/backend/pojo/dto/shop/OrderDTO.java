@@ -1,28 +1,24 @@
-package com.qudiancan.backend.pojo.po;
+package com.qudiancan.backend.pojo.dto.shop;
 
+import com.qudiancan.backend.pojo.po.OrderProductPO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author NINGTIANMIN
  */
-@Entity(name = "BranchOrder")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BranchOrderPO {
-    @Id
-    @GeneratedValue
+public class OrderDTO {
+    List<OrderProductPO> orderProducts;
     private Integer id;
     private Integer branchId;
-    private String branchName;
     private Integer tableId;
     private Integer memberId;
     private String orderNumber;

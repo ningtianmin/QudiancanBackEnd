@@ -3,13 +3,13 @@ package com.qudiancan.backend.enums.shop;
 /**
  * @author NINGTIANMIN
  */
-public enum ShopBranchStatus {
+public enum OrderPayStatus {
     /**
-     * 正常
+     * 未支付
      */
-    NORMAL,
+    UNPAID,
     /**
-     * 休息中
+     * 已支付
      */
-    CLOSED
+    PAID
 }

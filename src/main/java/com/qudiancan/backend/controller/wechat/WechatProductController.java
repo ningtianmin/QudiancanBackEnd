@@ -1,7 +1,7 @@
 package com.qudiancan.backend.controller.wechat;
 
 import com.qudiancan.backend.pojo.Response;
-import com.qudiancan.backend.pojo.dto.ShopProductDTO;
+import com.qudiancan.backend.pojo.dto.shop.ShopProductDTO;
 import com.qudiancan.backend.service.shop.ShopProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

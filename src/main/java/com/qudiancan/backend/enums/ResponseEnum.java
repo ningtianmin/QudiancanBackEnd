@@ -90,7 +90,43 @@ public enum ResponseEnum {
     /**
      * 请求错误
      */
-    WECHAT_BAD_REQUEST(2017, "请求错误");
+    WECHAT_BAD_REQUEST(2017, "请求错误"),
+    /**
+     * 参数不完整
+     */
+    PARAM_INCOMPLETE(2018, "参数不完整"),
+    /**
+     * 参数无效
+     */
+    PARAM_INVALID(2019, "参数无效"),
+    /**
+     * 门店状态不正常
+     */
+    BRANCH_STATUS_UNUSUAL(2020, "门店状态不正常"),
+    /**
+     * 门店桌位状态不正常
+     */
+    BRANCH_TABLE_STATUS_UNUSUAL(2021, "门店桌位状态不正常"),
+    /**
+     * 订单不存在
+     */
+    ORDER_NOT_EXIST(2022, "订单不存在"),
+    /**
+     * 订单产品不存在
+     */
+    ORDER_PRODUCT_NOT_EXIST(2023, "订单产品不存在"),
+    /**
+     * 订单状态不正常
+     */
+    ORDER_STATUS_UNUSUAL(2024, "订单状态不正常"),
+    /**
+     * 购物车不存在
+     */
+    WECHAT_CART_NOT_EXIST(2025, "购物车不存在"),
+    /**
+     * 会员不存在
+     */
+    WECHAT_MEMBER_NOT_EXIST(2026, "会员不存在");
 
     private Integer code;
     private String message;

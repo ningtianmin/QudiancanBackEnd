@@ -77,4 +77,12 @@ public interface ShopTableService {
      * @return 更新后的桌台
      */
     BranchTablePO updateBranchTable(Integer accountId, String shopId, Integer branchId, Integer branchTableId, BranchTableVO branchTableVO);
+
+    /**
+     * 获取桌台
+     *
+     * @param tableId 桌台id
+     * @return 桌台信息
+     */
+    BranchTablePO getBranchTable(Integer tableId);
 }

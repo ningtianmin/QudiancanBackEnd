@@ -20,5 +20,5 @@ public class CartPO {
     @GeneratedValue
     private Integer id;
     private Integer branchId;
-    private String wechatId;
+    private Integer memberId;
 }

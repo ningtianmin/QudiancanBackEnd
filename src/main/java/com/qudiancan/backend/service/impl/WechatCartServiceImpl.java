@@ -3,14 +3,13 @@ package com.qudiancan.backend.service.impl;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.enums.shop.ShopBranchProductStatus;
 import com.qudiancan.backend.exception.WechatException;
-import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.CartPO;
 import com.qudiancan.backend.pojo.po.CartProductPO;
 import com.qudiancan.backend.repository.BranchProductRepository;
-import com.qudiancan.backend.repository.BranchRepository;
 import com.qudiancan.backend.repository.CartProductRepository;
 import com.qudiancan.backend.repository.CartRepository;
+import com.qudiancan.backend.service.wechat.WechatAccountService;
 import com.qudiancan.backend.service.wechat.WechatCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,9 @@ public class WechatCartServiceImpl implements WechatCartService {
     @Autowired
     private CartProductRepository cartProductRepository;
     @Autowired
-    private BranchRepository branchRepository;
-    @Autowired
     private BranchProductRepository branchProductRepository;
+    @Autowired
+    private WechatAccountService wechatAccountService;
 
     @Override
     public List<CartProductPO> getCart(Integer branchId, String openid) {
@@ -45,13 +44,10 @@ public class WechatCartServiceImpl implements WechatCartService {
         if (Objects.isNull(branchId) || StringUtils.isEmpty(openid) || nullOpenid.equals(openid)) {
             throw new WechatException(ResponseEnum.WECHAT_WRONG_PARAM, "branchId，openid");
         }
-        CartPO cartPO = cartRepository.findByBranchIdAndWechatId(branchId, openid);
+        Integer memberId = wechatAccountService.getMemberIdByBranchIdAndOpenid(branchId, openid);
+        CartPO cartPO = cartRepository.findByBranchIdAndMemberId(branchId, memberId);
         if (Objects.isNull(cartPO)) {
-            BranchPO branchPO = branchRepository.findOne(branchId);
-            if (Objects.isNull(branchPO)) {
-                throw new WechatException(ResponseEnum.WECHAT_WRONG_PARAM, "branchId");
-            }
-            cartPO = new CartPO(null, branchId, openid);
+            cartPO = new CartPO(null, branchId, memberId);
             cartRepository.save(cartPO);
             return Collections.emptyList();
         }
@@ -61,7 +57,7 @@ public class WechatCartServiceImpl implements WechatCartService {
     @Transactional(rollbackOn = {Exception.class})
     @Override
     public void clearCart(Integer branchId, String openid) {
-        CartPO cartPO = cartRepository.findByBranchIdAndWechatId(branchId, openid);
+        CartPO cartPO = cartRepository.findByBranchIdAndMemberId(branchId, wechatAccountService.getMemberIdByBranchIdAndOpenid(branchId, openid));
         if (Objects.isNull(cartPO)) {
             throw new WechatException(ResponseEnum.WECHAT_BAD_REQUEST, "购物车不存在");
         }
@@ -70,7 +66,7 @@ public class WechatCartServiceImpl implements WechatCartService {
 
     @Override
     public void subtractNum(Integer branchId, String openid, Integer productId) {
-        CartPO cartPO = cartRepository.findByBranchIdAndWechatId(branchId, openid);
+        CartPO cartPO = cartRepository.findByBranchIdAndMemberId(branchId, wechatAccountService.getMemberIdByBranchIdAndOpenid(branchId, openid));
         if (Objects.isNull(cartPO)) {
             throw new WechatException(ResponseEnum.WECHAT_BAD_REQUEST, "购物车不存在");
         }
@@ -89,7 +85,7 @@ public class WechatCartServiceImpl implements WechatCartService {
 
     @Override
     public void addNum(Integer branchId, String openid, Integer productId) {
-        CartPO cartPO = cartRepository.findByBranchIdAndWechatId(branchId, openid);
+        CartPO cartPO = cartRepository.findByBranchIdAndMemberId(branchId, wechatAccountService.getMemberIdByBranchIdAndOpenid(branchId, openid));
         if (Objects.isNull(cartPO)) {
             throw new WechatException(ResponseEnum.WECHAT_BAD_REQUEST, "购物车不存在");
         }

@@ -1,4 +1,4 @@
-package com.qudiancan.backend.pojo.dto;
+package com.qudiancan.backend.pojo.dto.shop;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

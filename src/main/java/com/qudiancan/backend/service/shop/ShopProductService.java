@@ -1,6 +1,6 @@
 package com.qudiancan.backend.service.shop;
 
-import com.qudiancan.backend.pojo.dto.ShopProductDTO;
+import com.qudiancan.backend.pojo.dto.shop.ShopProductDTO;
 import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.ProductCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchProductVO;

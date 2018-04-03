@@ -11,4 +11,21 @@ public interface WechatAccountService {
      * @return openid
      */
     String getOpenid(String jsCode);
+
+    /**
+     * 成为店铺会员
+     *
+     * @param branchId 门店id
+     * @param openid   微信用户openid
+     */
+    void beShopMember(Integer branchId, String openid);
+
+    /**
+     * 获取会员id
+     *
+     * @param branchId 门店id
+     * @param openid   微信用户openid
+     * @return 会员id
+     */
+    Integer getMemberIdByBranchIdAndOpenid(Integer branchId, String openid);
 }
