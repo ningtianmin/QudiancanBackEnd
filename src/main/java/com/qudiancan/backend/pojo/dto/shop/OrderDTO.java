@@ -1,6 +1,8 @@
 package com.qudiancan.backend.pojo.dto.shop;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.qudiancan.backend.pojo.po.OrderProductPO;
+import com.qudiancan.backend.util.JsonTimeStampSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,12 +27,13 @@ public class OrderDTO {
     private BigDecimal discountSum;
     private BigDecimal wipeSum;
     private BigDecimal chargeSum;
-    List<OrderProductPO> orderProducts;
+    private List<OrderProductPO> orderProducts;
     private String tableName;
     private String note;
     private String payMethod;
     private String payStatus;
     private String orderStatus;
+    @JsonSerialize(using = JsonTimeStampSerializer.class)
     private Timestamp createTime;
     private String branchName;
 }
