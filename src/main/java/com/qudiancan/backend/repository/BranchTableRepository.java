@@ -15,4 +15,12 @@ public interface BranchTableRepository extends JpaRepository<BranchTablePO, Inte
      * @return 桌台
      */
     BranchTablePO findByBranchIdAndName(Integer branchId, String branchTableName);
+
+    /**
+     * 通过订单id获取桌台
+     *
+     * @param orderId 订单id
+     * @return 桌台
+     */
+    BranchTablePO findByOrderId(Integer orderId);
 }

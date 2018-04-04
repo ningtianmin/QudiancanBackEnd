@@ -9,4 +9,6 @@ public interface Constant {
     Integer REDIS_SMS_CAPTCHA_EXPIRY = 5;
     String REDIS_ACCOUNT_KEY_PREFIX = "account_token_";
     Integer REDIS_ACCOUNT_EXPIRY = 60;
+    String COOKIE_ACCOUNT_SESSION = "accountSession";
+    Integer COOKIE_ACCOUNT_SESSION_EXPIRY = 100;
 }

@@ -2,8 +2,8 @@ package com.qudiancan.backend.controller.wechat;
 
 import com.qudiancan.backend.pojo.Response;
 import com.qudiancan.backend.pojo.dto.shop.OrderDTO;
-import com.qudiancan.backend.pojo.po.BranchTablePO;
-import com.qudiancan.backend.pojo.vo.shop.AddProductsVO;
+import com.qudiancan.backend.pojo.dto.wechat.TableOrderDTO;
+import com.qudiancan.backend.pojo.vo.wechat.AddProductsVO;
 import com.qudiancan.backend.pojo.vo.wechat.OrderVO;
 import com.qudiancan.backend.service.shop.ShopOrderService;
 import com.qudiancan.backend.service.shop.ShopTableService;
@@ -28,15 +28,16 @@ public class WechatOrderController {
     private ShopOrderService shopOrderService;
 
     /**
-     * 获取桌台
+     * 获取桌台及对应订单
      *
      * @param tableId 桌台id
-     * @return 桌台信息
+     * @param openid  微信用户openid
+     * @return 桌台及对应订单
      */
     @GetMapping("/tables/{tableId}")
-    public Response<BranchTablePO> getBranchTable(@PathVariable Integer tableId) {
-        log.info("【获取桌台】tableId：{}", tableId);
-        return Response.success(shopTableService.getBranchTable(tableId));
+    public Response<TableOrderDTO> getTableOrder(@PathVariable Integer tableId, @RequestParam String openid) {
+        log.info("【获取桌台及对应订单】tableId：{}，openid：{}", tableId, openid);
+        return Response.success(wechatOrderService.getTableOrder(tableId, openid));
     }
 
     /**
@@ -62,6 +63,6 @@ public class WechatOrderController {
     public Response<OrderDTO> addOrderProducts(AddProductsVO addProductsVO) {
         log.info("【追加产品】addProductsVO：{}", addProductsVO);
         addProductsVO.setCart(JsonToObjectUtil.toCartVO(addProductsVO.getCartData()));
-        return Response.success(shopOrderService.addProducts(addProductsVO));
+        return Response.success(wechatOrderService.addProducts(addProductsVO));
     }
 }

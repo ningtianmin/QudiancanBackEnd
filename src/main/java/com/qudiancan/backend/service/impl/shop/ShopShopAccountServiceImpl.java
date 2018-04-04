@@ -18,12 +18,15 @@ import com.qudiancan.backend.repository.ShopRepository;
 import com.qudiancan.backend.service.SmsService;
 import com.qudiancan.backend.service.shop.ShopAccountService;
 import com.qudiancan.backend.service.util.shop.ShopAccountServiceUtil;
+import com.qudiancan.backend.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.UUID;
@@ -117,20 +120,29 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
     }
 
     @Override
-    public ShopAccountTokenDTO login(LoginVO loginVO) {
+    public ShopAccountTokenDTO login(LoginVO loginVO, HttpServletResponse response) {
         log.info("[账户登录]loginVO:{}", loginVO);
-        if (Objects.isNull(loginVO)) {
-            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "loginVO");
-        }
         AccountPO accountPO = accountRepository.findByShopIdAndLoginIdAndPassword(loginVO.getShopId(), loginVO.getLoginId(), loginVO.getPassword());
-        if (accountPO == null) {
+        if (Objects.isNull(accountPO)) {
             log.warn("[账户登录失败]{}", loginVO);
             throw new ShopException(ResponseEnum.SHOP_LOGIN_FAILURE);
         }
         // 生成token存放于redis
         String token = UUID.randomUUID().toString();
         // TODO: 18/02/16 redis需释放资源
-        redisTemplate.opsForValue().set(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", token), String.valueOf(accountPO.getId()), Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", token),
+                String.valueOf(accountPO.getId()), Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
+        // 存放token于cookie
+        CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, token, Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
         return new ShopAccountTokenDTO(accountPO.getId(), token);
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        String token = CookieUtil.get(request, Constant.COOKIE_ACCOUNT_SESSION);
+        if (Objects.nonNull(token)) {
+            redisTemplate.opsForValue().getOperations().delete(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%S", token));
+            CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, null, 0);
+        }
     }
 }

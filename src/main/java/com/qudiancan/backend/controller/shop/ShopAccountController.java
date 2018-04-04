@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author NINGTIANMIN
  */
@@ -54,7 +57,16 @@ public class ShopAccountController {
      * @return 账户token
      */
     @PostMapping("/login")
-    public Response<ShopAccountTokenDTO> login(LoginVO loginVO) {
-        return Response.success(shopAccountService.login(loginVO));
+    public Response<ShopAccountTokenDTO> login(LoginVO loginVO, HttpServletResponse response) {
+        return Response.success(shopAccountService.login(loginVO, response));
+    }
+
+    /**
+     * 账户登出
+     */
+    @PostMapping("/logout")
+    public Response logout(HttpServletRequest request, HttpServletResponse response) {
+        shopAccountService.logout(request, response);
+        return Response.success();
     }
 }

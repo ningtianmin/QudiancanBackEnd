@@ -85,4 +85,11 @@ public interface ShopTableService {
      * @return 桌台信息
      */
     BranchTablePO getBranchTable(Integer tableId);
+
+    /**
+     * 通过订单id使桌台空闲
+     *
+     * @param orderId 订单id
+     */
+    void leisureTable(Integer orderId);
 }

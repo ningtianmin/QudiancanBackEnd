@@ -6,6 +6,9 @@ import com.qudiancan.backend.pojo.dto.shop.ShopAccountTokenDTO;
 import com.qudiancan.backend.pojo.vo.shop.LoginVO;
 import com.qudiancan.backend.pojo.vo.shop.RegisterVO;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author NINGTIANMIN
  */
@@ -38,8 +41,17 @@ public interface ShopAccountService {
     /**
      * 账户登录
      *
-     * @param loginVO 登录信息
+     * @param loginVO  登录信息
+     * @param response servletResponse
      * @return 账户token
      */
-    ShopAccountTokenDTO login(LoginVO loginVO);
+    ShopAccountTokenDTO login(LoginVO loginVO, HttpServletResponse response);
+
+    /**
+     * 账户登出
+     *
+     * @param request  servletRequest
+     * @param response servletResponse
+     */
+    void logout(HttpServletRequest request, HttpServletResponse response);
 }

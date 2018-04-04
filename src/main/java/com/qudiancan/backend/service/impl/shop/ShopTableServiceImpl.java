@@ -158,4 +158,14 @@ public class ShopTableServiceImpl implements ShopTableService {
         }
         return branchTableRepository.findOne(tableId);
     }
+
+    @Override
+    public void leisureTable(Integer orderId) {
+        BranchTablePO branchTablePO = branchTableRepository.findByOrderId(orderId);
+        if (Objects.nonNull(branchTablePO)) {
+            branchTablePO.setOrderId(null);
+            branchTablePO.setStatus(ShopBranchTableStatus.LEISURE.name());
+            branchTableRepository.save(branchTablePO);
+        }
+    }
 }

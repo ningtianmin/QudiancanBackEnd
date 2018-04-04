@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
-    List<OrderProductPO> orderProducts;
     private Integer id;
     private Integer branchId;
     private Integer tableId;
@@ -26,10 +25,12 @@ public class OrderDTO {
     private BigDecimal discountSum;
     private BigDecimal wipeSum;
     private BigDecimal chargeSum;
+    List<OrderProductPO> orderProducts;
     private String tableName;
     private String note;
     private String payMethod;
     private String payStatus;
     private String orderStatus;
     private Timestamp createTime;
+    private String branchName;
 }

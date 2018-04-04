@@ -12,6 +12,7 @@ import com.qudiancan.backend.pojo.vo.shop.CartVO;
 import com.qudiancan.backend.pojo.vo.shop.OrderVO;
 import com.qudiancan.backend.repository.*;
 import com.qudiancan.backend.service.shop.ShopOrderService;
+import com.qudiancan.backend.service.shop.ShopTableService;
 import com.qudiancan.backend.service.util.shop.ShopOrderServiceUtil;
 import com.qudiancan.backend.service.wechat.WechatCartService;
 import com.qudiancan.backend.util.KeyUtil;
@@ -50,6 +51,8 @@ public class ShopOrderServiceImpl implements ShopOrderService {
     private OrderProductRepository orderProductRepository;
     @Autowired
     private WechatCartService wechatCartService;
+    @Autowired
+    private ShopTableService shopTableService;
 
     @Override
     @Transactional(rollbackOn = {Exception.class})
@@ -76,8 +79,6 @@ public class ShopOrderServiceImpl implements ShopOrderService {
             if (Objects.isNull(memberPO) || !memberPO.getShopId().equals(branchPO.getShopId())) {
                 throw new ShopException(ResponseEnum.PARAM_INVALID, "memberId");
             }
-            // 清空购物车
-            wechatCartService.clearCart(orderVO.getBranchId(), memberPO.getOpenid());
         }
         BranchTablePO branchTablePO = null;
         if (Objects.nonNull(orderVO.getBranchTableId())) {
@@ -154,7 +155,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         }
         BranchOrderPO branchOrderPO = branchOrderRepository.findOne(orderId);
         if (Objects.isNull(branchOrderPO)) {
-            throw new ShopException(ResponseEnum.ORDER_NOT_EXIST);
+            return null;
         }
         List<OrderProductPO> orderProductPOList = orderProductRepository.findByOrderId(orderId);
         if (CollectionUtils.isEmpty(orderProductPOList)) {
@@ -211,6 +212,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         // 修改订单状态
         branchOrderPO.setOrderStatus(OrderStatus.CANCELED.name());
         BranchOrderPO savedBranchOrderPO = branchOrderRepository.save(branchOrderPO);
+        shopTableService.leisureTable(savedBranchOrderPO.getId());
 
         // 如果已支付，则退款
         // TODO: 18/04/03
@@ -244,6 +246,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
     }
 
     @Override
+    @Transactional(rollbackOn = {Exception.class})
     public void pay(String orderNumber) {
         log.info("【支付订单】orderNumber：{}", orderNumber);
         if (StringUtils.isEmpty(orderNumber)) {
@@ -258,9 +261,11 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         }
         branchOrderPO.setPayStatus(OrderPayStatus.PAID.name());
         branchOrderRepository.save(branchOrderPO);
+        shopTableService.leisureTable(branchOrderPO.getId());
     }
 
     @Override
+    @Transactional(rollbackOn = {Exception.class})
     public OrderDTO addProducts(AddProductsVO addProductsVO) {
         log.info("【追加产品】addProductsVO：{}", addProductsVO);
         // 参数格式、完整性校验
@@ -306,11 +311,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
                             p.getPrice().multiply(new BigDecimal(o.getProductNum())), OrderProductStatus.NORMAL.name());
                 })
                 .collect(Collectors.toList());
-        List<OrderProductPO> savedOrderProductPO = orderProductRepository.save(orderProductPOList);
-
-        OrderDTO orderDTO = new OrderDTO();
-        BeanUtils.copyProperties(savedBranchOrderPO, orderDTO);
-        orderDTO.setOrderProducts(savedOrderProductPO);
-        return orderDTO;
+        orderProductRepository.save(orderProductPOList);
+        return findByOrderId(savedBranchOrderPO.getId());
     }
 }
