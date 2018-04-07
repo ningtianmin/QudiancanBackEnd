@@ -68,7 +68,7 @@
                         setTimeout('location.href="${basePath!}/merchants/index"', 2000);
                     } else if (response.code === 1000) {
                         layer.msg(response.message, {icon: 5});
-                        setTimeout('location.href="${basePath!}/merchants/suppleShopInfo"', 2000);
+                        setTimeout('location.href="${basePath!}/merchants/perfectShop"', 2000);
                     } else {
                         layer.msg(response.message, {icon: 5});
                     }

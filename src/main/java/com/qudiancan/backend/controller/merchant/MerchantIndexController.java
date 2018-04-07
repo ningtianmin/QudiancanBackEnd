@@ -31,9 +31,9 @@ public class MerchantIndexController {
         return new ModelAndView("merchant/login");
     }
 
-    @RequestMapping("/suppleShopInfo")
+    @RequestMapping("/perfectShop")
     public ModelAndView suppleShopInfo() {
-        return new ModelAndView("merchant/suppleShopInfo");
+        return new ModelAndView("merchant/perfectShop");
     }
 
 }

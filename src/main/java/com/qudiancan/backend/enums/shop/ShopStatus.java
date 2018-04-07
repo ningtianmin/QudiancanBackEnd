@@ -9,9 +9,9 @@ import lombok.Getter;
 public enum ShopStatus {
 
     /**
-     * 新建的，门店待创建
+     * 待完善
      */
-    NEW("NEW", "新建的"),
+    REMAIN_PERFECT("REMAIN_PERFECT", "待完善"),
     /**
      * 正常
      */

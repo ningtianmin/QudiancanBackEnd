@@ -13,9 +13,9 @@ public enum ResponseEnum {
      */
     OK(0, "OK"),
     /**
-     * 门店待创建
+     * 店铺待完善
      */
-    BRANCH_NEED_CREATED(1000, "门店待创建"),
+    SHOP_REMAIN_PERFECT(1000, "店铺待完善"),
     /**
      * 服务器内部错误
      */

@@ -114,7 +114,7 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         // 持久化
         ShopPO shop = new ShopPO();
         shop.setId(registerVO.getShopId());
-        shop.setStatus(ShopStatus.NEW.toString());
+        shop.setStatus(ShopStatus.REMAIN_PERFECT.toString());
         shopRepository.save(shop);
         AccountPO account = new AccountPO(null, registerVO.getShopId(), registerVO.getShopId(), registerVO.getPassword(),
                 StringUtils.isEmpty(registerVO.getName()) ? registerVO.getPhone() : registerVO.getName(),
@@ -141,8 +141,8 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         CookieUtil.set(response, Constant.COOKIE_CURRENT_ACCOUNT_NAME, accountPO.getName(), Constant.COOKIE_EXPIRY);
         CookieUtil.set(response, Constant.COOKIE_CURRENT_SHOP_ID, accountPO.getShopId(), Constant.COOKIE_EXPIRY);
 
-        if (shopRepository.findOne(accountPO.getShopId()).getStatus().equals(ShopStatus.NEW.name())) {
-            throw new ShopException(ResponseEnum.BRANCH_NEED_CREATED);
+        if (shopRepository.findOne(accountPO.getShopId()).getStatus().equals(ShopStatus.REMAIN_PERFECT.name())) {
+            throw new ShopException(ResponseEnum.SHOP_REMAIN_PERFECT);
         } else {
             BranchPO firstBranchPO = branchRepository.findFirstByShopId(accountPO.getShopId());
             if (accountPO.getIsCreator().equals(ShopIsCreator.YES.name())) {
