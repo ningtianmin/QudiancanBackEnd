@@ -6,10 +6,14 @@ import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
 import com.qudiancan.backend.pojo.Response;
 import com.qudiancan.backend.pojo.po.ShopPO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
+import com.qudiancan.backend.service.shop.ShopAccountService;
 import com.qudiancan.backend.service.shop.ShopService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author NINGTIANMIN
@@ -18,8 +22,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/shops")
 @Slf4j
 public class ShopController {
+
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private ShopAccountService shopAccountService;
 
     /**
      * 获取店铺
@@ -44,4 +51,14 @@ public class ShopController {
     public Response<ShopPO> updateShop(@PathVariable String shopId, ShopVO shopVO) {
         return Response.success(shopService.updateShop(ShopAccountHolder.get().getId(), shopId, shopVO));
     }
+
+    /**
+     * 账户登出
+     */
+    @PostMapping("/logout")
+    public Response logout(HttpServletRequest request, HttpServletResponse response) {
+        shopAccountService.logout(request, response);
+        return Response.success();
+    }
+
 }

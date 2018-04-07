@@ -10,10 +10,12 @@ import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.dto.shop.ShopAccountDTO;
 import com.qudiancan.backend.pojo.dto.shop.ShopAccountTokenDTO;
 import com.qudiancan.backend.pojo.po.AccountPO;
+import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
 import com.qudiancan.backend.pojo.vo.shop.LoginVO;
 import com.qudiancan.backend.pojo.vo.shop.RegisterVO;
 import com.qudiancan.backend.repository.AccountRepository;
+import com.qudiancan.backend.repository.BranchRepository;
 import com.qudiancan.backend.repository.ShopRepository;
 import com.qudiancan.backend.service.SmsService;
 import com.qudiancan.backend.service.shop.ShopAccountService;
@@ -46,6 +48,8 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
     private SmsService smsService;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private BranchRepository branchRepository;
 
     @Override
     public void sendSmsCaptcha(String phone, SmsCaptchaType smsCaptchaType) {
@@ -85,7 +89,7 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackOn = {Exception.class})
     public ShopAccountDTO register(RegisterVO registerVO) {
         log.info("[账户注册]registerVO:{}", registerVO);
         // 验证字段合法性和有效性
@@ -134,6 +138,21 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
                 String.valueOf(accountPO.getId()), Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
         // 存放token于cookie
         CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, token, Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+        CookieUtil.set(response, Constant.MERCHANT_CURRENT_ACCOUNT_NAME, accountPO.getName(), Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+        CookieUtil.set(response, Constant.MERCHANT_CURRENT_SHOP_ID, accountPO.getShopId(), Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+
+        if (shopRepository.findOne(accountPO.getShopId()).getStatus().equals(ShopStatus.NEW.name())) {
+            throw new ShopException(ResponseEnum.BRANCH_NEED_CREATED);
+        } else {
+            BranchPO firstBranchPO = branchRepository.findFirstByShopId(accountPO.getShopId());
+            if (accountPO.getIsCreator().equals(ShopIsCreator.YES.name())) {
+                if (Objects.nonNull(firstBranchPO)) {
+                    CookieUtil.set(response, Constant.MERCHANT_CURRENT_BRANCH_ID, firstBranchPO.getId() + "", Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+                }
+            } else {
+                CookieUtil.set(response, Constant.MERCHANT_CURRENT_BRANCH_ID, accountPO.getBranchIds().split(",")[0], Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+            }
+        }
         return new ShopAccountTokenDTO(accountPO.getId(), token);
     }
 

@@ -7,10 +7,15 @@ import lombok.Getter;
  */
 @Getter
 public enum ResponseEnum {
+
     /**
      * 请求成功
      */
-    OK(1000, "OK"),
+    OK(0, "OK"),
+    /**
+     * 门店待创建
+     */
+    BRANCH_NEED_CREATED(1000, "门店待创建"),
     /**
      * 服务器内部错误
      */
@@ -135,4 +140,5 @@ public enum ResponseEnum {
         this.code = code;
         this.message = message;
     }
+
 }

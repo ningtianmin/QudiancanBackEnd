@@ -13,6 +13,13 @@ spring:
         max-wait: 10000
   jpa:
     show-sql: true
+  freemarker:
+    charset: utf-8
+    content-type: text/html
+    request-context-attribute: request
+    template-loader-path: classpath:/templates/
+  mvc:
+    static-path-pattern: /static/**
 aliyun:
   accesskeyId:
   accessKeySecret:
@@ -23,3 +30,6 @@ wechat:
   appSecret: 
   grantType: authorization_code
   apiUrl: https://api.weixin.qq.com
+server:
+  context-path: /qudiancan
+  port: 8080

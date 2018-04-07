@@ -13,10 +13,11 @@ import java.util.regex.Pattern;
  * @author NINGTIANMIN
  */
 public class ShopAccountServiceUtil {
+
     public static final Pattern PHONE_PATTERN = Pattern.compile("^1(3[0-9]|4[57]|5[0-35-9]|7[0135678]|8[0-9])\\d{8}$");
     public static final Pattern ID_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_-]{2,15}$");
     public static final Pattern EMAIL_PATTERN = Pattern.compile("^([A-Za-z0-9_.-])+@([A-Za-z0-9_.-])+\\.([A-Za-z]{2,4})$");
-    public static final Pattern PASSWORD_PATTERN = Pattern.compile("[a-zA-Z0-9?.-_]{6,16}");
+    public static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9?.-_]{6,16}$");
     public static final Random SMS_CAPTCHA_RANDOM = new Random();
 
     public static void checkRegisterVO(RegisterVO registerVO) {
@@ -51,4 +52,5 @@ public class ShopAccountServiceUtil {
     public static boolean checkEmailValidity(String email) {
         return !StringUtils.isEmpty(email) && EMAIL_PATTERN.matcher(email).matches();
     }
+
 }

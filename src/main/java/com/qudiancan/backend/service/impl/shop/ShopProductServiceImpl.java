@@ -18,6 +18,8 @@ import com.qudiancan.backend.service.util.shop.ShopProductServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -170,5 +172,16 @@ public class ShopProductServiceImpl implements ShopProductService {
                 )
                 .sorted((o1, o2) -> o2.getCategoryPosition() - o1.getCategoryPosition())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<BranchProductPO> pageProduct(Integer accountId, String shopId, Integer branchId, Pageable pageable) {
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId) || Objects.isNull(pageable)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        if (!shopBranchService.canManageBranch(accountId, shopId, branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        return branchProductRepository.findByBranchId(branchId, pageable);
     }
 }

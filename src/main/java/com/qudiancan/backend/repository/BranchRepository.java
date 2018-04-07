@@ -9,6 +9,7 @@ import java.util.List;
  * @author NINGTIANMIN
  */
 public interface BranchRepository extends JpaRepository<BranchPO, Integer> {
+
     /**
      * 通过门店名查询门店
      *
@@ -24,4 +25,13 @@ public interface BranchRepository extends JpaRepository<BranchPO, Integer> {
      * @return 门店列表
      */
     List<BranchPO> findByShopId(String shopId);
+
+    /**
+     * 通过店铺id查询第一个门店
+     *
+     * @param shopId 店铺id
+     * @return 门店
+     */
+    BranchPO findFirstByShopId(String shopId);
+
 }

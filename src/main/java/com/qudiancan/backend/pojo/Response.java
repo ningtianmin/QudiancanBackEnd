@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Response<T> {
+
     private Integer code;
     private String message;
     private T data;
@@ -54,7 +55,14 @@ public class Response<T> {
         return new Response(code, message);
     }
 
+    public static Response failure(String message) {
+        Response response = new Response();
+        response.setMessage(message);
+        return response;
+    }
+
     public static <T> Response<T> failure(Integer code, String message, T data) {
         return new Response<>(code, message, data);
     }
+
 }

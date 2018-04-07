@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -24,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/shops")
 @Slf4j
 public class ShopAccountController {
+
     @Autowired
     private ShopAccountService shopAccountService;
 
@@ -61,12 +61,4 @@ public class ShopAccountController {
         return Response.success(shopAccountService.login(loginVO, response));
     }
 
-    /**
-     * 账户登出
-     */
-    @PostMapping("/logout")
-    public Response logout(HttpServletRequest request, HttpServletResponse response) {
-        shopAccountService.logout(request, response);
-        return Response.success();
-    }
 }

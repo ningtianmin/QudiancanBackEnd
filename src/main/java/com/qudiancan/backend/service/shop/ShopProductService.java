@@ -5,6 +5,8 @@ import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.ProductCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchProductVO;
 import com.qudiancan.backend.pojo.vo.shop.ProductCategoryVO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  * @author NINGTIANMIN
  */
 public interface ShopProductService {
+
     /**
      * 获取产品类目列表
      *
@@ -97,4 +100,16 @@ public interface ShopProductService {
      * @return 门店产品信息
      */
     List<ShopProductDTO> listProductUp(Integer branchId);
+
+    /**
+     * 分页查询产品列表
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @param pageable  分页参数
+     * @return 产品列表
+     */
+    Page<BranchProductPO> pageProduct(Integer accountId, String shopId, Integer branchId, Pageable pageable);
+
 }
