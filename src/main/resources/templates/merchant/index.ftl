@@ -3,12 +3,11 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${basePath!}/static/layui/css/layui.css">
     <script src="${basePath!}/static/jquery-3.3.1.min.js"></script>
-    <script src="${basePath!}/static/layui/layui.all.js"></script>
     <script src="${basePath!}/static/layui/layui.js"></script>
-    <script src="${basePath!}/static/layer/layer.js"></script>
     <title>去点餐后台</title>
 </head>
 <body>
+<#if currentBranchId??>
 <div class="layui-container" style="width: 90%;">
     <div class="layui-row">
         <ul class="layui-nav" style="display: flex; flex-direction: row-reverse; align-items: center">
@@ -71,6 +70,9 @@
         </div>
     </div>
 </div>
+<#else>
+<button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/suppleShopInfo">前去完善店铺信息</a></button>
+</#if>
 
 <!--layui script-->
 <script>

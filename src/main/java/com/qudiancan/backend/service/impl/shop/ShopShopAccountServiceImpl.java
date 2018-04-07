@@ -137,9 +137,9 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         redisTemplate.opsForValue().set(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", token),
                 String.valueOf(accountPO.getId()), Constant.REDIS_ACCOUNT_EXPIRY, TimeUnit.MINUTES);
         // 存放token于cookie
-        CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, token, Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
-        CookieUtil.set(response, Constant.MERCHANT_CURRENT_ACCOUNT_NAME, accountPO.getName(), Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
-        CookieUtil.set(response, Constant.MERCHANT_CURRENT_SHOP_ID, accountPO.getShopId(), Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+        CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, token, Constant.COOKIE_EXPIRY);
+        CookieUtil.set(response, Constant.COOKIE_CURRENT_ACCOUNT_NAME, accountPO.getName(), Constant.COOKIE_EXPIRY);
+        CookieUtil.set(response, Constant.COOKIE_CURRENT_SHOP_ID, accountPO.getShopId(), Constant.COOKIE_EXPIRY);
 
         if (shopRepository.findOne(accountPO.getShopId()).getStatus().equals(ShopStatus.NEW.name())) {
             throw new ShopException(ResponseEnum.BRANCH_NEED_CREATED);
@@ -147,10 +147,10 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
             BranchPO firstBranchPO = branchRepository.findFirstByShopId(accountPO.getShopId());
             if (accountPO.getIsCreator().equals(ShopIsCreator.YES.name())) {
                 if (Objects.nonNull(firstBranchPO)) {
-                    CookieUtil.set(response, Constant.MERCHANT_CURRENT_BRANCH_ID, firstBranchPO.getId() + "", Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+                    CookieUtil.set(response, Constant.COOKIE_CURRENT_BRANCH_ID, firstBranchPO.getId() + "", Constant.COOKIE_EXPIRY);
                 }
             } else {
-                CookieUtil.set(response, Constant.MERCHANT_CURRENT_BRANCH_ID, accountPO.getBranchIds().split(",")[0], Constant.COOKIE_ACCOUNT_SESSION_EXPIRY);
+                CookieUtil.set(response, Constant.COOKIE_CURRENT_BRANCH_ID, accountPO.getBranchIds().split(",")[0], Constant.COOKIE_EXPIRY);
             }
         }
         return new ShopAccountTokenDTO(accountPO.getId(), token);
@@ -159,9 +159,10 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         String token = CookieUtil.get(request, Constant.COOKIE_ACCOUNT_SESSION);
-        if (Objects.nonNull(token)) {
-            redisTemplate.opsForValue().getOperations().delete(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%S", token));
-            CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, null, 0);
-        }
+        redisTemplate.opsForValue().getOperations().delete(String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%S", token));
+        CookieUtil.set(response, Constant.COOKIE_ACCOUNT_SESSION, null, 0);
+        CookieUtil.set(response, Constant.COOKIE_CURRENT_ACCOUNT_NAME, null, 0);
+        CookieUtil.set(response, Constant.COOKIE_CURRENT_BRANCH_ID, null, 0);
+        CookieUtil.set(response, Constant.COOKIE_CURRENT_SHOP_ID, null, 0);
     }
 }

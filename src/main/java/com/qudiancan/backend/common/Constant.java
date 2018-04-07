@@ -10,10 +10,11 @@ public interface Constant {
     Integer REDIS_SMS_CAPTCHA_EXPIRY = 5;
     String REDIS_ACCOUNT_KEY_PREFIX = "account_token_";
     Integer REDIS_ACCOUNT_EXPIRY = 60;
+
+    Integer COOKIE_EXPIRY = 100;
     String COOKIE_ACCOUNT_SESSION = "accountSession";
-    Integer COOKIE_ACCOUNT_SESSION_EXPIRY = 100;
-    String MERCHANT_CURRENT_ACCOUNT_NAME = "currentAccountName";
-    String MERCHANT_CURRENT_SHOP_ID = "currentShopId";
-    String MERCHANT_CURRENT_BRANCH_ID = "currentBranchId";
+    String COOKIE_CURRENT_ACCOUNT_NAME = "currentAccountName";
+    String COOKIE_CURRENT_SHOP_ID = "currentShopId";
+    String COOKIE_CURRENT_BRANCH_ID = "currentBranchId";
 
 }

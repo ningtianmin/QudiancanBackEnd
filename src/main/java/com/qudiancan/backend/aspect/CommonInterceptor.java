@@ -17,9 +17,9 @@ public class CommonInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         request.setAttribute("basePath", String.format("%s://%s:%d%s", request.getScheme(), request.getServerName(),
                 request.getServerPort(), request.getContextPath()));
-        request.setAttribute(Constant.MERCHANT_CURRENT_SHOP_ID, CookieUtil.get(request, Constant.MERCHANT_CURRENT_SHOP_ID));
-        request.setAttribute(Constant.MERCHANT_CURRENT_BRANCH_ID, CookieUtil.get(request, Constant.MERCHANT_CURRENT_BRANCH_ID));
-        request.setAttribute(Constant.MERCHANT_CURRENT_ACCOUNT_NAME, CookieUtil.get(request, Constant.MERCHANT_CURRENT_ACCOUNT_NAME));
+        request.setAttribute(Constant.COOKIE_CURRENT_SHOP_ID, CookieUtil.get(request, Constant.COOKIE_CURRENT_SHOP_ID));
+        request.setAttribute(Constant.COOKIE_CURRENT_BRANCH_ID, CookieUtil.get(request, Constant.COOKIE_CURRENT_BRANCH_ID));
+        request.setAttribute(Constant.COOKIE_CURRENT_ACCOUNT_NAME, CookieUtil.get(request, Constant.COOKIE_CURRENT_ACCOUNT_NAME));
         return true;
     }
 
