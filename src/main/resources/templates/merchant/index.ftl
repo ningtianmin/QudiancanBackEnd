@@ -40,7 +40,9 @@
                     <a href="javascript:;">出品中心</a>
                     <dl class="layui-nav-child">
                         <dd style="text-align: center"><a href="javascript:;">出品设置</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">出品部门</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/departments')">出品部门</a>
+                        </dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -71,7 +73,7 @@
     </div>
 </div>
 <#else>
-<button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/suppleShopInfo">前去完善店铺信息</a></button>
+<button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/perfectShop">前去完善店铺信息</a></button>
 </#if>
 
 <!--layui script-->

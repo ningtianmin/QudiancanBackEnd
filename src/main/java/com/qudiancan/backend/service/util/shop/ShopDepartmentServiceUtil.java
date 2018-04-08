@@ -15,11 +15,13 @@ public class ShopDepartmentServiceUtil {
         if (Objects.isNull(departmentVO)) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "departmentVO");
         }
-        if (StringUtils.isEmpty(departmentVO.getName())) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "name");
+        if (StringUtils.isEmpty(departmentVO.getName())
+                || departmentVO.getName().length() < 2 || departmentVO.getName().length() > 15) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "name两个字符到十五个字符");
         }
-        if (StringUtils.isEmpty(departmentVO.getDescription())) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "description");
+        if (StringUtils.isEmpty(departmentVO.getDescription())
+                || departmentVO.getDescription().length() < 2 || departmentVO.getDescription().length() > 50) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "description两个字符到五十个字符");
         }
     }
 }

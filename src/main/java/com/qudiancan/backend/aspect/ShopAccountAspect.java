@@ -37,10 +37,11 @@ import java.util.stream.Collectors;
 @Aspect
 @Slf4j
 public class ShopAccountAspect {
+
+    public static final String COMMA = ",";
     private StringRedisTemplate redisTemplate;
     private AccountRepository accountRepository;
     private AuthorityRepository authorityRepository;
-    public static final String COMMA=",";
 
     public ShopAccountAspect(StringRedisTemplate redisTemplate, AccountRepository accountRepository, AuthorityRepository authorityRepository) {
         Assert.notNull(redisTemplate, "redisTemplate不能为空");
@@ -52,7 +53,9 @@ public class ShopAccountAspect {
     }
 
     @Pointcut("execution(public * com.qudiancan.backend.controller.shop.*.*(..))" +
-            "&& !execution(public * com.qudiancan.backend.controller.shop.ShopAccountController.*(..))")
+            "&& !execution(public * com.qudiancan.backend.controller.shop.ShopAccountController.*(..))" +
+            "|| execution(public * com.qudiancan.backend.controller.merchant.*.*(..))" +
+            "&& !execution(public * com.qudiancan.backend.controller.merchant.MerchantAccountController.*(..))")
     public void pointcut() {
 
     }
@@ -122,4 +125,5 @@ public class ShopAccountAspect {
         ShopAccountHolder.remove();
         return result;
     }
+
 }

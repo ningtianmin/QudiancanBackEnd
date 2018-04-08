@@ -1,13 +1,16 @@
 package com.qudiancan.backend.controller.shop;
 
+import com.qudiancan.backend.common.Constant;
 import com.qudiancan.backend.common.ShopAccountHolder;
 import com.qudiancan.backend.common.ShopRequiredAuthority;
 import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
 import com.qudiancan.backend.pojo.Response;
+import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 import com.qudiancan.backend.service.shop.ShopAccountService;
 import com.qudiancan.backend.service.shop.ShopService;
+import com.qudiancan.backend.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +34,7 @@ public class ShopController {
     /**
      * 获取店铺
      *
-     * @param shopId  店铺id
+     * @param shopId 店铺id
      * @return 获取的店铺
      */
     @GetMapping("/{shopId}")
@@ -43,7 +46,7 @@ public class ShopController {
     /**
      * 更新店铺
      *
-     * @param shopVO  店铺信息
+     * @param shopVO 店铺信息
      * @return 更新后的店铺
      */
     @PostMapping("/{shopId}")
@@ -58,6 +61,19 @@ public class ShopController {
     @PostMapping("/logout")
     public Response logout(HttpServletRequest request, HttpServletResponse response) {
         shopAccountService.logout(request, response);
+        return Response.success();
+    }
+
+    /**
+     * 完善店铺
+     *
+     * @param perfectShopVO 店铺和第一个门店信息
+     * @return 请求状态
+     */
+    @PostMapping("/perfect")
+    public Response perfectShop(PerfectShopVO perfectShopVO, HttpServletResponse servletResponse) {
+        BranchPO branchPO = shopService.perfectShop(ShopAccountHolder.get().getId(), perfectShopVO);
+        CookieUtil.set(servletResponse, Constant.COOKIE_CURRENT_BRANCH_ID, branchPO.getId() + "", Constant.COOKIE_EXPIRY);
         return Response.success();
     }
 

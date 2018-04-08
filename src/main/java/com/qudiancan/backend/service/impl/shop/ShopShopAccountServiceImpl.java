@@ -115,6 +115,7 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         ShopPO shop = new ShopPO();
         shop.setId(registerVO.getShopId());
         shop.setStatus(ShopStatus.REMAIN_PERFECT.toString());
+        shop.setTelephone(registerVO.getPhone());
         shopRepository.save(shop);
         AccountPO account = new AccountPO(null, registerVO.getShopId(), registerVO.getShopId(), registerVO.getPassword(),
                 StringUtils.isEmpty(registerVO.getName()) ? registerVO.getPhone() : registerVO.getName(),

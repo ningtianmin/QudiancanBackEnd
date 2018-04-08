@@ -1,12 +1,13 @@
 package com.qudiancan.backend.enums.shop;
 
+import com.qudiancan.backend.enums.StringPair;
 import lombok.Getter;
 
 /**
  * @author NINGTIANMIN
  */
 @Getter
-public enum ShopIsCreator {
+public enum ShopIsCreator implements StringPair {
 
     /**
      * 是账户创建者

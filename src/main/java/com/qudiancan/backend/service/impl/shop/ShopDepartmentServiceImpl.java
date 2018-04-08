@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -69,5 +70,18 @@ public class ShopDepartmentServiceImpl implements ShopDepartmentService {
         departmentPO.setName(departmentVO.getName());
         departmentPO.setDescription(departmentVO.getDescription());
         return departmentRepository.save(departmentPO);
+    }
+
+    @Override
+    public List<DepartmentPO> listDepartment(Integer accountId, String shopId, Integer branchId) {
+        log.info("[获取出品部门列表]accountId:{},shopId:{},branchId;{}", accountId, shopId, branchId);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId");
+        }
+        // 逻辑验证
+        if (!shopBranchService.canManageBranch(accountId, shopId, branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        return departmentRepository.findByBranchId(branchId);
     }
 }

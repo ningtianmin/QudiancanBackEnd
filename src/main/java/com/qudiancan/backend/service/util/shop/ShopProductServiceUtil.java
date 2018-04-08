@@ -18,11 +18,12 @@ public class ShopProductServiceUtil {
     public static final Pattern PRICE_PATTERN = Pattern.compile("^(0|[1-9][0-9]{0,5})(\\.[0-9]{1,2})?$");
 
     public static void checkProductCategoryVO(ProductCategoryVO productCategoryVO) {
-        if (StringUtils.isEmpty(productCategoryVO.getName())) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "name");
+        if (StringUtils.isEmpty(productCategoryVO.getName())
+                || productCategoryVO.getName().length() < 2 || productCategoryVO.getName().length() > 15) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "name两个字符到十五个字符");
         }
         if (!checkPositionValidity(productCategoryVO.getPosition())) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "position");
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "position为1至4位整数");
         }
     }
 

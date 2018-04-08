@@ -17,4 +17,6 @@ public interface Constant {
     String COOKIE_CURRENT_SHOP_ID = "currentShopId";
     String COOKIE_CURRENT_BRANCH_ID = "currentBranchId";
 
+    String CLIENT_CONSTANTS_NAME = "constants";
+
 }

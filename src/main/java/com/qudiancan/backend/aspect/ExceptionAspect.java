@@ -23,7 +23,7 @@ public class ExceptionAspect {
             return Response.failure(shopException.getCode(), shopException.getMessage());
         } else {
             log.error("", e);
-            return Response.failure(e.getMessage());
+            return Response.failure("操作失败");
         }
     }
 

@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author NINGTIANMIN
  */
@@ -18,8 +20,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/shops")
 @Slf4j
 public class ShopDepartmentController {
+
     @Autowired
     private ShopDepartmentService shopDepartmentService;
+
+    /**
+     * 获取出品部门列表
+     *
+     * @param shopId   店铺id
+     * @param branchId 门店id
+     * @return 出品部门列表
+     */
+    @GetMapping("/{shopId}/branches/{branchId}/departments")
+    @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_DEPARTMENT_SHOW)
+    public Response<List<DepartmentPO>> listDepartment(@PathVariable String shopId, @PathVariable Integer branchId) {
+        return Response.success(shopDepartmentService.listDepartment(ShopAccountHolder.get().getId(), shopId, branchId));
+    }
 
     /**
      * 创建出品部门
@@ -65,4 +81,5 @@ public class ShopDepartmentController {
                                                    @PathVariable Integer departmentId, DepartmentVO departmentVO) {
         return Response.success(shopDepartmentService.updateDepartment(ShopAccountHolder.get().getId(), shopId, branchId, departmentId, departmentVO));
     }
+
 }

@@ -3,6 +3,8 @@ package com.qudiancan.backend.service.shop;
 import com.qudiancan.backend.pojo.po.DepartmentPO;
 import com.qudiancan.backend.pojo.vo.shop.DepartmentVO;
 
+import java.util.List;
+
 /**
  * @author NINGTIANMIN
  */
@@ -40,4 +42,14 @@ public interface ShopDepartmentService {
      * @return 更新后的出品部门
      */
     DepartmentPO updateDepartment(Integer accountId, String shopId, Integer branchId, Integer departmentId, DepartmentVO departmentVO);
+
+    /**
+     * 获取出品部门列表
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @return 出品部门列表
+     */
+    List<DepartmentPO> listDepartment(Integer accountId, String shopId, Integer branchId);
 }

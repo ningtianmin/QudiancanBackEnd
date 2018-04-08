@@ -1,5 +1,7 @@
 package com.qudiancan.backend.service.shop;
 
+import com.qudiancan.backend.controller.shop.PerfectShopVO;
+import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 
@@ -25,4 +27,13 @@ public interface ShopService {
      * @return 更新后的店铺
      */
     ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO);
+
+    /**
+     * 完善店铺
+     *
+     * @param accountId     账户id
+     * @param perfectShopVO 店铺和第一个门店信息
+     * @return 完善店铺后返回的门店
+     */
+    BranchPO perfectShop(Integer accountId, PerfectShopVO perfectShopVO);
 }

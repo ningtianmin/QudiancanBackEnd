@@ -20,6 +20,12 @@ public class MerchantProductController {
         return new ModelAndView("merchant/categories");
     }
 
+    @GetMapping("/departments")
+    @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_DEPARTMENT_SHOW)
+    public ModelAndView departments() {
+        return new ModelAndView("merchant/departments");
+    }
+
     @GetMapping("/products")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_PRODUCT_SHOW)
     public ModelAndView products() {
