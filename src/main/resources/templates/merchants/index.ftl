@@ -29,24 +29,20 @@
                     <a href="javascript:;">门店中心</a>
                     <dl class="layui-nav-child">
                         <dd style="text-align: center"><a href="javascript:;"
-                                                          onclick="changeMainBody('/merchants/products')">产品管理</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/categories')">商品分类</a>
-                        </dd>
-                        <dd style="text-align: center"><a href="javascript:;">订单列表</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">出品中心</a>
-                    <dl class="layui-nav-child">
-                        <dd style="text-align: center"><a href="javascript:;">出品设置</a></dd>
                         <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/departments')">出品部门</a>
                         </dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/products')">产品管理</a></dd>
+                        </dd>
+                        <dd style="text-align: center"><a href="javascript:;">出品设置</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;">桌台分类</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;">桌台管理</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">报表</a>
+                    <a href="javascript:;">数据中心</a>
                     <dl class="layui-nav-child">
                         <dd style="text-align: center"><a href="javascript:;">订单分析</a></dd>
                         <dd style="text-align: center"><a href="javascript:;">菜品分析</a></dd>
@@ -61,8 +57,6 @@
                         <dd style="text-align: center"><a href="javascript:;">系统设置</a></dd>
                         <dd style="text-align: center"><a href="javascript:;">角色设置</a></dd>
                         <dd style="text-align: center"><a href="javascript:;">账号设置</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">用户分析</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">营业分析</a></dd>
                     </dl>
                 </li>
             </ul>

@@ -1,5 +1,6 @@
 package com.qudiancan.backend.aspect;
 
+import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class ExceptionAspect {
             return Response.failure(shopException.getCode(), shopException.getMessage());
         } else {
             log.error("", e);
-            return Response.failure("操作失败");
+            return Response.failure(ResponseEnum.FAILURE);
         }
     }
 

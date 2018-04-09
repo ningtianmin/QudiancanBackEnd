@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author NINGTIANMIN
  */
-public class CommonInterceptor implements HandlerInterceptor {
+public class MerchantInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

@@ -13,6 +13,10 @@ public enum ResponseEnum {
      */
     OK(0, "OK"),
     /**
+     * 请求失败
+     */
+    FAILURE(-1, "FAILURE"),
+    /**
      * 店铺待完善
      */
     SHOP_REMAIN_PERFECT(1000, "店铺待完善"),

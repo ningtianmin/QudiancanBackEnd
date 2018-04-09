@@ -21,12 +21,12 @@ public class MerchantAccountController {
 
     @RequestMapping("/register")
     public ModelAndView register() {
-        return new ModelAndView("merchant/register");
+        return new ModelAndView("merchants/register");
     }
 
     @RequestMapping("/login")
     public ModelAndView login() {
-        return new ModelAndView("merchant/login");
+        return new ModelAndView("merchants/login");
     }
 
     @GetMapping("constants")

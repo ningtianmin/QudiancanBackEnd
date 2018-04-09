@@ -28,13 +28,13 @@ public class MerchantIndexController {
 
     @GetMapping("/index")
     public ModelAndView index() {
-        return new ModelAndView("merchant/index");
+        return new ModelAndView("merchants/index");
     }
 
     @RequestMapping("/logout")
     public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
         shopAccountService.logout(request, response);
-        return new ModelAndView("merchant/login");
+        return new ModelAndView("merchants/login");
     }
 
     @RequestMapping("/perfectShop")
@@ -42,7 +42,7 @@ public class MerchantIndexController {
         Map<String, List<StringPairDTO>> constants = CommonUtil.getConstants();
         Map<String, Object> map = new HashMap<>(1);
         map.put(Constant.CLIENT_CONSTANTS_NAME, constants);
-        return new ModelAndView("merchant/perfectShop", map);
+        return new ModelAndView("merchants/perfectShop", map);
     }
 
 }

@@ -12,24 +12,24 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/merchants")
-public class MerchantProductController {
+public class MerchantBranchController {
 
     @GetMapping("/categories")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_CATEGORY_SHOW)
     public ModelAndView categories() {
-        return new ModelAndView("merchant/categories");
+        return new ModelAndView("merchants/categories");
     }
 
     @GetMapping("/departments")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_DEPARTMENT_SHOW)
     public ModelAndView departments() {
-        return new ModelAndView("merchant/departments");
+        return new ModelAndView("merchants/departments");
     }
 
     @GetMapping("/products")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_PRODUCT_SHOW)
     public ModelAndView products() {
-        return new ModelAndView("merchant/products");
+        return new ModelAndView("merchants/products");
     }
 
 }
