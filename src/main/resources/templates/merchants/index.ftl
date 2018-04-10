@@ -36,7 +36,6 @@
                         <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/products')">产品管理</a></dd>
                         </dd>
-                        <dd style="text-align: center"><a href="javascript:;">出品设置</a></dd>
                         <dd style="text-align: center"><a href="javascript:;">桌台分类</a></dd>
                         <dd style="text-align: center"><a href="javascript:;">桌台管理</a></dd>
                     </dl>
@@ -67,7 +66,7 @@
     </div>
 </div>
 <#else>
-<button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/perfectShop">前去完善店铺信息</a></button>
+<button class="layui-btn layui-bg-green" onclick="perfectShopSkip()">前去完善店铺信息</button>
 </#if>
 
 <!--layui script-->
@@ -90,12 +89,16 @@
                 var response = JSON.parse(res.responseText);
                 if (response.code === 0) {
                     layer.msg("注销成功", {icon: 6});
-                    setTimeout('location.href="${basePath!}/merchants/login"', 2000);
                 } else {
                     layer.msg(response.message, {icon: 5});
                 }
+                setTimeout('location.href="${basePath!}/merchants/login"', 2000);
             }
         });
+    }
+
+    function perfectShopSkip() {
+        window.location.href = "${basePath!}/merchants/perfectShop";
     }
 
     function changeMainBody(url) {

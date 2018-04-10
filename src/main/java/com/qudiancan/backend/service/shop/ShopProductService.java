@@ -1,5 +1,6 @@
 package com.qudiancan.backend.service.shop;
 
+import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.pojo.dto.shop.ShopProductDTO;
 import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.ProductCategoryPO;
@@ -111,5 +112,31 @@ public interface ShopProductService {
      * @return 产品列表
      */
     Page<BranchProductPO> pageProduct(Integer accountId, String shopId, Integer branchId, Pageable pageable);
+
+    /**
+     * 获取门店的类目枚举
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @return 类目枚举
+     */
+    List<StringPairDTO> categoriesStringPair(Integer accountId, String shopId, Integer branchId);
+
+    /**
+     * 上架产品
+     *
+     * @param accountId 账户id
+     * @param productId 产品id
+     */
+    void upProduct(Integer accountId, Integer productId);
+
+    /**
+     * 下架产品
+     *
+     * @param accountId 账户id
+     * @param productId 产品id
+     */
+    void downProduct(Integer accountId, Integer productId);
 
 }

@@ -1,5 +1,6 @@
 package com.qudiancan.backend.service.shop;
 
+import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.pojo.po.DepartmentPO;
 import com.qudiancan.backend.pojo.vo.shop.DepartmentVO;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @author NINGTIANMIN
  */
 public interface ShopDepartmentService {
+
     /**
      * 创建出品部门
      *
@@ -52,4 +54,15 @@ public interface ShopDepartmentService {
      * @return 出品部门列表
      */
     List<DepartmentPO> listDepartment(Integer accountId, String shopId, Integer branchId);
+
+    /**
+     * 获取门店的出品部门枚举
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @return 出品部门枚举
+     */
+    List<StringPairDTO> departmentsStringPair(Integer accountId, String shopId, Integer branchId);
+
 }

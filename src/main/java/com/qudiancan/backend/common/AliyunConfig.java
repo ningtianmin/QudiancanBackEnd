@@ -15,4 +15,6 @@ public class AliyunConfig {
     private String accessKeySecret;
     private String smsSignName;
     private String smsTemplateCode;
+    private String endpoint;
+    private String bucketName;
 }

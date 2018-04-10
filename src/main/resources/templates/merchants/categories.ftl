@@ -49,8 +49,7 @@
                     title: '操作',
                     width: 120,
                     align: 'center',
-                    templet: '#updateTool',
-                    event: 'update'
+                    templet: '#updateTool'
                 }
             ]],
             response: {
@@ -150,7 +149,7 @@
 
 <!--laytpl-->
 <script type="text/html" id="updateTool">
-    <button class="layui-btn">更新</button>
+    <button class="layui-btn" lay-event="update">更新</button>
 </script>
 
 <!--plain script-->

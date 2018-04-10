@@ -8,10 +8,16 @@ import java.time.LocalDate;
  * @author NINGTIANMIN
  */
 public class KeyUtil {
+
     private static final int ORDER_NUMBER_RANDOM_COUNT = 10;
 
     public static synchronized String generateOrderNumber() {
         return LocalDate.now().toString().replaceAll("-", "") +
                 RandomStringUtils.randomNumeric(ORDER_NUMBER_RANDOM_COUNT);
     }
+
+    public static synchronized String genImageKey() {
+        return RandomStringUtils.random(15, true, true);
+    }
+
 }

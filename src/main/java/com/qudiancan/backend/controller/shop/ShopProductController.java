@@ -1,5 +1,7 @@
 package com.qudiancan.backend.controller.shop;
 
+import com.aliyun.oss.OSSClient;
+import com.qudiancan.backend.common.AliyunConfig;
 import com.qudiancan.backend.common.ShopAccountHolder;
 import com.qudiancan.backend.common.ShopRequiredAuthority;
 import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
@@ -10,11 +12,14 @@ import com.qudiancan.backend.pojo.po.ProductCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchProductVO;
 import com.qudiancan.backend.pojo.vo.shop.ProductCategoryVO;
 import com.qudiancan.backend.service.shop.ShopProductService;
+import com.qudiancan.backend.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -27,6 +32,10 @@ public class ShopProductController {
 
     @Autowired
     private ShopProductService shopProductService;
+    @Autowired
+    private AliyunConfig aliyunConfig;
+    @Autowired
+    private OSSClient ossClient;
 
     /**
      * 获取产品类目列表
@@ -146,6 +155,46 @@ public class ShopProductController {
                                                                @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return PageResponse.success(shopProductService.pageProduct(
                 ShopAccountHolder.get().getId(), shopId, branchId, new PageRequest(page - 1, size)));
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param file 图片文件
+     * @return 请求结果
+     * @throws IOException 文件找不到
+     */
+    @PostMapping("/uploadImage")
+    public Response uploadImage(@RequestParam MultipartFile file) throws IOException {
+        String imageName = KeyUtil.genImageKey() + ".jpg";
+        ossClient.putObject(aliyunConfig.getBucketName(), imageName, file.getInputStream());
+        return Response.success(String.format("https://%s.%s/%s", aliyunConfig.getBucketName(), aliyunConfig.getEndpoint(), imageName));
+    }
+
+    /**
+     * 上架产品
+     *
+     * @param productId 产品id
+     * @return 请求结果
+     */
+    @PostMapping("/products/{productId}/up")
+    @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_PRODUCT_UP)
+    public Response upProduct(@PathVariable Integer productId) {
+        shopProductService.upProduct(ShopAccountHolder.get().getId(), productId);
+        return Response.success();
+    }
+
+    /**
+     * 下架产品
+     *
+     * @param productId 产品id
+     * @return 请求结果
+     */
+    @PostMapping("/products/{productId}/down")
+    @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_PRODUCT_DOWN)
+    public Response downProduct(@PathVariable Integer productId) {
+        shopProductService.downProduct(ShopAccountHolder.get().getId(), productId);
+        return Response.success();
     }
 
 }

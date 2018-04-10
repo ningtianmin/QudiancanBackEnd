@@ -12,7 +12,11 @@ public enum ShopBranchProductStatus implements StringPair {
     /**
      * 正常
      */
-    NORMAL("NORMAL", "正常");
+    NORMAL("NORMAL", "正常"),
+    /**
+     * 下架
+     */
+    DOWN("DOWN", "下架");
 
     private String key;
     private String value;

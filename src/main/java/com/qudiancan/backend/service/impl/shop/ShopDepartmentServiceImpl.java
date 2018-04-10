@@ -1,6 +1,7 @@
 package com.qudiancan.backend.service.impl.shop;
 
 import com.qudiancan.backend.enums.ResponseEnum;
+import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.po.DepartmentPO;
 import com.qudiancan.backend.pojo.vo.shop.DepartmentVO;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author NINGTIANMIN
@@ -22,6 +24,7 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class ShopDepartmentServiceImpl implements ShopDepartmentService {
+
     @Autowired
     private DepartmentRepository departmentRepository;
     @Autowired
@@ -84,4 +87,12 @@ public class ShopDepartmentServiceImpl implements ShopDepartmentService {
         }
         return departmentRepository.findByBranchId(branchId);
     }
+
+    @Override
+    public List<StringPairDTO> departmentsStringPair(Integer accountId, String shopId, Integer branchId) {
+        return listDepartment(accountId, shopId, branchId).stream()
+                .map(o -> new StringPairDTO(String.valueOf(o.getId()), o.getName()))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -20,14 +20,24 @@ spring:
     template-loader-path: classpath:/templates/
   mvc:
     static-path-pattern: /static/**
+  http:
+    multipart:
+      enabled: true
+      location: /tmp
+      max-file-size: 10MB
+      max-request-size: 10MB
+      resolve-lazily: false
+      file-size-threshold: 0KB
 aliyun:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  bucketName: qudiancan
   accesskeyId:
   accessKeySecret:
   smsSignName: 去点餐
   smsTemplateCode: SMS_125018336
 wechat:
   appId:
-  appSecret: 
+  appSecret:
   grantType: authorization_code
   apiUrl: https://api.weixin.qq.com
 server:

@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ShopAuthorityEnum {
+
     /**
      * 查看店铺
      */
@@ -82,7 +83,15 @@ public enum ShopAuthorityEnum {
     /**
      * 更新桌台
      */
-    BRANCH_TABLE_UPDATE(19, "BRANCH_TABLE_UPDATE");
+    BRANCH_TABLE_UPDATE(19, "BRANCH_TABLE_UPDATE"),
+    /**
+     * 上架产品
+     */
+    BRANCH_PRODUCT_UP(20, "BRANCH_PRODUCT_UP"),
+    /**
+     * 下架产品
+     */
+    BRANCH_PRODUCT_DOWN(21, "BRANCH_PRODUCT_DOWN");
 
     private Integer id;
     private String path;
@@ -91,4 +100,5 @@ public enum ShopAuthorityEnum {
         this.id = id;
         this.path = path;
     }
+
 }

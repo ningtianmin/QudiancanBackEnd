@@ -37,12 +37,13 @@
                 <button type="submit" class="layui-btn layui-bg-orange" lay-submit lay-filter="login">登录账户</button>
             </div>
             <div class="layui-form-label">
-                <button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/register">注册账户</a></button>
+                <button class="layui-btn layui-bg-green" onclick="registerSkip()">注册账户</button>
             </div>
         </div>
     </div>
 </div>
 </body>
+
 <!--layui script-->
 <script>
     layui.use('form', function () {
@@ -77,8 +78,12 @@
         });
     });
 </script>
+
 <!--plain script-->
 <script>
-
+    function registerSkip() {
+        window.location.href = "${basePath!}/merchants/register";
+    }
 </script>
+
 </html>

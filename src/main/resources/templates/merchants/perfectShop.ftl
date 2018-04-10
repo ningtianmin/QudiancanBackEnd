@@ -20,11 +20,13 @@
         <div class="layui-form-item"
              style="display: flex; align-items: center; justify-content: center;">
             <label class="layui-form-label">主体类型</label>
-            <select name="shopHolderType">
+            <div class="layui-input-inline">
+                <select name="shopHolderType">
                     <#list constants.shopHolderType as temp>
                         <option value="${temp.key}">${temp.value}</option>
                     </#list>
-            </select>
+                </select>
+            </div>
         </div>
         <div class="layui-form-item" style="display: flex;align-items: center; justify-content: center">
             <label class="layui-form-label" for="holderName">个人姓名/企业名称</label>

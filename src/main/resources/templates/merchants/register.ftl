@@ -75,11 +75,12 @@
                 <button class="layui-btn layui-bg-orange" lay-submit lay-filter="register">注册账户</button>
             </div>
             <div class="layui-form-label">
-                <button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/login">登录账户</a></button>
+                <button class="layui-btn layui-bg-green" onclick="loginSkip()">登录账户</button>
             </div>
         </div>
     </div>
 </div>
+
 <!--layui script-->
 <script>
     layui.use('form', function () {
@@ -119,6 +120,7 @@
         });
     });
 </script>
+
 <!--plain script-->
 <script>
     function sendCaptcha() {
@@ -145,6 +147,11 @@
             }
         });
     }
+
+    function loginSkip() {
+        window.location.href = "${basePath!}/merchants/login";
+    }
 </script>
+
 </body>
 </html>

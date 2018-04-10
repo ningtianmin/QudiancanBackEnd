@@ -1,14 +1,18 @@
 package com.qudiancan.backend.service.impl.shop;
 
 import com.qudiancan.backend.enums.ResponseEnum;
+import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.enums.shop.ShopBranchProductStatus;
+import com.qudiancan.backend.enums.shop.ShopIsCreator;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.dto.shop.ShopProductDTO;
+import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.BranchProductPO;
 import com.qudiancan.backend.pojo.po.DepartmentPO;
 import com.qudiancan.backend.pojo.po.ProductCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchProductVO;
 import com.qudiancan.backend.pojo.vo.shop.ProductCategoryVO;
+import com.qudiancan.backend.repository.AccountRepository;
 import com.qudiancan.backend.repository.BranchProductRepository;
 import com.qudiancan.backend.repository.DepartmentRepository;
 import com.qudiancan.backend.repository.ProductCategoryRepository;
@@ -23,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,6 +38,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ShopProductServiceImpl implements ShopProductService {
+
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
     @Autowired
@@ -41,6 +47,8 @@ public class ShopProductServiceImpl implements ShopProductService {
     private BranchProductRepository branchProductRepository;
     @Autowired
     private ShopBranchService shopBranchService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public List<ProductCategoryPO> listProductCategory(Integer accountId, String shopId, Integer branchId) {
@@ -184,4 +192,60 @@ public class ShopProductServiceImpl implements ShopProductService {
         }
         return branchProductRepository.findByBranchId(branchId, pageable);
     }
+
+    @Override
+    public List<StringPairDTO> categoriesStringPair(Integer accountId, String shopId, Integer branchId) {
+        return listProductCategory(accountId, shopId, branchId).stream()
+                .map(o -> new StringPairDTO(String.valueOf(o.getId()), o.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void upProduct(Integer accountId, Integer productId) {
+        log.info("【上架产品】accountId：{}，productId：{}", accountId, productId);
+        if (Objects.isNull(accountId) || Objects.isNull(productId)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        BranchProductPO branchProductPO = branchProductRepository.findOne(productId);
+        if (Objects.isNull(accountPO) || Objects.isNull(branchProductPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID);
+        }
+        if (accountPO.getIsCreator().equals(ShopIsCreator.YES.getKey()) ||
+                Arrays.stream(accountPO.getBranchIds().split(",")).anyMatch(o -> o.equals(productId + ""))) {
+            if (branchProductPO.getStatus().equals(ShopBranchProductStatus.DOWN.getKey())) {
+                branchProductPO.setStatus(ShopBranchProductStatus.NORMAL.getKey());
+                branchProductRepository.save(branchProductPO);
+            } else {
+                throw new ShopException(ResponseEnum.BAD_REQUEST, "该产品处于上架状态");
+            }
+        } else {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+    }
+
+    @Override
+    public void downProduct(Integer accountId, Integer productId) {
+        log.info("【下架产品】accountId：{}，productId：{}", accountId, productId);
+        if (Objects.isNull(accountId) || Objects.isNull(productId)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        BranchProductPO branchProductPO = branchProductRepository.findOne(productId);
+        if (Objects.isNull(accountPO) || Objects.isNull(branchProductPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID);
+        }
+        if (accountPO.getIsCreator().equals(ShopIsCreator.YES.getKey()) ||
+                Arrays.stream(accountPO.getBranchIds().split(",")).anyMatch(o -> o.equals(productId + ""))) {
+            if (branchProductPO.getStatus().equals(ShopBranchProductStatus.NORMAL.getKey())) {
+                branchProductPO.setStatus(ShopBranchProductStatus.DOWN.getKey());
+                branchProductRepository.save(branchProductPO);
+            } else {
+                throw new ShopException(ResponseEnum.BAD_REQUEST, "该产品处于下架状态");
+            }
+        } else {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+    }
+
 }
