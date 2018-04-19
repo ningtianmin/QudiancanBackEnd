@@ -18,7 +18,7 @@ public class ShopServiceUtil {
     public static final Pattern SOCIAL_CREDIT_CODE_PATTERN = Pattern.compile("^[1-9A-GY][1239][1-5][0-9]{5}[0-9A-Z]{10}$");
     public static final Pattern NATIONAL_IDENTIFICATION_NUMBER_PATTERN = Pattern.compile("(^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]$)");
     public static final Pattern SHOP_NAME_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
-    public static final Pattern HOLDER_NAME_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
+    public static final Pattern HOLDER_NAME_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
     public static final Pattern SHOP_INTRODUCTION_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
     public static final Pattern BRANCH_NAME_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
     public static final Pattern BRANCH_NOTICE_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,50}$");

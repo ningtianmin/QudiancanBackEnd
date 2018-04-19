@@ -62,6 +62,8 @@
             url: '${basePath}/shops/${currentShopId}/branches/${currentBranchId}/tables',
             cols: [[
                 {type: 'numbers', title: '序号', width: 50, align: 'center'},
+                {field: 'id', title: '桌台id', width: 100, align: 'center'},
+                {field: 'branchId', title: '门店id', width: 100, align: 'center'},
                 {field: 'categoryId', title: '桌台类目id', width: 100, align: 'center'},
                 {field: 'name', title: '名称', width: 120, align: 'center'},
                 {field: 'orderId', title: '该桌台当前订单', width: 130, align: 'center'},

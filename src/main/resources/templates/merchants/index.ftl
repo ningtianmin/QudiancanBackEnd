@@ -83,7 +83,7 @@
             </ul>
         </div>
         <div class="layui-col-md11">
-            <iframe id="frame" style="width: 100%; height: 100%; border: none;"></iframe>
+            <iframe id="frame" style="width: 100%; height: 100%; border: none;" src="productCategories.ftl"></iframe>
         </div>
     </div>
 </div>
