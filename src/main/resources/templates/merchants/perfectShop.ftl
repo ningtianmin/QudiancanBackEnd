@@ -136,17 +136,17 @@
     layui.use('form', function () {
         var form = layui.form;
         form.verify({
-            shopName: [/^[a-zA-Z\u4E00-\u9FA5]{2,16}$/, '2位到16位'],
+            shopName: [/^[0-9a-zA-Z\u4E00-\u9FA5]{2,16}$/, '2位到16位'],
             holderName: [/^[a-zA-Z\u4E00-\u9FA5]{2,16}$/, '2位到16位'],
             holderIdentify: [/^(([1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx])|([1-9A-GY][1239][1-5][0-9]{5}[0-9A-Z]{10}))$/
                 , '请输入正确的身份证/企业信用代码'],
-            shopIntroduction: [/^[a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位'],
-            branchName: [/^[a-zA-Z\u4E00-\u9FA5]{2,16}$/, '2位到16位'],
-            branchNotice: [/^[a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位'],
-            branchAddress: [/^[a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位'],
+            shopIntroduction: [/^[0-9a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位'],
+            branchName: [/^[0-9a-zA-Z\u4E00-\u9FA5]{2,16}$/, '2位到16位'],
+            branchNotice: [/^[0-9a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位'],
+            branchAddress: [/^[0-9a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位'],
             branchLongitude: [/^-?((0|1?[0-7]?[0-9]?)(([.][0-9]{1,10})?)|180(([.][0]{1,10})?))$/, '请输入正确的经度'],
             branchLatitude: [/^-?((0|[1-8]?[0-9]?)(([.][0-9]{1,10})?)|90(([.][0]{1,10})?))$/, '请输入正确的纬度'],
-            branchIntroduction: [/^[a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位']
+            branchIntroduction: [/^[0-9a-zA-Z\u4E00-\u9FA5]{2,50}$/, '2位到50位']
         });
         form.on('submit(perfect)', function (data) {
             $.ajax({

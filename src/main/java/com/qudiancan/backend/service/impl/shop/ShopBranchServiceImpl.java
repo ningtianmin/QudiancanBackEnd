@@ -65,7 +65,7 @@ public class ShopBranchServiceImpl implements ShopBranchService {
 
         // 保存门店
         BranchPO branchPO = new BranchPO(null, shopId, branchVO.getName(), branchVO.getNotice(), branchVO.getPhone(), branchVO.getAddress(),
-                branchVO.getLongitude(), branchVO.getLatitude(), branchVO.getIntroduction(), ShopBranchStatus.NORMAL.name(), null);
+                branchVO.getLongitude(), branchVO.getLatitude(), branchVO.getIntroduction(), ShopBranchStatus.NORMAL.getKey(), null);
         return branchRepository.save(branchPO);
     }
 

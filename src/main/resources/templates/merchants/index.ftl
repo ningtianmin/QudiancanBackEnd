@@ -70,6 +70,9 @@
                                                           onclick="changeMainBody('/merchants/shopSetting')">店铺设置</a>
                         </dd>
                         <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/branchSetting?branchId=${currentBranchId}')">门店设置</a>
+                        </dd>
+                        <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/roleSetting')">角色设置</a>
                         </dd>
                         <dd style="text-align: center"><a href="javascript:;"

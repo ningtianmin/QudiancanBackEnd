@@ -12,7 +12,7 @@ spring:
         max-idle: 100
         max-wait: 10000
   jpa:
-    show-sql: true
+    show-sql: false
   freemarker:
     charset: utf-8
     content-type: text/html
@@ -42,7 +42,7 @@ wechat:
   accessTokenGrantType: client_credential
   accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
   apiUrl: https://api.weixin.qq.com
-  getwxacodeUrl: https://api.weixin.qq.com/wxa/getwxacode
+  wxacodeUrl: https://api.weixin.qq.com/wxa/getwxacode
 server:
   context-path: /qudiancan
   port: 8080

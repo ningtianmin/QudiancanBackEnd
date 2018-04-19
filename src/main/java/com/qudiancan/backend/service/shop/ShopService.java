@@ -7,6 +7,7 @@ import com.qudiancan.backend.pojo.vo.shop.PerfectShopVO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author NINGTIANMIN
@@ -29,7 +30,7 @@ public interface ShopService {
      * @param shopVO    店铺信息
      * @return 更新后的店铺
      */
-    ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO);
+    ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO, Set<String> fieldNames);
 
     /**
      * 完善店铺

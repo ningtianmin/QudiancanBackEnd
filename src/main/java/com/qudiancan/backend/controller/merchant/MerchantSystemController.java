@@ -7,9 +7,11 @@ import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
 import com.qudiancan.backend.pojo.dto.shop.AccountInfoDTO;
 import com.qudiancan.backend.pojo.po.AccountPO;
+import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.RolePO;
 import com.qudiancan.backend.pojo.po.ShopPO;
 import com.qudiancan.backend.service.shop.RoleService;
+import com.qudiancan.backend.service.shop.ShopBranchService;
 import com.qudiancan.backend.service.shop.ShopService;
 import com.qudiancan.backend.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -35,6 +38,8 @@ public class MerchantSystemController {
     private ShopService shopService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private ShopBranchService shopBranchService;
 
     @GetMapping("/shopSetting")
     public ModelAndView shopSetting() {
@@ -65,4 +70,19 @@ public class MerchantSystemController {
         return new ModelAndView("merchants/accountSetting", map);
     }
 
+    @GetMapping("/branchSetting")
+    @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_BRANCH_UPDATE)
+    public ModelAndView branchSetting(@RequestParam Integer branchId) {
+        AccountPO accountPO = ShopAccountHolder.get();
+        BranchPO branch = shopBranchService.getBranch(accountPO.getId(), accountPO.getShopId(), branchId);
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("branch", branch);
+        return new ModelAndView("merchants/branchSetting", map);
+    }
+
+    @GetMapping("/createBranch")
+    @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_BRANCH_CREATE)
+    public ModelAndView createBranch() {
+        return new ModelAndView("merchants/createBranch");
+    }
 }

@@ -66,21 +66,21 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO) {
+    public ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO, Set<String> fieldNames) {
         log.info("[更新店铺]accountId:{},shopId:{},shopVO:{}", accountId, shopId, shopVO);
         if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(shopVO)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId, shopVO");
         }
         ShopPO shopPO = getShop(accountId, shopId);
         // 检查字段
-        ShopServiceUtil.checkShopVO(shopVO);
+        ShopServiceUtil.checkShopVO(shopVO, fieldNames);
 
-        shopPO.setHolderIdentify(shopVO.getHolderIdentify());
-        shopPO.setHolderName(shopVO.getHolderName());
-        shopPO.setHolderType(shopVO.getHolderType());
-        shopPO.setIntroduction(shopVO.getIntroduction());
-        shopPO.setName(shopVO.getName());
-        shopPO.setTelephone(shopVO.getTelephone());
+        shopPO.setHolderIdentify(fieldNames.contains("holderIdentify") ? shopVO.getHolderIdentify() : shopPO.getHolderIdentify());
+        shopPO.setHolderName(fieldNames.contains("holderName") ? shopVO.getHolderName() : shopPO.getHolderName());
+        shopPO.setHolderType(fieldNames.contains("holderType") ? shopVO.getHolderType() : shopPO.getHolderType());
+        shopPO.setIntroduction(fieldNames.contains("introduction") ? shopVO.getIntroduction() : shopPO.getIntroduction());
+        shopPO.setName(fieldNames.contains("name") ? shopVO.getName() : shopPO.getName());
+        shopPO.setTelephone(fieldNames.contains("telephone") ? shopVO.getTelephone() : shopPO.getTelephone());
         return shopRepository.save(shopPO);
     }
 

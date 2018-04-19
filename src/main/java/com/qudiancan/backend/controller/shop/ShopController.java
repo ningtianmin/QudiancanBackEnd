@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -58,7 +60,26 @@ public class ShopController {
     @PostMapping("/{shopId}")
     @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_SHOP_UPDATE)
     public Response<ShopPO> updateShop(@PathVariable String shopId, ShopVO shopVO) {
-        return Response.success(shopService.updateShop(ShopAccountHolder.get().getId(), shopId, shopVO));
+        return Response.success(shopService.updateShop(ShopAccountHolder.get().getId(), shopId, shopVO,
+                new HashSet<>(Arrays.asList("holderIdentify",
+                        "holderName",
+                        "holderType",
+                        "introduction",
+                        "name",
+                        "telephone"))));
+    }
+
+    /**
+     * 更新店铺名和介绍
+     *
+     * @param shopVO 店铺信息
+     * @return 更新后的店铺
+     */
+    @PostMapping("/{shopId}/nameIntroductionUpdate")
+    @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_SHOP_UPDATE)
+    public Response<ShopPO> updateShopNameAndIntroduction(@PathVariable String shopId, ShopVO shopVO) {
+        return Response.success(shopService.updateShop(ShopAccountHolder.get().getId(), shopId, shopVO,
+                new HashSet<>(Arrays.asList("introduction", "name"))));
     }
 
     /**

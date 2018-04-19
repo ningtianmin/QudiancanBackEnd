@@ -8,6 +8,7 @@ import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -16,36 +17,38 @@ import java.util.regex.Pattern;
 public class ShopServiceUtil {
     public static final Pattern SOCIAL_CREDIT_CODE_PATTERN = Pattern.compile("^[1-9A-GY][1239][1-5][0-9]{5}[0-9A-Z]{10}$");
     public static final Pattern NATIONAL_IDENTIFICATION_NUMBER_PATTERN = Pattern.compile("(^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}[0-9Xx]$)");
-    public static final Pattern SHOP_NAME_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
+    public static final Pattern SHOP_NAME_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
     public static final Pattern HOLDER_NAME_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
-    public static final Pattern SHOP_INTRODUCTION_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
-    public static final Pattern BRANCH_NAME_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
-    public static final Pattern BRANCH_NOTICE_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
-    public static final Pattern BRANCH_ADDRESS_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
-    public static final Pattern BRANCH_INTRODUCTION_PATTERN = Pattern.compile("^[a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
+    public static final Pattern SHOP_INTRODUCTION_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
+    public static final Pattern BRANCH_NAME_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,16}$");
+    public static final Pattern BRANCH_NOTICE_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
+    public static final Pattern BRANCH_ADDRESS_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
+    public static final Pattern BRANCH_INTRODUCTION_PATTERN = Pattern.compile("^[0-9a-zA-Z\\u4E00-\\u9FA5]{2,50}$");
 
-    public static void checkShopVO(ShopVO shopVO) {
+    public static void checkShopVO(ShopVO shopVO, Set<String> fieldNames) {
         try {
-            ShopHolderType shopHolderType = ShopHolderType.valueOf(shopVO.getHolderType());
-            String holderIdentify = shopVO.getHolderIdentify();
-            boolean holderIdentifyValidity = (ShopHolderType.COMPANY == shopHolderType && checkSocialCreditCodeValidity(holderIdentify)) ||
-                    (ShopHolderType.PERSON == shopHolderType && checkNationalIdentificationNumberValidity(holderIdentify));
-            if (!holderIdentifyValidity) {
-                throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "holderIdentify");
+            if (fieldNames.contains("holderType") || fieldNames.contains("holderType")) {
+                String holderIdentify = shopVO.getHolderIdentify();
+                String holderType = shopVO.getHolderType();
+                boolean holderIdentifyValidity = (ShopHolderType.COMPANY.getKey().equals(holderType) && checkSocialCreditCodeValidity(holderIdentify)) ||
+                        (ShopHolderType.PERSON.getKey().equals(holderType) && checkNationalIdentificationNumberValidity(holderIdentify));
+                if (!holderIdentifyValidity) {
+                    throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "holderType,holderIdentify");
+                }
             }
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "holderType");
         }
-        if (StringUtils.isEmpty(shopVO.getHolderName())) {
+        if (fieldNames.contains("holderName") && !checkHolderNameValidity(shopVO.getHolderName())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "holderName");
         }
-        if (StringUtils.isEmpty(shopVO.getIntroduction())) {
+        if (fieldNames.contains("introduction") && !checkShopIntroductionValidity(shopVO.getIntroduction())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "introduction");
         }
-        if (StringUtils.isEmpty(shopVO.getName())) {
+        if (fieldNames.contains("name") && !checkShopNameValidity(shopVO.getName())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "name");
         }
-        if (!ShopAccountServiceUtil.checkPhoneValidity(shopVO.getTelephone())) {
+        if (fieldNames.contains("telephone") && !ShopAccountServiceUtil.checkPhoneValidity(shopVO.getTelephone())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "telephone");
         }
     }

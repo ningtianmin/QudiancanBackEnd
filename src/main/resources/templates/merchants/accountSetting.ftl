@@ -7,7 +7,7 @@
     <title>账户列表</title>
 </head>
 <body>
-<div class="layui-container" style="width: 100%;">
+<div class="layui-container" style="width: 100%; padding: 10px;">
     <h2 class="layui-show">当前门店的账户</h2>
     <table class="layui-table">
         <thead class="layui-table-header">
