@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,18 @@ public class ShopAccountController {
     }
 
     /**
+     * 发送重置密码手机验证码
+     *
+     * @param phone 手机号
+     * @return 发送状态
+     */
+    @PostMapping("/resetPassword/send_sms_captcha")
+    public Response sendResetPasswordSmsCaptcha(@RequestParam String phone) {
+        shopAccountService.sendSmsCaptcha(phone, SmsCaptchaType.RESET_PASSWORD);
+        return Response.success();
+    }
+
+    /**
      * 账户注册
      *
      * @param registerVO 注册信息
@@ -48,6 +61,17 @@ public class ShopAccountController {
     @PostMapping("/register")
     public Response<ShopAccountDTO> register(RegisterVO registerVO) {
         return Response.success(shopAccountService.register(registerVO));
+    }
+
+    /**
+     * 重置密码
+     *
+     * @return 请求状态
+     */
+    @PostMapping("/resetPassword")
+    public Response resetPassword(@RequestParam String phone, @RequestParam String phoneCaptcha, @RequestParam String newPassword) {
+        shopAccountService.resetPassword(phone, phoneCaptcha, newPassword);
+        return Response.success();
     }
 
     /**

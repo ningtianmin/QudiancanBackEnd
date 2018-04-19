@@ -25,9 +25,10 @@ public interface ShopService {
     /**
      * 更新店铺
      *
-     * @param accountId 账户id
-     * @param shopId    店铺id
-     * @param shopVO    店铺信息
+     * @param accountId  账户id
+     * @param shopId     店铺id
+     * @param shopVO     店铺信息
+     * @param fieldNames 需要更新的字段集合
      * @return 更新后的店铺
      */
     ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO, Set<String> fieldNames);

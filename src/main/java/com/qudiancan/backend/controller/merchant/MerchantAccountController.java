@@ -35,4 +35,8 @@ public class MerchantAccountController {
         return Response.success(CommonUtil.getConstants());
     }
 
+    @GetMapping("/resetPassword")
+    public ModelAndView forgetPassword() {
+        return new ModelAndView("merchants/resetPassword");
+    }
 }

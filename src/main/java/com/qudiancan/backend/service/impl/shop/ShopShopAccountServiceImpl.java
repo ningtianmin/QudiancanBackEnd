@@ -60,11 +60,21 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         }
 
         // 逻辑验证
-        if (SmsCaptchaType.REGISTER.equals(smsCaptchaType)) {
-            if (accountRepository.findByPhone(phone) != null) {
-                log.warn("[发送手机验证码失败]{},{}", phone, smsCaptchaType);
-                throw new ShopException(ResponseEnum.SHOP_PHONE_OCCUPIED);
-            }
+        switch (smsCaptchaType) {
+            case REGISTER:
+                if (Objects.nonNull(accountRepository.findByPhone(phone))) {
+                    log.warn("[发送手机验证码失败]{},{}", phone, smsCaptchaType);
+                    throw new ShopException(ResponseEnum.SHOP_PHONE_OCCUPIED);
+                }
+                break;
+            case RESET_PASSWORD:
+                if (Objects.isNull(accountRepository.findByPhone(phone))) {
+                    log.warn("[发送手机验证码失败]{},{}", phone, smsCaptchaType);
+                    throw new ShopException(ResponseEnum.PARAM_INVALID, "不存在该手机号对应的账号");
+                }
+                break;
+            default:
+                break;
         }
 
         String captcha = ShopAccountServiceUtil.generateSmsCaptcha();
@@ -77,14 +87,34 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         }
         // 存放验证码在redis
         // TODO: 18/02/16 redis需释放资源
-        redisTemplate.opsForValue().set(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone),
-                captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
+        switch (smsCaptchaType) {
+            case REGISTER:
+                redisTemplate.opsForValue().set(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone),
+                        captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
+                break;
+            case RESET_PASSWORD:
+                redisTemplate.opsForValue().set(String.format(Constant.REDIS_RESET_PASSWORD_SMS_CAPTCHA_KEY_PREFIX + "%S", phone),
+                        captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
-    public boolean verifySmsCaptcha(String phone, String captcha) {
+    public boolean verifySmsCaptcha(String phone, String captcha, SmsCaptchaType smsCaptchaType) {
         // TODO: 18/02/16 redis需释放资源
-        String value = redisTemplate.opsForValue().get(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone));
+        String value = null;
+        switch (smsCaptchaType) {
+            case REGISTER:
+                value = redisTemplate.opsForValue().get(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone));
+                break;
+            case RESET_PASSWORD:
+                value = redisTemplate.opsForValue().get(String.format(Constant.REDIS_RESET_PASSWORD_SMS_CAPTCHA_KEY_PREFIX + "%S", phone));
+                break;
+            default:
+                break;
+        }
         return !StringUtils.isEmpty(value) && value.equals(captcha);
     }
 
@@ -96,7 +126,7 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         if (Objects.isNull(registerVO)) {
             throw new ShopException(ResponseEnum.SHOP_NO_PARAM);
         }
-        if (!verifySmsCaptcha(registerVO.getPhone(), registerVO.getPhoneCaptcha())) {
+        if (!verifySmsCaptcha(registerVO.getPhone(), registerVO.getPhoneCaptcha(), SmsCaptchaType.REGISTER)) {
             throw new ShopException(ResponseEnum.SHOP_PHONE_VERIFY_FAILURE);
         }
         ShopAccountServiceUtil.checkRegisterVO(registerVO);
@@ -122,6 +152,31 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
                 registerVO.getEmail(), registerVO.getPhone(), null, null, ShopIsCreator.YES.name(), null);
         accountRepository.save(account);
         return new ShopAccountDTO(registerVO.getShopId(), registerVO.getShopId());
+    }
+
+    @Override
+    public void resetPassword(String phone, String phoneCaptcha, String newPassword) {
+        log.info("[重置密码]phone:{}，phoneCaptcha：{}，newPassword：{}", phone, phoneCaptcha, newPassword);
+        // 验证字段合法性和有效性
+        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(phoneCaptcha) || StringUtils.isEmpty(newPassword)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        if (!ShopAccountServiceUtil.checkPasswordValidity(newPassword)) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "密码格式有误");
+        }
+        if (!verifySmsCaptcha(phone, phoneCaptcha, SmsCaptchaType.RESET_PASSWORD)) {
+            throw new ShopException(ResponseEnum.SHOP_PHONE_VERIFY_FAILURE);
+        }
+
+        // 逻辑验证
+        AccountPO accountPO = accountRepository.findByPhone(phone);
+        if (Objects.isNull(accountPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "请检查phone");
+        }
+
+        // 持久化
+        accountPO.setPassword(newPassword);
+        accountRepository.save(accountPO);
     }
 
     @Override
@@ -165,5 +220,24 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         CookieUtil.set(response, Constant.COOKIE_CURRENT_ACCOUNT_NAME, null, 0);
         CookieUtil.set(response, Constant.COOKIE_CURRENT_BRANCH_ID, null, 0);
         CookieUtil.set(response, Constant.COOKIE_CURRENT_SHOP_ID, null, 0);
+    }
+
+    @Override
+    public void updatePassword(Integer accountId, String oldPassword, String newPassword) {
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(oldPassword) || StringUtils.isEmpty(newPassword)) {
+            throw new ShopException(ResponseEnum.BAD_REQUEST);
+        }
+        if (!ShopAccountServiceUtil.checkPasswordValidity(newPassword)) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG);
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        if (Objects.isNull(accountPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID);
+        }
+        if (!accountPO.getPassword().equals(oldPassword)) {
+            throw new ShopException(ResponseEnum.BAD_REQUEST, "旧密码错误");
+        }
+        accountPO.setPassword(newPassword);
+        accountRepository.save(accountPO);
     }
 }

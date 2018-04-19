@@ -16,7 +16,7 @@
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:;" onclick="changeMainBody('/merchants/personalCenter')">个人中心</a></dd>
-                    <dd><a href="javascript:;">修改密码</a></dd>
+                    <dd><a href="javascript:;" onclick="popUpdatePassword()">修改密码</a></dd>
                     <dd><a href="javascript:;" onclick="logout()">注销</a></dd>
                 </dl>
             </li>
@@ -129,6 +129,17 @@
 
     function changeBranch(branchId) {
         window.location.href = "${basePath!}/merchants/branchIndex?branchId=" + branchId;
+    }
+
+    function popUpdatePassword() {
+        layer.open({
+            type: 2,
+            title: '<span style="font-size: 15px; color: #555555; font-weight: bold;">修改密码</span>',
+            anim: 5,
+            area: ['442px', '400px'],
+            move: false,
+            content: '${basePath!}/merchants/updatePassword'
+        });
     }
 </script>
 

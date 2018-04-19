@@ -109,4 +109,11 @@ public class ShopController {
         return Response.success(roleService.listAuthority(roleId));
     }
 
+    @PostMapping("/updatePassword")
+    public Response updatePassword(@RequestParam String oldPassword, @RequestParam String newPassword, HttpServletRequest request, HttpServletResponse response) {
+        shopAccountService.updatePassword(ShopAccountHolder.get().getId(), oldPassword, newPassword);
+        shopAccountService.logout(request, response);
+        return Response.success();
+    }
+
 }

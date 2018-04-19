@@ -104,4 +104,8 @@ public class MerchantIndexController {
         return new ModelAndView("merchants/personalCenter", map);
     }
 
+    @GetMapping("/updatePassword")
+    public ModelAndView updatePassword() {
+        return new ModelAndView("merchants/updatePassword");
+    }
 }

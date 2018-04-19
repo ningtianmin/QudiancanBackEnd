@@ -8,7 +8,6 @@
 </head>
 <body>
 <div class="layui-container" style="width: 100%; padding: 10px;">
-    <div class="layui-row layui-bg-orange"><h1 style="text-align: center;">新增产品</h1></div>
     <div class="layui-form">
         <div class="layui-form-item"
              style="display: flex; align-items: center; justify-content: center">

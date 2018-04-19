@@ -8,7 +8,9 @@
 </head>
 <body>
 <div class="layui-container">
-    <div class="layui-row layui-bg-orange"><h1 style="text-align: center;">注册商家账号</h1></div>
+    <div class="layui-row"
+         style="font-size: 30px; color: #555555; font-weight: bold; line-height: 60px; text-align: center;">注册商家账号
+    </div>
     <div class="layui-form">
         <div class="layui-form-item" style="display: flex;align-items:center;align-self: center;justify-content:center">
             <label class="layui-form-label" for="phone">手机</label>
@@ -18,9 +20,12 @@
             </div>
             <p class="layui-input-inline" style="color: red;width: 5px;">*</p>
         </div>
-        <button type="button" class="layui-btn layui-btn-primary" style="position: absolute; top: 37px; right: 25%"
-                onclick="sendCaptcha()">发送验证码
-        </button>
+        <div class="layui-form-item" style="display: flex;align-items:center;align-self: center;justify-content:center">
+            <button type="button" class="layui-btn layui-btn-primary" style="margin-left: 15px;"
+                    onclick="sendCaptcha()">发送验证码
+            </button>
+            <p class="layui-input-inline" style="color: red;width: 5px;"></p>
+        </div>
         <div class="layui-form-item" style="display: flex;align-items: center; justify-content: center">
             <label class="layui-form-label" for="phoneCaptcha">验证码</label>
             <div class="layui-input-inline">

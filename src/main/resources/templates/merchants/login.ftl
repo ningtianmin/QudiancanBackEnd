@@ -8,7 +8,9 @@
 </head>
 <body>
 <div class="layui-container">
-    <div class="layui-row layui-bg-orange"><h1 style="text-align: center;">登录商家账号</h1></div>
+    <div class="layui-row"
+         style="font-size: 30px; color: #555555; font-weight: bold; line-height: 60px; text-align: center;">登录商家账号
+    </div>
     <div class="layui-form">
         <div class="layui-form-item" style="display: flex; justify-content: center">
             <label class="layui-form-label" for="shopId">店铺id</label>
@@ -39,6 +41,9 @@
             <div class="layui-form-label">
                 <button class="layui-btn layui-bg-green" onclick="registerSkip()">注册账户</button>
             </div>
+        </div>
+        <div class="layui-form-item" style="display: flex; justify-content: center">
+            <button class="layui-btn layui-bg-gray" onclick="resetPassword()">重置密码?</button>
         </div>
     </div>
 </div>
@@ -83,6 +88,17 @@
 <script>
     function registerSkip() {
         window.location.href = "${basePath!}/merchants/register";
+    }
+
+    function resetPassword() {
+        layer.open({
+            type: 2,
+            title: '<span style="font-size: 15px; color: #555555; font-weight: bold;">重置密码</span>',
+            anim: 5,
+            area: ['442px', '480px'],
+            move: false,
+            content: '${basePath!}/merchants/resetPassword'
+        });
     }
 </script>
 

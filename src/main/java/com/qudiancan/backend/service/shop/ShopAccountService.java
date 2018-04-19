@@ -24,11 +24,12 @@ public interface ShopAccountService {
     /**
      * 验证手机验证码
      *
-     * @param phone   手机号
-     * @param captcha 验证码
+     * @param phone          手机号
+     * @param captcha        验证码
+     * @param smsCaptchaType 验证码使用类型
      * @return 验证结果
      */
-    boolean verifySmsCaptcha(String phone, String captcha);
+    boolean verifySmsCaptcha(String phone, String captcha, SmsCaptchaType smsCaptchaType);
 
     /**
      * 账户注册
@@ -37,6 +38,15 @@ public interface ShopAccountService {
      * @return 注册的账户
      */
     ShopAccountDTO register(RegisterVO registerVO);
+
+    /**
+     * 重置密码
+     *
+     * @param phone        账号手机号
+     * @param phoneCaptcha 手机验证码
+     * @param newPassword  新密码
+     */
+    void resetPassword(String phone, String phoneCaptcha, String newPassword);
 
     /**
      * 账户登录
@@ -54,4 +64,13 @@ public interface ShopAccountService {
      * @param response servletResponse
      */
     void logout(HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 修改密码
+     *
+     * @param accountId   账户id
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     */
+    void updatePassword(Integer accountId, String oldPassword, String newPassword);
 }
