@@ -6,12 +6,14 @@ import com.qudiancan.backend.pojo.vo.shop.OrderVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * @author NINGTIANMIN
  */
 public interface ShopOrderService {
+
     /**
      * 创建订单
      *
@@ -65,7 +67,7 @@ public interface ShopOrderService {
      *
      * @param orderNumber 订单编号
      */
-    void pay(String orderNumber);
+    void payByWechat(String orderNumber);
 
     /**
      * 追加产品
@@ -74,4 +76,13 @@ public interface ShopOrderService {
      * @return 追加后的订单
      */
     OrderDTO addProducts(AddProductsVO addProductsVO);
+
+    /**
+     * 获取订单列表
+     *
+     * @param openid 微信用户openid
+     * @return 订单列表
+     */
+    List<OrderDTO> listOrderByOpenid(String openid);
+
 }

@@ -15,9 +15,17 @@
                 <a href="javascript:;"><i class="layui-icon" style="color: #FFB800; font-size: 20px;">&#xe612;</i>&nbsp;&nbsp;${currentAccountName!}
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">个人中心</a></dd>
+                    <dd><a href="javascript:;" onclick="changeMainBody('/merchants/personalCenter')">个人中心</a></dd>
                     <dd><a href="javascript:;">修改密码</a></dd>
                     <dd><a href="javascript:;" onclick="logout()">注销</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">当前门店：${currentBranch.name}</a>
+                <dl class="layui-nav-child">
+                    <#list managedBranches as branch>
+                        <dd><a href="javascript:;" onclick="changeBranch(${branch.id})">${branch.name}</a></dd>
+                    </#list>
                 </dl>
             </li>
         </ul>
@@ -29,15 +37,20 @@
                     <a href="javascript:;">门店中心</a>
                     <dl class="layui-nav-child">
                         <dd style="text-align: center"><a href="javascript:;"
-                                                          onclick="changeMainBody('/merchants/categories')">商品分类</a>
+                                                          onclick="changeMainBody('/merchants/productCategories')">产品分类</a>
+                        </dd>
                         <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/departments')">出品部门</a>
                         </dd>
                         <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/products')">产品管理</a></dd>
                         </dd>
-                        <dd style="text-align: center"><a href="javascript:;">桌台分类</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">桌台管理</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/tableCategories')">桌台分类</a>
+                        </dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/tables')">桌台管理</a>
+                        </dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -53,9 +66,15 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">系统中心</a>
                     <dl class="layui-nav-child">
-                        <dd style="text-align: center"><a href="javascript:;">系统设置</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">角色设置</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">账号设置</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/shopSetting')">店铺设置</a>
+                        </dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/roleSetting')">角色设置</a>
+                        </dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/accountSetting')">账号设置</a>
+                        </dd>
                     </dl>
                 </li>
             </ul>
@@ -103,6 +122,10 @@
 
     function changeMainBody(url) {
         document.getElementById("frame").src = '${basePath!}' + url;
+    }
+
+    function changeBranch(branchId) {
+        window.location.href = "${basePath!}/merchants/branchIndex?branchId=" + branchId;
     }
 </script>
 

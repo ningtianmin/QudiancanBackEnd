@@ -39,7 +39,10 @@ wechat:
   appId:
   appSecret:
   grantType: authorization_code
+  accessTokenGrantType: client_credential
+  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
   apiUrl: https://api.weixin.qq.com
+  getwxacodeUrl: https://api.weixin.qq.com/wxa/getwxacode
 server:
   context-path: /qudiancan
   port: 8080

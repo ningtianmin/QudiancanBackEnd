@@ -4,6 +4,7 @@ import com.qudiancan.backend.common.WechatConfig;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.exception.WechatException;
+import com.qudiancan.backend.pojo.api.WechatAccessToken;
 import com.qudiancan.backend.pojo.api.WechatOpenid;
 import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.MemberPO;
@@ -26,6 +27,7 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class WechatAccountServiceImpl implements WechatAccountService {
+
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -48,6 +50,18 @@ public class WechatAccountServiceImpl implements WechatAccountService {
         uriVariables.put("grantType", wechatConfig.getGrantType());
         uriVariables.put("jsCode", jsCode);
         return restTemplate.getForObject(url, WechatOpenid.class, uriVariables).getOpenid();
+    }
+
+    @Override
+    public String getAccessToken(String appid, String secret) {
+        String url = String.format("%s?grant_type=%s&appid=%s&secret=%s", wechatConfig.getAccessTokenUrl(),
+                wechatConfig.getAccessTokenGrantType(), wechatConfig.getAppId(), wechatConfig.getAppSecret());
+        WechatAccessToken response = restTemplate.getForObject(url, WechatAccessToken.class);
+        if (response.getErrcode() == 0) {
+            return response.getAccess_token();
+        } else {
+            throw new ShopException(ResponseEnum.WECHAT_BAD_REQUEST, response.getErrmsg());
+        }
     }
 
     @Override

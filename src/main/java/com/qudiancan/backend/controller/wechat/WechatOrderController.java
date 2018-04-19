@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author NINGTIANMIN
  */
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/wechat")
 @Slf4j
 public class WechatOrderController {
+
     @Autowired
     private ShopTableService shopTableService;
     @Autowired
@@ -65,4 +68,22 @@ public class WechatOrderController {
         addProductsVO.setCart(JsonToObjectUtil.toCartVO(addProductsVO.getCartData()));
         return Response.success(wechatOrderService.addProducts(addProductsVO));
     }
+
+    /**
+     * 获取订单列表
+     *
+     * @param openid 微信用户openid
+     * @return 订单列表
+     */
+    @GetMapping("/orders/{openid}")
+    public Response<List<OrderDTO>> listOrderByOpenid(@PathVariable String openid) {
+        return Response.success(shopOrderService.listOrderByOpenid(openid));
+    }
+
+    @PostMapping("/order/pay")
+    public Response payOrder(@RequestParam String orderNumber) {
+        shopOrderService.payByWechat(orderNumber);
+        return Response.success();
+    }
+
 }

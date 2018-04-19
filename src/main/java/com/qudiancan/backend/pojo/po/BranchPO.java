@@ -3,11 +3,13 @@ package com.qudiancan.backend.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 /**
  * @author NINGTIANMIN
@@ -29,7 +31,26 @@ public class BranchPO {
     private String latitude;
     private String introduction;
     private String status;
-    // TODO: 18/02/17 问题:新建门店记录时返回的门店对象createTime属性为null
-    
+    @CreatedDate
     private Timestamp createTime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        BranchPO branchPO = (BranchPO) o;
+        return Objects.equals(id, branchPO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id);
+    }
 }

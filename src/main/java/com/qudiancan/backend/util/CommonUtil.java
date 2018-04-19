@@ -18,7 +18,7 @@ public class CommonUtil {
     public static Map<String, List<StringPairDTO>> getConstants() {
         List<Class<? extends StringPair>> classes = Arrays.asList(OrderPayStatus.class, OrderProductStatus.class,
                 OrderStatus.class, ShopBranchProductStatus.class, ShopBranchStatus.class, ShopBranchTableStatus.class,
-                ShopHolderType.class, ShopIsCreator.class, ShopStatus.class);
+                ShopHolderType.class, ShopIsCreator.class, ShopStatus.class, OrderPayMethod.class);
         Map<String, List<StringPairDTO>> map = new HashMap<>(classes.size());
         classes.forEach(o -> {
             List<StringPairDTO> collect = Arrays.stream(o.getEnumConstants())

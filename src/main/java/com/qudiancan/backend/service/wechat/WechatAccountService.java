@@ -4,6 +4,7 @@ package com.qudiancan.backend.service.wechat;
  * @author NINGTIANMIN
  */
 public interface WechatAccountService {
+
     /**
      * 获取微信用户openid
      *
@@ -11,6 +12,15 @@ public interface WechatAccountService {
      * @return openid
      */
     String getOpenid(String jsCode);
+
+    /**
+     * 获取微信accessToken
+     *
+     * @param appid  微信小程序appid
+     * @param secret 微信小程序secret
+     * @return 微信accessToken
+     */
+    String getAccessToken(String appid, String secret);
 
     /**
      * 成为店铺会员
@@ -28,4 +38,5 @@ public interface WechatAccountService {
      * @return 会员id
      */
     Integer getMemberIdByBranchIdAndOpenid(Integer branchId, String openid);
+
 }

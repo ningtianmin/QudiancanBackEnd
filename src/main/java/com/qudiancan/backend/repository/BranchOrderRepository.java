@@ -36,4 +36,12 @@ public interface BranchOrderRepository extends JpaRepository<BranchOrderPO, Inte
      * @return 订单列表
      */
     List<BranchOrderPO> findByOrderNumberIn(Set<String> orderNumbers);
+
+    /**
+     * 通过会员id列表查询订单列表
+     *
+     * @param memberIds 会员id列表
+     * @return 订单列表
+     */
+    List<BranchOrderPO> findByMemberIdIn(Set<Integer> memberIds);
 }

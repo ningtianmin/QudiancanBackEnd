@@ -1,9 +1,12 @@
 package com.qudiancan.backend.service.shop;
 
-import com.qudiancan.backend.controller.shop.PerfectShopVO;
+import com.qudiancan.backend.pojo.dto.shop.AccountInfoDTO;
 import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
+import com.qudiancan.backend.pojo.vo.shop.PerfectShopVO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
+
+import java.util.List;
 
 /**
  * @author NINGTIANMIN
@@ -36,4 +39,12 @@ public interface ShopService {
      * @return 完善店铺后返回的门店
      */
     BranchPO perfectShop(Integer accountId, PerfectShopVO perfectShopVO);
+
+    /**
+     * 通过店铺的账户列表
+     *
+     * @param shopId 店铺id
+     * @return 账户列表
+     */
+    List<AccountInfoDTO> listShopAccount(String shopId);
 }

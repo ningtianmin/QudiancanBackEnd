@@ -4,6 +4,7 @@ import com.qudiancan.backend.common.ShopAccountHolder;
 import com.qudiancan.backend.common.ShopRequiredAuthority;
 import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
 import com.qudiancan.backend.pojo.Response;
+import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchTableVO;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequestMapping("/shops")
 @Slf4j
 public class ShopTableController {
+
     @Autowired
     private ShopTableService shopTableService;
 
@@ -111,4 +113,12 @@ public class ShopTableController {
                                                      @PathVariable Integer branchTableId, BranchTableVO branchTableVO) {
         return Response.success(shopTableService.updateBranchTable(ShopAccountHolder.get().getId(), shopId, branchId, branchTableId, branchTableVO));
     }
+
+    @GetMapping("/{shopId}/branches/{branchId}/tables")
+    @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_TABLE_SHOW)
+    public Response<List<BranchTablePO>> listBranchTable(@PathVariable String shopId, @PathVariable Integer branchId) {
+        AccountPO accountPO = ShopAccountHolder.get();
+        return Response.success(shopTableService.listBranchTable(accountPO.getId(), shopId, branchId));
+    }
+
 }

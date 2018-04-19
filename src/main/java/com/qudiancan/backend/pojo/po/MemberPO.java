@@ -21,4 +21,5 @@ public class MemberPO {
     private Integer id;
     private String shopId;
     private String openid;
+    // TODO: 18/04/16 会员微信用户名，且要加入订单等其他表中
 }

@@ -3,6 +3,7 @@ package com.qudiancan.backend.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,5 +36,6 @@ public class BranchOrderPO {
     private String payMethod;
     private String payStatus;
     private String orderStatus;
+    @CreatedDate
     private Timestamp createTime;
 }

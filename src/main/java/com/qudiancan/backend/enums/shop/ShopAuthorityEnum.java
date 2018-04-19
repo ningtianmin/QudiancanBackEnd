@@ -91,7 +91,11 @@ public enum ShopAuthorityEnum {
     /**
      * 下架产品
      */
-    BRANCH_PRODUCT_DOWN(21, "BRANCH_PRODUCT_DOWN");
+    BRANCH_PRODUCT_DOWN(21, "BRANCH_PRODUCT_DOWN"),
+    /**
+     * 账号设置
+     */
+    SHOP_ACCOUNT_SETTING(22, "SHOP_ACCOUNT_SETTING");
 
     private Integer id;
     private String path;

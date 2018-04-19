@@ -3,6 +3,8 @@ package com.qudiancan.backend.repository;
 import com.qudiancan.backend.pojo.po.AccountPO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * @author NINGTIANMIN
  */
@@ -24,4 +26,12 @@ public interface AccountRepository extends JpaRepository<AccountPO, Integer> {
      * @return 账户
      */
     AccountPO findByShopIdAndLoginIdAndPassword(String shopId, String loginId, String password);
+
+    /**
+     * 通过店铺id查询账户列表
+     *
+     * @param shopId 店铺id
+     * @return 账户列表
+     */
+    List<AccountPO> findByShopId(String shopId);
 }

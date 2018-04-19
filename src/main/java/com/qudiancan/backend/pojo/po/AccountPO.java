@@ -3,6 +3,7 @@ package com.qudiancan.backend.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,5 +30,6 @@ public class AccountPO {
     private String branchIds;
     private String roleIds;
     private String isCreator;
+    @CreatedDate
     private Timestamp createTime;
 }

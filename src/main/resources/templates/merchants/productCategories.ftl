@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="${basePath!}/static/layui/css/layui.override.css">
     <script src="${basePath!}/static/jquery-3.3.1.min.js"></script>
     <script src="${basePath!}/static/layui/layui.js"></script>
-    <title>类目列表</title>
+    <title>产品类目列表</title>
 </head>
 <body>
 <div class="layui-container" style="width: 100%; padding: 10px;">
@@ -24,10 +24,11 @@
                        name="position"
                        id="position" class="layui-input">
             </div>
-            <button class="layui-btn layui-btn-radius layui-btn-warm" lay-submit lay-filter="newCategory">新增分类</button>
+            <button class="layui-btn layui-btn-radius layui-btn-warm" lay-submit lay-filter="newCategory">新增产品分类
+            </button>
         </div>
     </div>
-    <table id="categories" lay-filter="category"></table>
+    <table id="categories" lay-filter="category" class="layui-table"></table>
 </div>
 </body>
 

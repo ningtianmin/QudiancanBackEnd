@@ -1,4 +1,4 @@
-package com.qudiancan.backend.controller.shop;
+package com.qudiancan.backend.pojo.vo.shop;
 
 import lombok.Data;
 

@@ -1,0 +1,15 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+</head>
+<body>
+<h2>迷路了吧，<a id="link">登录界面</a></h2>
+<script>
+    var pathname = window.location.pathname;
+    var contextPath = pathname.substring(0, pathname.substring(1).indexOf("/") + 1);
+
+    document.getElementById("link").setAttribute("href", contextPath + "/merchants/login");
+</script>
+</body>
+</html>

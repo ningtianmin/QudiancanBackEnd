@@ -16,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author NINGTIANMIN
@@ -30,6 +29,8 @@ public class ShopBranchServiceImpl implements ShopBranchService {
     private AccountRepository accountRepository;
     @Autowired
     private BranchRepository branchRepository;
+    @Autowired
+    private ShopBranchService shopBranchService;
 
     @Override
     public boolean canManageBranch(Integer accountId, String shopId, Integer branchId) {
@@ -123,5 +124,31 @@ public class ShopBranchServiceImpl implements ShopBranchService {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         return branchRepository.findByShopId(shopId);
+    }
+
+    @Override
+    public List<BranchPO> getBranches(String branchIds) {
+        if (StringUtils.isEmpty(branchIds)) {
+            return Collections.emptyList();
+        }
+        return branchRepository.findAll(Arrays.stream(branchIds.split(",")).map(Integer::valueOf).collect(Collectors.toSet()));
+    }
+
+    @Override
+    public List<BranchPO> listBranchManage(Integer accountId) {
+        if (Objects.isNull(accountId)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        if (Objects.isNull(accountPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID);
+        }
+        List<BranchPO> all = branchRepository.findByShopId(accountPO.getShopId());
+        if (ShopIsCreator.YES.getKey().equals(accountPO.getIsCreator())) {
+            // 返回所有的门店
+            return all;
+        }
+        Set<Integer> branchIdSet = Arrays.stream(accountPO.getBranchIds().split(",")).map(Integer::valueOf).collect(Collectors.toSet());
+        return all.stream().filter(o -> branchIdSet.contains(o.getId())).collect(Collectors.toList());
     }
 }

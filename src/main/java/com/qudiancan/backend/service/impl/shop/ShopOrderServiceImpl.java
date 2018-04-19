@@ -28,6 +28,8 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -101,7 +103,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 
         // 添加订单
         BranchOrderPO branchOrderPO = new BranchOrderPO(null, orderVO.getBranchId(), branchPO.getName(), orderVO.getBranchTableId(), orderVO.getMemberId(), KeyUtil.generateOrderNumber(), totalSum.get(), null, null, null,
-                branchTablePO == null ? null : branchTablePO.getName(), orderVO.getNote(), null, OrderPayStatus.UNPAID.toString(), OrderStatus.NEW.name(), null);
+                branchTablePO == null ? null : branchTablePO.getName(), orderVO.getNote() == null ? "" : orderVO.getNote(), null, OrderPayStatus.UNPAID.toString(), OrderStatus.NEW.name(), Timestamp.valueOf(LocalDateTime.now()));
         BranchOrderPO savedBranchOrderPO = branchOrderRepository.save(branchOrderPO);
 
         // 添加订单产品
@@ -117,7 +119,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 
         // 修改桌位状态
         if (Objects.nonNull(branchTablePO)) {
-            branchTablePO.setStatus(ShopBranchTableStatus.OCCUPIED.name());
+            branchTablePO.setStatus(ShopBranchTableStatus.OCCUPIED.getKey());
             branchTablePO.setOrderId(savedBranchOrderPO.getId());
             branchTableRepository.save(branchTablePO);
         }
@@ -214,8 +216,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         BranchOrderPO savedBranchOrderPO = branchOrderRepository.save(branchOrderPO);
         shopTableService.leisureTable(savedBranchOrderPO.getId());
 
-        // 如果已支付，则退款
-        // TODO: 18/04/03
+        // TODO: 18/04/03 如果已支付，则退款
         OrderDTO orderDTO = new OrderDTO();
         BeanUtils.copyProperties(savedBranchOrderPO, orderDTO);
         orderDTO.setOrderProducts(orderProductRepository.findByOrderId(orderDTO.getId()));
@@ -247,7 +248,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 
     @Override
     @Transactional(rollbackOn = {Exception.class})
-    public void pay(String orderNumber) {
+    public void payByWechat(String orderNumber) {
         log.info("【支付订单】orderNumber：{}", orderNumber);
         if (StringUtils.isEmpty(orderNumber)) {
             throw new ShopException(ResponseEnum.PARAM_INCOMPLETE, "orderNumber");
@@ -256,10 +257,11 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         if (Objects.isNull(branchOrderPO)) {
             throw new ShopException(ResponseEnum.PARAM_INVALID, "orderNumber");
         }
-        if (!OrderStatus.NEW.name().equals(branchOrderPO.getOrderStatus()) || !OrderPayStatus.UNPAID.name().equals(branchOrderPO.getPayStatus())) {
+        if (!OrderStatus.NEW.getKey().equals(branchOrderPO.getOrderStatus()) || !OrderPayStatus.UNPAID.getKey().equals(branchOrderPO.getPayStatus())) {
             throw new ShopException(ResponseEnum.ORDER_STATUS_UNUSUAL, branchOrderPO.getOrderStatus() + branchOrderPO.getPayStatus());
         }
-        branchOrderPO.setPayStatus(OrderPayStatus.PAID.name());
+        branchOrderPO.setPayStatus(OrderPayStatus.PAID.getKey());
+        branchOrderPO.setPayMethod(OrderPayMethod.WECHAT.getKey());
         branchOrderRepository.save(branchOrderPO);
         shopTableService.leisureTable(branchOrderPO.getId());
     }
@@ -314,4 +316,29 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         orderProductRepository.save(orderProductPOList);
         return findByOrderId(savedBranchOrderPO.getId());
     }
+
+    @Override
+    public List<OrderDTO> listOrderByOpenid(String openid) {
+        log.info("[获取订单列表]openid:{}", openid);
+        if (StringUtils.isEmpty(openid)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        List<MemberPO> memberPOList = memberRepository.findByOpenid(openid);
+        if (memberPOList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<BranchOrderPO> branchOrderPOList = branchOrderRepository.findByMemberIdIn(memberPOList.stream().map(MemberPO::getId).collect(Collectors.toSet()));
+        List<OrderProductPO> orderProductPOList = orderProductRepository.findByOrderIdIn(branchOrderPOList.stream().map(BranchOrderPO::getId).collect(Collectors.toList()));
+        Map<Integer, List<OrderProductPO>> orderProductPOMap = orderProductPOList.stream().collect(Collectors.groupingBy(OrderProductPO::getOrderId));
+        return branchOrderPOList.stream()
+                .map(o -> {
+                    OrderDTO orderDTO = new OrderDTO();
+                    BeanUtils.copyProperties(o, orderDTO);
+                    orderDTO.setOrderProducts(orderProductPOMap.get(o.getId()).stream().sorted(Comparator.comparingInt(OrderProductPO::getId)).collect(Collectors.toList()));
+                    return orderDTO;
+                })
+                .sorted(((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime())))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,9 +1,9 @@
 package com.qudiancan.backend.service.util.shop;
 
-import com.qudiancan.backend.controller.shop.PerfectShopVO;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.enums.shop.ShopHolderType;
 import com.qudiancan.backend.exception.ShopException;
+import com.qudiancan.backend.pojo.vo.shop.PerfectShopVO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 import org.springframework.util.StringUtils;
 

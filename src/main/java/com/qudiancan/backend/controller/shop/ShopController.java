@@ -5,9 +5,12 @@ import com.qudiancan.backend.common.ShopAccountHolder;
 import com.qudiancan.backend.common.ShopRequiredAuthority;
 import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
 import com.qudiancan.backend.pojo.Response;
+import com.qudiancan.backend.pojo.po.AuthorityPO;
 import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
+import com.qudiancan.backend.pojo.vo.shop.PerfectShopVO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
+import com.qudiancan.backend.service.shop.RoleService;
 import com.qudiancan.backend.service.shop.ShopAccountService;
 import com.qudiancan.backend.service.shop.ShopService;
 import com.qudiancan.backend.util.CookieUtil;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author NINGTIANMIN
@@ -30,6 +34,8 @@ public class ShopController {
     private ShopService shopService;
     @Autowired
     private ShopAccountService shopAccountService;
+    @Autowired
+    private RoleService roleService;
 
     /**
      * 获取店铺
@@ -75,6 +81,11 @@ public class ShopController {
         BranchPO branchPO = shopService.perfectShop(ShopAccountHolder.get().getId(), perfectShopVO);
         CookieUtil.set(servletResponse, Constant.COOKIE_CURRENT_BRANCH_ID, branchPO.getId() + "", Constant.COOKIE_EXPIRY);
         return Response.success();
+    }
+
+    @GetMapping("roles/{roleId}/authorities")
+    public Response<List<AuthorityPO>> roleAuthority(@PathVariable Integer roleId) {
+        return Response.success(roleService.listAuthority(roleId));
     }
 
 }

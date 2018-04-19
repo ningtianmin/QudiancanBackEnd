@@ -1,6 +1,7 @@
 package com.qudiancan.backend.pojo.po;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,5 +22,6 @@ public class ShopPO {
     private String telephone;
     private String introduction;
     private String status;
+    @CreatedDate
     private Timestamp createTime;
 }

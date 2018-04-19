@@ -1,5 +1,6 @@
 package com.qudiancan.backend.service.shop;
 
+import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchTableVO;
@@ -92,4 +93,24 @@ public interface ShopTableService {
      * @param orderId 订单id
      */
     void leisureTable(Integer orderId);
+
+    /**
+     * 获取门店桌台类目列表
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @return 桌台类目列表
+     */
+    List<StringPairDTO> categoriesStringPair(Integer accountId, String shopId, Integer branchId);
+
+    /**
+     * 获取门店桌台列表
+     *
+     * @param accountId 账户id
+     * @param shopId    店铺id
+     * @param branchId  门店id
+     * @return 桌台列表
+     */
+    List<BranchTablePO> listBranchTable(Integer accountId, String shopId, Integer branchId);
 }

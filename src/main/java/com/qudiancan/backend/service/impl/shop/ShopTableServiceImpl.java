@@ -1,6 +1,7 @@
 package com.qudiancan.backend.service.impl.shop;
 
 import com.qudiancan.backend.enums.ResponseEnum;
+import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.enums.shop.ShopBranchTableStatus;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.po.BranchTablePO;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ShopTableServiceImpl implements ShopTableService {
+
     @Autowired
     private TableCategoryRepository tableCategoryRepository;
     @Autowired
@@ -106,8 +108,9 @@ public class ShopTableServiceImpl implements ShopTableService {
         if (Objects.isNull(tableCategoryPO) || !branchId.equals(tableCategoryPO.getBranchId())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "categoryId");
         }
+        // TODO: 18/04/11 加上qrcode图片地址
         return branchTableRepository.save(new BranchTablePO(null, branchId, branchTableVO.getCategoryId(), null,
-                branchTableVO.getName(), branchTableVO.getCapacity(), branchTableVO.getPosition(), ShopBranchTableStatus.LEISURE.name()));
+                branchTableVO.getName(), branchTableVO.getCapacity(), branchTableVO.getPosition(), ShopBranchTableStatus.LEISURE.name(), null));
     }
 
     @Override
@@ -164,8 +167,29 @@ public class ShopTableServiceImpl implements ShopTableService {
         BranchTablePO branchTablePO = branchTableRepository.findByOrderId(orderId);
         if (Objects.nonNull(branchTablePO)) {
             branchTablePO.setOrderId(null);
-            branchTablePO.setStatus(ShopBranchTableStatus.LEISURE.name());
+            branchTablePO.setStatus(ShopBranchTableStatus.LEISURE.getKey());
             branchTableRepository.save(branchTablePO);
         }
     }
+
+    @Override
+    public List<StringPairDTO> categoriesStringPair(Integer accountId, String shopId, Integer branchId) {
+        return listTableCategory(accountId, shopId, branchId).stream()
+                .map(o -> new StringPairDTO(o.getId() + "", o.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BranchTablePO> listBranchTable(Integer accountId, String shopId, Integer branchId) {
+        log.info("[获取门店桌台列表]accountId:{},shopId:{},branchId;{}", accountId, shopId, branchId);
+        if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(branchId)) {
+            throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId,branchId");
+        }
+        // 逻辑验证
+        if (!shopBranchService.canManageBranch(accountId, shopId, branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        return branchTableRepository.findByBranchId(branchId);
+    }
+
 }

@@ -14,6 +14,7 @@ import java.util.Objects;
 public class ShopTableServiceUtil {
     public static final Integer TABLE_CAPACITY_MAX = 12;
     public static final Integer TABLE_CAPACITY_MIN = 1;
+    public static final Integer TABLE_NAME_MAX_LENGTH = 10;
 
     public static void checkTableCategoryVO(TableCategoryVO tableCategoryVO) {
         if (Objects.isNull(tableCategoryVO)) {
@@ -34,8 +35,8 @@ public class ShopTableServiceUtil {
         if (Objects.isNull(branchTableVO.getCategoryId())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "categoryId");
         }
-        if (StringUtils.isEmpty(branchTableVO.getName())) {
-            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "name");
+        if (StringUtils.isEmpty(branchTableVO.getName()) || branchTableVO.getName().length() > TABLE_NAME_MAX_LENGTH) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "桌台名称不超过10个字符");
         }
         if (!ShopProductServiceUtil.checkPositionValidity(branchTableVO.getPosition())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "position");

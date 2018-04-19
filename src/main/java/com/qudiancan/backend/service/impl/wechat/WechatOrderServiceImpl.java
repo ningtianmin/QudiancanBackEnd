@@ -83,6 +83,9 @@ public class WechatOrderServiceImpl implements WechatOrderService {
         if (Objects.isNull(memberPO)) {
             throw new WechatException(ResponseEnum.PARAM_INVALID, "openid");
         }
+        if (Objects.isNull(branchTablePO.getOrderId())) {
+            return new TableOrderDTO(branchTablePO, null);
+        }
         OrderDTO orderDTO = shopOrderService.findByOrderId(branchTablePO.getOrderId());
         return new TableOrderDTO(branchTablePO, orderDTO);
     }

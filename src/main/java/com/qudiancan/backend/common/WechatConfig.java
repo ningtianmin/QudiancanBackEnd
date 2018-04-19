@@ -15,4 +15,7 @@ public class WechatConfig {
     private String appSecret;
     private String grantType;
     private String apiUrl;
+    private String accessTokenGrantType;
+    private String accessTokenUrl;
+    private String wxacodeUrl;
 }

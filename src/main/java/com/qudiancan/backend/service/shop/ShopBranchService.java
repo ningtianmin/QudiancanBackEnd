@@ -9,6 +9,7 @@ import java.util.List;
  * @author NINGTIANMIN
  */
 public interface ShopBranchService {
+
     /**
      * 判断是否可以管理指定门店
      *
@@ -58,4 +59,20 @@ public interface ShopBranchService {
      * @return 获取的门店列表
      */
     List<BranchPO> listBranch(Integer accountId, String shopId);
+
+    /**
+     * 通过门店id列表获取门店列表
+     *
+     * @param branchIds 门店id列表
+     * @return 门店列表
+     */
+    List<BranchPO> getBranches(String branchIds);
+
+    /**
+     * 获取账户管理的门店列表
+     *
+     * @param accountId 账户id
+     * @return 门店列表
+     */
+    List<BranchPO> listBranchManage(Integer accountId);
 }

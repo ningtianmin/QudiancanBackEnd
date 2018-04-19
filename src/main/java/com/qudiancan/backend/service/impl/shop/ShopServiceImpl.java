@@ -1,27 +1,36 @@
 package com.qudiancan.backend.service.impl.shop;
 
-import com.qudiancan.backend.controller.shop.PerfectShopVO;
 import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.enums.shop.ShopBranchStatus;
 import com.qudiancan.backend.enums.shop.ShopIsCreator;
 import com.qudiancan.backend.enums.shop.ShopStatus;
 import com.qudiancan.backend.exception.ShopException;
+import com.qudiancan.backend.pojo.dto.shop.AccountInfoDTO;
 import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.BranchPO;
+import com.qudiancan.backend.pojo.po.RolePO;
 import com.qudiancan.backend.pojo.po.ShopPO;
+import com.qudiancan.backend.pojo.vo.shop.PerfectShopVO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 import com.qudiancan.backend.repository.AccountRepository;
 import com.qudiancan.backend.repository.BranchRepository;
+import com.qudiancan.backend.repository.RoleRepository;
 import com.qudiancan.backend.repository.ShopRepository;
+import com.qudiancan.backend.service.shop.RoleService;
 import com.qudiancan.backend.service.shop.ShopService;
 import com.qudiancan.backend.service.util.shop.ShopServiceUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author NINGTIANMIN
@@ -35,6 +44,10 @@ public class ShopServiceImpl implements ShopService {
     private ShopRepository shopRepository;
     @Autowired
     private BranchRepository branchRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public ShopPO getShop(Integer accountId, String shopId) {
@@ -102,6 +115,36 @@ public class ShopServiceImpl implements ShopService {
                 perfectShopVO.getBranchLatitude(), perfectShopVO.getBranchIntroduction(),
                 ShopBranchStatus.NORMAL.getKey(), null);
         return branchRepository.save(branchPO);
+    }
+
+    @Override
+    public List<AccountInfoDTO> listShopAccount(String shopId) {
+        if (StringUtils.isEmpty(shopId)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        if (Objects.isNull(shopRepository.findOne(shopId))) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID);
+        }
+        List<AccountPO> accountPOList = accountRepository.findByShopId(shopId);
+        List<BranchPO> branchPOList = branchRepository.findByShopId(shopId);
+        List<RolePO> rolePOList = roleRepository.findAll();
+
+        return accountPOList.stream().map(o -> {
+            AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
+            BeanUtils.copyProperties(o, accountInfoDTO);
+            if (!StringUtils.isEmpty(o.getBranchIds())) {
+                Set<Integer> branchIdList = Arrays.stream(o.getBranchIds().split(",")).map(Integer::valueOf).collect(Collectors.toSet());
+                accountInfoDTO.setBranches(StringUtils.isEmpty(o.getBranchIds()) ? null : branchPOList.stream().filter(j -> branchIdList.contains(j.getId())).collect(Collectors.toList()));
+                accountInfoDTO.setBranchesString(accountInfoDTO.getBranches().stream().map(BranchPO::getName).collect(Collectors.joining(",")));
+            }
+            if (!StringUtils.isEmpty(o.getRoleIds())) {
+                Set<Integer> roleIdList = Arrays.stream(o.getRoleIds().split(",")).map(Integer::valueOf).collect(Collectors.toSet());
+                accountInfoDTO.setRoles(rolePOList.stream().filter(j -> roleIdList.contains(j.getId())).collect(Collectors.toList()));
+                accountInfoDTO.setRolesString(accountInfoDTO.getRoles().stream().map(RolePO::getName).collect(Collectors.joining(",")));
+            }
+            accountInfoDTO.setIsCreator(ShopIsCreator.valueOf(accountInfoDTO.getIsCreator()).getValue());
+            return accountInfoDTO;
+        }).collect(Collectors.toList());
     }
 
 }

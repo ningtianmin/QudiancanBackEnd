@@ -20,8 +20,10 @@
 </head>
 <body>
 <div class="layui-container" style="width: 100%; padding: 10px;">
-    <button class="layui-btn layui-btn-radius" onclick="parent.changeMainBody('/merchants/createProduct')">新增产品</button>
-    <table id="products" lay-filter="product"></table>
+    <button class="layui-btn layui-btn-radius layui-bg-orange"
+            onclick="parent.changeMainBody('/merchants/createProduct')">新增产品
+    </button>
+    <table id="products" lay-filter="product" class="layui-table"></table>
 </div>
 </body>
 
@@ -48,10 +50,10 @@
                 },
                 {field: 'unitName', title: '单位', width: 70, align: 'center'},
                 {field: 'price', title: '价格', width: 70, align: 'center', sort: true},
-                {field: 'description', title: '描述', width: 150, align: 'center'},
+                {field: 'description', title: '描述', width: 410, align: 'center'},
                 {field: 'position', title: '类目内排序', width: 120, align: 'center'},
                 {field: 'status', title: '状态', width: 120, align: 'center'},
-                {title: '操作', width: 150, align: 'center', toolbar: '#operationBar'}
+                {title: '操作', width: 200, align: 'center', toolbar: '#operationBar'}
             ]],
             page: true,
             request: {
@@ -83,7 +85,8 @@
                         var response = JSON.parse(res.responseText);
                         if (response.code === 0) {
                             layer.msg('上架成功');
-                            table.reload('products');
+                            parent.changeMainBody('/merchants/products');
+                            // table.reload('products');
                         } else {
                             layer.msg(response.message);
                         }
@@ -97,14 +100,17 @@
                         var response = JSON.parse(res.responseText);
                         if (response.code === 0) {
                             layer.msg('下架成功');
-                            table.reload('products');
+                            parent.changeMainBody('/merchants/products');
+                            // table.reload('products');
                         } else {
                             layer.msg(response.message);
                         }
                     }
                 });
+            } else if (event === 'updateProduct') {
+                parent.changeMainBody('/merchants/updateProduct?branchId=' + data.branchId + '&productId=' + data.id);
             }
-        })
+        });
     });
 </script>
 
@@ -116,6 +122,7 @@
     {{# if(d.status==='DOWN'){ }}
     <a class="layui-btn layui-btn-md" lay-event="upProduct">上架</a>
     {{# } }}
+    <a class="layui-btn layuibtn-md" lay-event="updateProduct">更新</a>
 </script>
 <script type="text/html" id="imageTemplet">
     <img style="width: 100px; height: 100px;" src="{{d.image}}">

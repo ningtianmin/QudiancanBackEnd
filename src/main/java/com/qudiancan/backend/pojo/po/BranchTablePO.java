@@ -26,4 +26,5 @@ public class BranchTablePO {
     private Integer capacity;
     private Integer position;
     private String status;
+    private String qrcode;
 }
