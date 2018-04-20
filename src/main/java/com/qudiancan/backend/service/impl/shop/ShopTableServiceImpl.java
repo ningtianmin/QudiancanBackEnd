@@ -141,8 +141,11 @@ public class ShopTableServiceImpl implements ShopTableService {
         if (Objects.isNull(branchTablePO) || !branchId.equals(branchTablePO.getBranchId())) {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
-        BranchTablePO byBranchIdAndName = branchTableRepository.findByBranchIdAndName(branchId, branchTableVO.getName());
-        if (Objects.nonNull(byBranchIdAndName) && !branchTablePO.getName().equals(branchTableVO.getName())) {
+        if (branchTablePO.getStatus().equals(ShopBranchTableStatus.OCCUPIED.getKey())) {
+            throw new ShopException(ResponseEnum.BRANCH_TABLE_STATUS_UNUSUAL, "稍后再修改");
+        }
+        BranchTablePO branch = branchTableRepository.findByBranchIdAndName(branchId, branchTableVO.getName());
+        if (Objects.nonNull(branch) && !branch.getId().equals(branchTablePO.getId())) {
             throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "该名称已被占用");
         }
         TableCategoryPO tableCategoryPO = tableCategoryRepository.findOne(branchTableVO.getCategoryId());
@@ -150,7 +153,7 @@ public class ShopTableServiceImpl implements ShopTableService {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         BeanUtils.copyProperties(branchTableVO, branchTablePO);
-        return branchTablePO;
+        return branchTableRepository.save(branchTablePO);
     }
 
     @Override

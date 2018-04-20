@@ -103,7 +103,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 
         // 添加订单
         BranchOrderPO branchOrderPO = new BranchOrderPO(null, orderVO.getBranchId(), branchPO.getName(), orderVO.getBranchTableId(), orderVO.getMemberId(), KeyUtil.generateOrderNumber(), totalSum.get(), null, null, null,
-                branchTablePO == null ? null : branchTablePO.getName(), orderVO.getNote() == null ? "" : orderVO.getNote(), null, OrderPayStatus.UNPAID.toString(), OrderStatus.NEW.name(), Timestamp.valueOf(LocalDateTime.now()));
+                branchTablePO == null ? null : branchTablePO.getName(), orderVO.getNote() == null ? "" : orderVO.getNote(), null, OrderPayStatus.UNPAID.toString(), OrderStatus.NEW.name(), Timestamp.valueOf(LocalDateTime.now()), 2);
         BranchOrderPO savedBranchOrderPO = branchOrderRepository.save(branchOrderPO);
 
         // 添加订单产品
@@ -262,6 +262,10 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         }
         branchOrderPO.setPayStatus(OrderPayStatus.PAID.getKey());
         branchOrderPO.setPayMethod(OrderPayMethod.WECHAT.getKey());
+        // TODO: 18/04/20 折扣金额和抹零金额依赖于会员中心
+        branchOrderPO.setDiscountSum(BigDecimal.ZERO);
+        branchOrderPO.setWipeSum(BigDecimal.ZERO);
+        branchOrderPO.setChargeSum(branchOrderPO.getTotalSum());
         branchOrderRepository.save(branchOrderPO);
         shopTableService.leisureTable(branchOrderPO.getId());
     }

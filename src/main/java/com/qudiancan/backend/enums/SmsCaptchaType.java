@@ -15,7 +15,11 @@ public enum SmsCaptchaType {
     /**
      * 重置密码时发送
      */
-    RESET_PASSWORD("RESET_PASSWORD", "重置密码");
+    RESET_PASSWORD("RESET_PASSWORD", "重置密码"),
+    /**
+     * 用于创建账户
+     */
+    CREATE_ACCOUNT("CREATE_ACCOUNT", "创建账户");
 
     private String key;
     private String value;

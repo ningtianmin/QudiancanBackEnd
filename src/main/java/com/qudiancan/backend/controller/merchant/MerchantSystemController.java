@@ -50,7 +50,7 @@ public class MerchantSystemController {
         map.put("shop", shop);
         map.put(Constant.CLIENT_CONSTANTS_NAME, constants);
         // TODO: 18/04/18 主体类型前端显示有误
-        return new ModelAndView("merchants/shopSetting", map);
+        return new ModelAndView("merchants/system/shopSetting", map);
     }
 
     @GetMapping("/roleSetting")
@@ -58,7 +58,7 @@ public class MerchantSystemController {
         List<RolePO> roles = roleService.findAll();
         Map<String, Object> map = new HashMap<>(1);
         map.put("roles", roles);
-        return new ModelAndView("merchants/roleSetting", map);
+        return new ModelAndView("merchants/system/roleSetting", map);
     }
 
     @GetMapping("/accountSetting")
@@ -67,7 +67,7 @@ public class MerchantSystemController {
         List<AccountInfoDTO> accounts = shopService.listShopAccount(ShopAccountHolder.get().getShopId());
         Map<String, Object> map = new HashMap<>(1);
         map.put("accounts", accounts);
-        return new ModelAndView("merchants/accountSetting", map);
+        return new ModelAndView("merchants/system/accountSetting", map);
     }
 
     @GetMapping("/branchSetting")
@@ -77,12 +77,22 @@ public class MerchantSystemController {
         BranchPO branch = shopBranchService.getBranch(accountPO.getId(), accountPO.getShopId(), branchId);
         Map<String, Object> map = new HashMap<>(1);
         map.put("branch", branch);
-        return new ModelAndView("merchants/branchSetting", map);
+        return new ModelAndView("merchants/system/branchSetting", map);
     }
 
     @GetMapping("/createBranch")
     @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_BRANCH_CREATE)
     public ModelAndView createBranch() {
-        return new ModelAndView("merchants/createBranch");
+        return new ModelAndView("merchants/system/createBranch");
+    }
+
+    @GetMapping("/createAccount")
+    @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_ACCOUNT_CREATE)
+    public ModelAndView createAccount() {
+        AccountPO accountPO = ShopAccountHolder.get();
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("branches", shopBranchService.listBranch(accountPO.getId(), accountPO.getShopId()));
+        map.put("roles", roleService.findAll());
+        return new ModelAndView("merchants/system/createAccount", map);
     }
 }

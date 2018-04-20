@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -44,4 +45,14 @@ public interface BranchOrderRepository extends JpaRepository<BranchOrderPO, Inte
      * @return 订单列表
      */
     List<BranchOrderPO> findByMemberIdIn(Set<Integer> memberIds);
+
+    /**
+     * 按时间段查询门店订单列表
+     *
+     * @param branchId  门店id
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 门店订单列表
+     */
+    List<BranchOrderPO> findByBranchIdAndCreateTimeBetween(Integer branchId, Timestamp startTime, Timestamp endTime);
 }

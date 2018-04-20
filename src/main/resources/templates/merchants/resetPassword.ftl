@@ -14,8 +14,8 @@
             <input type="tel" id="phone" name="phone" lay-verify="required|phone" lay-verType="tips"
                    placeholder="请输入手机号" autocomplete="off" class="layui-input">
         </div>
-        <button type="button" class="layui-btn layui-btn-primary" style="width: 30%; height: 40px; margin-bottom: 5px;"
-                onclick="sendCaptcha()">发送验证码
+        <button type="button" class="layui-btn layui-btn-primary" style="100px; height: 40px; margin-bottom: 5px;"
+                onclick="sendCaptcha()" id="sendCaptchaBtn">发送验证码
         </button>
         <div class="layui-input-inline" style="width: 100%; height: 40px; margin-bottom: 5px;">
             <input type="text" name="phoneCaptcha" id="phoneCaptcha" lay-verify="required" lay-verType="tips"
@@ -86,6 +86,10 @@
         parent.layer.closeAll();
     }
 
+    var count = 60;
+    var curCount;
+    var interval;
+
     function sendCaptcha() {
         var phone = document.getElementById("phone").value;
         var regex = new RegExp(/^1(3[0-9]|4[57]|5[0-35-9]|7[0135678]|8[0-9])\d{8}$/);
@@ -109,6 +113,26 @@
                 }
             }
         });
+
+        var sendCaptchaBtn = document.getElementById("sendCaptchaBtn");
+        sendCaptchaBtn.setAttribute("class", "layui-btn layui-btn-primary layui-btn-disabled");
+        sendCaptchaBtn.setAttribute("disabled", "true");
+        curCount = count;
+        sendCaptchaBtn.innerHTML = curCount + "s后发送";
+        interval = window.setInterval("setSendCaptchaInterval()", 1000);
+    }
+
+    function setSendCaptchaInterval() {
+        var sendCaptchaBtn = document.getElementById("sendCaptchaBtn");
+        if (curCount === 0) {
+            window.clearInterval(interval);
+            sendCaptchaBtn.setAttribute("class", "layui-btn layui-btn-primary");
+            sendCaptchaBtn.removeAttribute("disabled");
+            sendCaptchaBtn.innerHTML = "发送验证码";
+        } else {
+            curCount--;
+            sendCaptchaBtn.innerHTML = curCount + "s后发送";
+        }
     }
 </script>
 

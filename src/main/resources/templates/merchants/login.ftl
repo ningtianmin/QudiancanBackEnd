@@ -23,7 +23,7 @@
             <label class="layui-form-label" for="loginId">登录id</label>
             <div class="layui-input-inline">
                 <input type="text" name="loginId" id="loginId" lay-verify="required|loginId" lay-verType="tips"
-                       placeholder="请输入登录id"
+                       placeholder="管理员登录id和店铺id一致"
                        autocomplete="off" class="layui-input">
             </div>
         </div>

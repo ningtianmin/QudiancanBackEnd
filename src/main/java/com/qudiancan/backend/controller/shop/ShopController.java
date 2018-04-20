@@ -8,6 +8,7 @@ import com.qudiancan.backend.pojo.Response;
 import com.qudiancan.backend.pojo.po.AuthorityPO;
 import com.qudiancan.backend.pojo.po.BranchPO;
 import com.qudiancan.backend.pojo.po.ShopPO;
+import com.qudiancan.backend.pojo.vo.shop.CreateAccountVO;
 import com.qudiancan.backend.pojo.vo.shop.PerfectShopVO;
 import com.qudiancan.backend.pojo.vo.shop.ShopVO;
 import com.qudiancan.backend.service.shop.RoleService;
@@ -113,6 +114,13 @@ public class ShopController {
     public Response updatePassword(@RequestParam String oldPassword, @RequestParam String newPassword, HttpServletRequest request, HttpServletResponse response) {
         shopAccountService.updatePassword(ShopAccountHolder.get().getId(), oldPassword, newPassword);
         shopAccountService.logout(request, response);
+        return Response.success();
+    }
+
+    @PostMapping("/accounts")
+    @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_ACCOUNT_CREATE)
+    public Response createAccount(CreateAccountVO createAccountVO) {
+        shopAccountService.createAccount(ShopAccountHolder.get().getId(), createAccountVO);
         return Response.success();
     }
 

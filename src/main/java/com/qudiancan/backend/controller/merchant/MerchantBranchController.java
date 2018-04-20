@@ -45,13 +45,13 @@ public class MerchantBranchController {
     @GetMapping("/productCategories")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_CATEGORY_SHOW)
     public ModelAndView categories() {
-        return new ModelAndView("merchants/productCategories");
+        return new ModelAndView("merchants/branch/productCategories");
     }
 
     @GetMapping("/departments")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_DEPARTMENT_SHOW)
     public ModelAndView departments() {
-        return new ModelAndView("merchants/departments");
+        return new ModelAndView("merchants/branch/departments");
     }
 
     @GetMapping("/products")
@@ -70,7 +70,7 @@ public class MerchantBranchController {
                 categoriesStringPair(accountPO.getId(), accountPO.getShopId(), Integer.valueOf(branchId))
                 .stream().collect(Collectors.toMap(StringPairDTO::getKey, StringPairDTO::getValue)));
         map.put("branchDepartments", shopDepartmentService.departmentsStringPair(accountPO.getId(), accountPO.getShopId(), Integer.valueOf(branchId)));
-        return new ModelAndView("merchants/products", map);
+        return new ModelAndView("merchants/branch/products", map);
     }
 
     @GetMapping("/createProduct")
@@ -84,13 +84,13 @@ public class MerchantBranchController {
         Map<String, Object> map = new HashMap<>(2);
         map.put("productCategories", shopProductService.categoriesStringPair(accountPO.getId(), accountPO.getShopId(), Integer.valueOf(branchId)));
         map.put("branchDepartments", shopDepartmentService.departmentsStringPair(accountPO.getId(), accountPO.getShopId(), Integer.valueOf(branchId)));
-        return new ModelAndView("merchants/createProduct", map);
+        return new ModelAndView("merchants/branch/createProduct", map);
     }
 
     @GetMapping("/tableCategories")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_TABLE_CATEGORY_SHOW)
     public ModelAndView tableCategories() {
-        return new ModelAndView("merchants/tableCategories");
+        return new ModelAndView("merchants/branch/tableCategories");
     }
 
     @GetMapping("/tables")
@@ -106,19 +106,29 @@ public class MerchantBranchController {
         map.put(Constant.CLIENT_CONSTANTS_NAME, constants);
         // TODO: 18/04/10 桌台类型id等转换为名称
         map.put("tableCategories", shopTableService.categoriesStringPair(accountPO.getId(), accountPO.getShopId(), Integer.valueOf(branchId)));
-        return new ModelAndView("merchants/tables", map);
+        return new ModelAndView("merchants/branch/tables", map);
     }
 
-    @GetMapping("updateProduct")
+    @GetMapping("/updateProduct")
     @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_PRODUCT_UPDATE)
     public ModelAndView updateProduct(@RequestParam Integer branchId, @RequestParam Integer productId) {
         AccountPO accountPO = ShopAccountHolder.get();
         BranchProductPO branchProduct = shopProductService.getBranchProduct(accountPO.getId(), accountPO.getShopId(), branchId, productId);
-        Map<String, Object> map = new HashMap<>(1);
+        Map<String, Object> map = new HashMap<>(3);
         map.put("product", branchProduct);
         map.put("productCategories", shopProductService.categoriesStringPair(accountPO.getId(), accountPO.getShopId(), branchId));
         map.put("branchDepartments", shopDepartmentService.departmentsStringPair(accountPO.getId(), accountPO.getShopId(), branchId));
-        return new ModelAndView("merchants/updateProduct", map);
+        return new ModelAndView("merchants/branch/updateProduct", map);
+    }
+
+    @GetMapping("/updateTable")
+    @ShopRequiredAuthority(ShopAuthorityEnum.BRANCH_TABLE_UPDATE)
+    public ModelAndView updateTable(@RequestParam Integer branchId, @RequestParam Integer tableId) {
+        AccountPO accountPO = ShopAccountHolder.get();
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("branchTable", shopTableService.getBranchTable(accountPO.getId(), accountPO.getShopId(), branchId, tableId));
+        map.put("tableCategories", shopTableService.categoriesStringPair(accountPO.getId(), accountPO.getShopId(), branchId));
+        return new ModelAndView("merchants/branch/updateTable", map);
     }
 
 }

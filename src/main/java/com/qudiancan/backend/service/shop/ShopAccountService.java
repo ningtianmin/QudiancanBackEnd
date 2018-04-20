@@ -3,6 +3,7 @@ package com.qudiancan.backend.service.shop;
 import com.qudiancan.backend.enums.SmsCaptchaType;
 import com.qudiancan.backend.pojo.dto.shop.ShopAccountDTO;
 import com.qudiancan.backend.pojo.dto.shop.ShopAccountTokenDTO;
+import com.qudiancan.backend.pojo.vo.shop.CreateAccountVO;
 import com.qudiancan.backend.pojo.vo.shop.LoginVO;
 import com.qudiancan.backend.pojo.vo.shop.RegisterVO;
 
@@ -73,4 +74,12 @@ public interface ShopAccountService {
      * @param newPassword 新密码
      */
     void updatePassword(Integer accountId, String oldPassword, String newPassword);
+
+    /**
+     * 创建新账户
+     *
+     * @param accountId       账户id
+     * @param createAccountVO 账户信息
+     */
+    void createAccount(Integer accountId, CreateAccountVO createAccountVO);
 }

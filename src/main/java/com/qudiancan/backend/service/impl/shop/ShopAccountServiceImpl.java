@@ -11,11 +11,14 @@ import com.qudiancan.backend.pojo.dto.shop.ShopAccountDTO;
 import com.qudiancan.backend.pojo.dto.shop.ShopAccountTokenDTO;
 import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.BranchPO;
+import com.qudiancan.backend.pojo.po.RolePO;
 import com.qudiancan.backend.pojo.po.ShopPO;
+import com.qudiancan.backend.pojo.vo.shop.CreateAccountVO;
 import com.qudiancan.backend.pojo.vo.shop.LoginVO;
 import com.qudiancan.backend.pojo.vo.shop.RegisterVO;
 import com.qudiancan.backend.repository.AccountRepository;
 import com.qudiancan.backend.repository.BranchRepository;
+import com.qudiancan.backend.repository.RoleRepository;
 import com.qudiancan.backend.repository.ShopRepository;
 import com.qudiancan.backend.service.SmsService;
 import com.qudiancan.backend.service.shop.ShopAccountService;
@@ -30,16 +33,19 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author NINGTIANMIN
  */
 @Service
 @Slf4j
-public class ShopShopAccountServiceImpl implements ShopAccountService {
+public class ShopAccountServiceImpl implements ShopAccountService {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -50,6 +56,9 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private BranchRepository branchRepository;
+    public static final String COMMA = ",";
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public void sendSmsCaptcha(String phone, SmsCaptchaType smsCaptchaType) {
@@ -59,21 +68,32 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
             throw new ShopException(ResponseEnum.SHOP_PHONE_ILLEGAL);
         }
 
+        AccountPO accountPO = accountRepository.findByPhone(phone);
+        String key;
         // 逻辑验证
         switch (smsCaptchaType) {
             case REGISTER:
-                if (Objects.nonNull(accountRepository.findByPhone(phone))) {
+                if (Objects.nonNull(accountPO)) {
                     log.warn("[发送手机验证码失败]{},{}", phone, smsCaptchaType);
                     throw new ShopException(ResponseEnum.SHOP_PHONE_OCCUPIED);
                 }
+                key = String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone);
                 break;
             case RESET_PASSWORD:
-                if (Objects.isNull(accountRepository.findByPhone(phone))) {
+                if (Objects.isNull(accountPO)) {
                     log.warn("[发送手机验证码失败]{},{}", phone, smsCaptchaType);
                     throw new ShopException(ResponseEnum.PARAM_INVALID, "不存在该手机号对应的账号");
                 }
+                key = String.format(Constant.REDIS_RESET_PASSWORD_SMS_CAPTCHA_KEY_PREFIX + "%S", phone);
+                break;
+            case CREATE_ACCOUNT:
+                if (Objects.nonNull(accountPO)) {
+                    throw new ShopException(ResponseEnum.PHONE_OCCUPIED);
+                }
+                key = String.format(Constant.REDIS_CREATE_ACCOUNT_SMS_CAPTCHA_KEY_PREFIX + "%S", phone);
                 break;
             default:
+                key = "";
                 break;
         }
 
@@ -85,36 +105,28 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
             log.warn("[发送手机验证码失败]{}", e);
             throw new ShopException(ResponseEnum.SHOP_SMS_CAPTCHA_FAILURE);
         }
-        // 存放验证码在redis
-        // TODO: 18/02/16 redis需释放资源
-        switch (smsCaptchaType) {
-            case REGISTER:
-                redisTemplate.opsForValue().set(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone),
-                        captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
-                break;
-            case RESET_PASSWORD:
-                redisTemplate.opsForValue().set(String.format(Constant.REDIS_RESET_PASSWORD_SMS_CAPTCHA_KEY_PREFIX + "%S", phone),
-                        captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
-                break;
-            default:
-                break;
-        }
+        redisTemplate.opsForValue().set(key, captcha, Constant.REDIS_SMS_CAPTCHA_EXPIRY, TimeUnit.MINUTES);
     }
 
     @Override
     public boolean verifySmsCaptcha(String phone, String captcha, SmsCaptchaType smsCaptchaType) {
         // TODO: 18/02/16 redis需释放资源
-        String value = null;
+        String key;
         switch (smsCaptchaType) {
             case REGISTER:
-                value = redisTemplate.opsForValue().get(String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone));
+                key = String.format(Constant.REDIS_SMS_CAPTCHA_KEY_PREFIX + "%S", phone);
                 break;
             case RESET_PASSWORD:
-                value = redisTemplate.opsForValue().get(String.format(Constant.REDIS_RESET_PASSWORD_SMS_CAPTCHA_KEY_PREFIX + "%S", phone));
+                key = String.format(Constant.REDIS_RESET_PASSWORD_SMS_CAPTCHA_KEY_PREFIX + "%S", phone);
+                break;
+            case CREATE_ACCOUNT:
+                key = String.format(Constant.REDIS_CREATE_ACCOUNT_SMS_CAPTCHA_KEY_PREFIX + "%S", phone);
                 break;
             default:
+                key = "";
                 break;
         }
+        String value = redisTemplate.opsForValue().get(key);
         return !StringUtils.isEmpty(value) && value.equals(captcha);
     }
 
@@ -239,5 +251,41 @@ public class ShopShopAccountServiceImpl implements ShopAccountService {
         }
         accountPO.setPassword(newPassword);
         accountRepository.save(accountPO);
+    }
+
+    @Override
+    public void createAccount(Integer accountId, CreateAccountVO createAccountVO) {
+        log.info("[账号创建]accountId:{},createAccountVO:{}", accountId, createAccountVO);
+        // 验证字段合法性和有效性
+        if (Objects.isNull(accountId) || Objects.isNull(createAccountVO)) {
+            throw new ShopException(ResponseEnum.SHOP_NO_PARAM);
+        }
+        if (!verifySmsCaptcha(createAccountVO.getPhone(), createAccountVO.getPhoneCaptcha(), SmsCaptchaType.CREATE_ACCOUNT)) {
+            throw new ShopException(ResponseEnum.SHOP_PHONE_VERIFY_FAILURE);
+        }
+        ShopAccountServiceUtil.checkCreateAccountVO(createAccountVO);
+
+        // 逻辑验证
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        if (Objects.isNull(accountPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "accountId");
+        }
+        if (Objects.nonNull(accountRepository.findByPhone(createAccountVO.getPhone()))) {
+            log.warn("[账户创建失败]{}", createAccountVO);
+            throw new ShopException(ResponseEnum.PHONE_OCCUPIED);
+        }
+
+        Set<Integer> existBranchIds = branchRepository.findByShopId(accountPO.getShopId()).stream().map(BranchPO::getId).collect(Collectors.toSet());
+        if (Arrays.stream(createAccountVO.getBranchIds().split(COMMA)).map(Integer::valueOf).anyMatch(o -> !existBranchIds.contains(o))) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "请确保所有门店id正确");
+        }
+        Set<Integer> existRoleIds = roleRepository.findAll().stream().map(RolePO::getId).collect(Collectors.toSet());
+        if (Arrays.stream(createAccountVO.getRoleIds().split(COMMA)).map(Integer::valueOf).anyMatch(o -> !existRoleIds.contains(o))) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "请确保所有角色id正确");
+        }
+
+        // 持久化
+        accountRepository.save(new AccountPO(null, accountPO.getShopId(), createAccountVO.getLoginId(), createAccountVO.getPassword(), createAccountVO.getName(), createAccountVO.getEmail(), createAccountVO.getPhone(),
+                createAccountVO.getBranchIds(), createAccountVO.getRoleIds(), ShopIsCreator.NO.getKey(), null));
     }
 }

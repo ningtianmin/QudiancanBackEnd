@@ -8,6 +8,9 @@
 </head>
 <body>
 <div class="layui-container" style="width: 100%; padding: 10px;">
+    <button class="layui-btn layui-btn-radius layui-bg-orange" style="margin-bottom: 10px;"
+            onclick="parent.changeMainBody('/merchants/createAccount')">创建账号
+    </button>
     <h2 class="layui-show">当前门店的账户</h2>
     <table class="layui-table">
         <thead class="layui-table-header">
@@ -26,15 +29,15 @@
         <tbody class="layui-table-body">
         <#list accounts as account>
         <tr>
-            <td>${account.shopId}</td>
-            <td>${account.loginId}</td>
-            <td>${account.name}</td>
-            <td>${account.email}</td>
-            <td>${account.phone}</td>
-            <td>${account.branchesString}</td>
-            <td>${account.rolesString}</td>
-            <td>${account.isCreator}</td>
-            <td>${account.createTime}</td>
+            <td>${account.shopId!}</td>
+            <td>${account.loginId!}</td>
+            <td>${account.name!}</td>
+            <td>${account.email!}</td>
+            <td>${account.phone!}</td>
+            <td>${account.branchesString!}</td>
+            <td>${account.rolesString!}</td>
+            <td>${account.isCreator!}</td>
+            <td>${account.createTime!}</td>
         </tr>
         </#list>
         </tbody>

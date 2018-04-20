@@ -135,7 +135,11 @@ public enum ResponseEnum {
     /**
      * 会员不存在
      */
-    WECHAT_MEMBER_NOT_EXIST(2026, "会员不存在");
+    WECHAT_MEMBER_NOT_EXIST(2026, "会员不存在"),
+    /**
+     * 手机号被占用
+     */
+    PHONE_OCCUPIED(2026, "手机号被占用");
 
     private Integer code;
     private String message;

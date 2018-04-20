@@ -95,7 +95,11 @@ public enum ShopAuthorityEnum {
     /**
      * 账号设置
      */
-    SHOP_ACCOUNT_SETTING(22, "SHOP_ACCOUNT_SETTING");
+    SHOP_ACCOUNT_SETTING(22, "SHOP_ACCOUNT_SETTING"),
+    /**
+     * 账号创建
+     */
+    SHOP_ACCOUNT_CREATE(23, "SHOP_ACCOUNT_CREATE");
 
     private Integer id;
     private String path;

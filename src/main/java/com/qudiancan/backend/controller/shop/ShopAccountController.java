@@ -53,6 +53,18 @@ public class ShopAccountController {
     }
 
     /**
+     * 发送创建账户手机验证码
+     *
+     * @param phone 手机号
+     * @return 发送状态
+     */
+    @PostMapping("/createAccount/send_sms_captcha")
+    public Response sendCreateAccountSmsCaptcha(@RequestParam String phone) {
+        shopAccountService.sendSmsCaptcha(phone, SmsCaptchaType.CREATE_ACCOUNT);
+        return Response.success();
+    }
+
+    /**
      * 账户注册
      *
      * @param registerVO 注册信息

@@ -134,7 +134,7 @@ public class ShopServiceImpl implements ShopService {
             BeanUtils.copyProperties(o, accountInfoDTO);
             if (!StringUtils.isEmpty(o.getBranchIds())) {
                 Set<Integer> branchIdList = Arrays.stream(o.getBranchIds().split(",")).map(Integer::valueOf).collect(Collectors.toSet());
-                accountInfoDTO.setBranches(StringUtils.isEmpty(o.getBranchIds()) ? null : branchPOList.stream().filter(j -> branchIdList.contains(j.getId())).collect(Collectors.toList()));
+                accountInfoDTO.setBranches(branchPOList.stream().filter(j -> branchIdList.contains(j.getId())).collect(Collectors.toList()));
                 accountInfoDTO.setBranchesString(accountInfoDTO.getBranches().stream().map(BranchPO::getName).collect(Collectors.joining(",")));
             }
             if (!StringUtils.isEmpty(o.getRoleIds())) {

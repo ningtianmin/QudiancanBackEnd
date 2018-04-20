@@ -38,4 +38,5 @@ public class BranchOrderPO {
     private String orderStatus;
     @CreatedDate
     private Timestamp createTime;
+    private Integer customerNum;
 }

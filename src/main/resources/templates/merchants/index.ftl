@@ -56,11 +56,10 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">数据中心</a>
                     <dl class="layui-nav-child">
-                        <dd style="text-align: center"><a href="javascript:;">订单分析</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">菜品分析</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/orderStatistics')">订单分析</a>
+                        </dd>
                         <dd style="text-align: center"><a href="javascript:;">桌台分析</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">用户分析</a></dd>
-                        <dd style="text-align: center"><a href="javascript:;">营业分析</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -83,7 +82,8 @@
             </ul>
         </div>
         <div class="layui-col-md11">
-            <iframe id="frame" style="width: 100%; height: 100%; border: none;" src="productCategories.ftl"></iframe>
+            <iframe id="frame" style="width: 100%; height: 100%; border: none;"
+                    src="${basePath!}/merchants/productCategories"></iframe>
         </div>
     </div>
 </div>

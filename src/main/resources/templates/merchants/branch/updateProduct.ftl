@@ -8,7 +8,9 @@
 </head>
 <body>
 <div class="layui-container" style="width: 100%; padding: 10px;">
-    <div class="layui-row layui-bg-orange"><h1 style="text-align: center;">更新产品</h1></div>
+    <div class="layui-row"
+         style="font-size: 30px; color: #555555; font-weight: bold; line-height: 60px; text-align: center;">更新产品
+    </div>
     <div class="layui-form">
         <div class="layui-form-item"
              style="display: flex; align-items: center; justify-content: center">
@@ -73,7 +75,6 @@
                 </div>
             </div>
             <input hidden name="image" id="image" value="${product.image}" lay-verify="image">
-            <input hidden name="id" id="id" value="${product.id}">
         </div>
         <div class="layui-form-item" style="display: flex; align-items: center; justify-content: center">
             <img id="imagePreview" style="width: 200px; height: 200px;" src="${product.image}">
@@ -131,7 +132,7 @@
             }
             $.ajax({
                 type: 'POST',
-                url: '${basePath!}/shops/${currentShopId}/branches/${currentBranchId}/products/' + data.field.id,
+                url: '${basePath!}/shops/${currentShopId}/branches/${currentBranchId}/products/${product.id}',
                 data: {
                     "categoryId": data.field.categoryId,
                     "departmentId": data.field.departmentId,

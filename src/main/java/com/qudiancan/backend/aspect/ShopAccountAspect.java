@@ -69,14 +69,14 @@ public class ShopAccountAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String accountSession = CookieUtil.get(request, Constant.COOKIE_ACCOUNT_SESSION);
         if (StringUtils.isEmpty(accountSession)) {
-            throw new ShopException(ResponseEnum.BAD_REQUEST, "cookie");
+            throw new ShopException(ResponseEnum.SHOP_INVALID_SESSION_ID, "请重新登录");
         }
         // 验证sessionId的有效性
         String redisSessionKey = String.format(Constant.REDIS_ACCOUNT_KEY_PREFIX + "%s", accountSession);
         // TODO: 18/02/16 redis需释放资源
         String redisSessionValue = redisTemplate.opsForValue().get(redisSessionKey);
         if (StringUtils.isEmpty(redisSessionValue)) {
-            throw new ShopException(ResponseEnum.SHOP_INVALID_SESSION_ID);
+            throw new ShopException(ResponseEnum.SHOP_INVALID_SESSION_ID, "请重新登录");
         }
         Integer accountId = Integer.valueOf(redisSessionValue);
         AccountPO accountPO = accountRepository.findOne(accountId);
