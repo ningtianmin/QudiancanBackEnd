@@ -34,8 +34,6 @@ public class ShopProductController {
     private ShopProductService shopProductService;
     @Autowired
     private AliyunConfig aliyunConfig;
-    @Autowired
-    private OSSClient ossClient;
 
     /**
      * 获取产品类目列表
@@ -166,6 +164,7 @@ public class ShopProductController {
      */
     @PostMapping("/uploadImage")
     public Response uploadImage(@RequestParam MultipartFile file) throws IOException {
+        OSSClient ossClient = new OSSClient(aliyunConfig.getEndpoint(), aliyunConfig.getAccesskeyId(), aliyunConfig.getAccessKeySecret());
         String imageName = KeyUtil.genImageKey() + ".jpg";
         ossClient.putObject(aliyunConfig.getBucketName(), imageName, file.getInputStream());
         return Response.success(String.format("https://%s.%s/%s", aliyunConfig.getBucketName(), aliyunConfig.getEndpoint(), imageName));

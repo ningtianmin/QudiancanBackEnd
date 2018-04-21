@@ -2,15 +2,16 @@ package com.qudiancan.backend.repository;
 
 import com.qudiancan.backend.BackEndApplicationTests;
 import com.qudiancan.backend.pojo.po.ShopPO;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * @author NINGTIANMIN
  */
+@Transactional
 public class ShopRepositoryTest extends BackEndApplicationTests {
     @Autowired
     private ShopRepository repository;
@@ -18,6 +19,5 @@ public class ShopRepositoryTest extends BackEndApplicationTests {
     @Test
     public void testFindAll() {
         List<ShopPO> all = repository.findAll();
-        Assert.assertNotEquals(0, all.size());
     }
 }

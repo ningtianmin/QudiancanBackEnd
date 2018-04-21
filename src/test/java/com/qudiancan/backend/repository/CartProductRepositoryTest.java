@@ -2,15 +2,16 @@ package com.qudiancan.backend.repository;
 
 import com.qudiancan.backend.BackEndApplicationTests;
 import com.qudiancan.backend.pojo.po.CartProductPO;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * @author NINGTIANMIN
  */
+@Transactional
 public class CartProductRepositoryTest extends BackEndApplicationTests {
     @Autowired
     private CartProductRepository repository;
@@ -18,6 +19,5 @@ public class CartProductRepositoryTest extends BackEndApplicationTests {
     @Test
     public void testFindAll() {
         List<CartProductPO> all = repository.findAll();
-        Assert.assertNotEquals(0, all.size());
     }
 }

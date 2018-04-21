@@ -1,6 +1,5 @@
 package com.qudiancan.backend.common;
 
-import com.aliyun.oss.OSSClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,11 +29,6 @@ public class MultipartResolverConfig {
         MultipartFilter multipartFilter = new MultipartFilter();
         multipartFilter.setMultipartResolverBeanName("multipartResolver");
         return multipartFilter;
-    }
-
-    @Bean
-    public OSSClient ossClient() {
-        return new OSSClient(aliyunConfig.getEndpoint(), aliyunConfig.getAccesskeyId(), aliyunConfig.getAccessKeySecret());
     }
 
 }
