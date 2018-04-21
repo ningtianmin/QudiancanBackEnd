@@ -4,11 +4,13 @@ import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.enums.shop.ShopIsCreator;
 import com.qudiancan.backend.exception.ShopException;
 import com.qudiancan.backend.pojo.dto.shop.OrderStatistics;
+import com.qudiancan.backend.pojo.dto.shop.TableStatistics;
 import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.BranchOrderPO;
 import com.qudiancan.backend.repository.AccountRepository;
 import com.qudiancan.backend.repository.BranchOrderRepository;
 import com.qudiancan.backend.repository.BranchRepository;
+import com.qudiancan.backend.service.shop.ShopBranchService;
 import com.qudiancan.backend.service.shop.StatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author NINGTIANMIN
@@ -35,6 +38,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     private BranchRepository branchRepository;
     @Autowired
     private BranchOrderRepository branchOrderRepository;
+    @Autowired
+    private ShopBranchService shopBranchService;
 
     @Override
     public List<OrderStatistics> orderStatisticsHour(int accountId, int branchId, LocalDate date) {
@@ -108,6 +113,48 @@ public class StatisticsServiceImpl implements StatisticsService {
         });
         tot(orderStatisticsList);
         return orderStatisticsList;
+    }
+
+    @Override
+    public List<TableStatistics> tableStatisticsPeriod(int accountId, int branchId, LocalDate startDate, LocalDate endDate) {
+        log.info("[桌台统计（时段）]accountId:{},branchId:{},startDate:{},endDate:{}", accountId, branchId, startDate, endDate);
+        if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        if (startDate.isAfter(endDate)) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "开始时间应小于结束时间");
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        if (Objects.isNull(accountPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "accountId");
+        }
+        if (!shopBranchService.canManageBranch(accountId, accountPO.getShopId(), branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        List<BranchOrderPO> branchOrders = branchOrderRepository.findByBranchIdAndCreateTimeBetween(branchId, Timestamp.valueOf(LocalDateTime.of(startDate, LocalTime.of(0, 0, 0))),
+                Timestamp.valueOf(LocalDateTime.of(endDate, LocalTime.of(23, 59, 59))));
+        branchOrders = branchOrders.stream().filter(o -> Objects.nonNull(o.getTableId())).collect(Collectors.toList());
+        Map<Integer, List<BranchOrderPO>> branchOrderMap = branchOrders.stream().collect(Collectors.groupingBy(BranchOrderPO::getTableId));
+        List<TableStatistics> tableStatisticsList = new ArrayList<>(branchOrderMap.size() + 1);
+        int totOrderNum = 0, totCustomerNum = 0;
+        BigDecimal totChargeSum = BigDecimal.ZERO;
+        for (Map.Entry<Integer, List<BranchOrderPO>> entry : branchOrderMap.entrySet()) {
+            List<BranchOrderPO> list = entry.getValue();
+            int orderNum = list.size(), customerNum = 0;
+            totOrderNum += list.size();
+            BigDecimal chargeSum = BigDecimal.ZERO;
+            for (BranchOrderPO branchOrderPO : list) {
+                customerNum += branchOrderPO.getCustomerNum();
+                totCustomerNum += branchOrderPO.getCustomerNum();
+                chargeSum = chargeSum.add(branchOrderPO.getChargeSum());
+                totChargeSum = totChargeSum.add(branchOrderPO.getChargeSum());
+            }
+            tableStatisticsList.add(new TableStatistics(list.get(0).getTableName(), orderNum, customerNum, chargeSum,
+                    chargeSum.divide(new BigDecimal(orderNum), 2), chargeSum.divide(new BigDecimal(customerNum), 2)));
+        }
+        tableStatisticsList.add(new TableStatistics("合计", totOrderNum, totCustomerNum, totChargeSum,
+                totChargeSum.divide(new BigDecimal(totOrderNum), 2), totChargeSum.divide(new BigDecimal(totCustomerNum), 2)));
+        return tableStatisticsList;
     }
 
     private void tot(List<OrderStatistics> orderStatisticsList) {

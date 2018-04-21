@@ -59,7 +59,19 @@
                         <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/orderStatistics')">订单分析</a>
                         </dd>
-                        <dd style="text-align: center"><a href="javascript:;">桌台分析</a></dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/tableStatistics')">桌台分析</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">收银中心</a>
+                    <dl class="layui-nav-child">
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/eatin?branchId=${currentBranchId}')">门店堂点</a>
+                        </dd>
+                        <dd style="text-align: center"><a href="javascript:;"
+                                                          onclick="changeMainBody('/merchants/orders')">订单管理</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">

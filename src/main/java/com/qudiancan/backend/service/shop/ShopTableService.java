@@ -1,6 +1,7 @@
 package com.qudiancan.backend.service.shop;
 
 import com.qudiancan.backend.enums.StringPairDTO;
+import com.qudiancan.backend.pojo.dto.wechat.TableOrderDTO;
 import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchTableVO;
@@ -113,4 +114,12 @@ public interface ShopTableService {
      * @return 桌台列表
      */
     List<BranchTablePO> listBranchTable(Integer accountId, String shopId, Integer branchId);
+
+    /**
+     * 获取桌台及对应的订单
+     *
+     * @param tableId 桌台id
+     * @return 桌台及对应的订单
+     */
+    TableOrderDTO getTableOrder(Integer tableId);
 }

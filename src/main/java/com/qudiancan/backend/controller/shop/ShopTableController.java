@@ -4,6 +4,7 @@ import com.qudiancan.backend.common.ShopAccountHolder;
 import com.qudiancan.backend.common.ShopRequiredAuthority;
 import com.qudiancan.backend.enums.shop.ShopAuthorityEnum;
 import com.qudiancan.backend.pojo.Response;
+import com.qudiancan.backend.pojo.dto.wechat.TableOrderDTO;
 import com.qudiancan.backend.pojo.po.AccountPO;
 import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
@@ -119,6 +120,12 @@ public class ShopTableController {
     public Response<List<BranchTablePO>> listBranchTable(@PathVariable String shopId, @PathVariable Integer branchId) {
         AccountPO accountPO = ShopAccountHolder.get();
         return Response.success(shopTableService.listBranchTable(accountPO.getId(), shopId, branchId));
+    }
+
+    @GetMapping("/tables/{tableId}/tableOrder")
+    @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_BRANCH_CASHIER)
+    public Response<TableOrderDTO> getTableOrder(@PathVariable Integer tableId) {
+        return Response.success(shopTableService.getTableOrder(tableId));
     }
 
 }

@@ -63,7 +63,7 @@ public interface ShopOrderService {
     void finish(Set<String> orderNumbers);
 
     /**
-     * 支付订单
+     * 微信支付订单
      *
      * @param orderNumber 订单编号
      */
@@ -85,4 +85,23 @@ public interface ShopOrderService {
      */
     List<OrderDTO> listOrderByOpenid(String openid);
 
+    /**
+     * 现金支付订单
+     *
+     * @param accountId   账户id
+     * @param shopId      店铺id
+     * @param branchId    门店id
+     * @param orderNumber 订单编号
+     */
+    void payByCash(Integer accountId, String shopId, Integer branchId, String orderNumber);
+
+    /**
+     * 根据门店分页查询订单
+     *
+     * @param accountId 账号id
+     * @param branchId  门店id
+     * @param pageable  分页参数
+     * @return 分页订单
+     */
+    Page<OrderDTO> pageOrderByBranch(Integer accountId, Integer branchId, Pageable pageable);
 }

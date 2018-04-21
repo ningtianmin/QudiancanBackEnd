@@ -27,7 +27,8 @@ public class ShopOrderServiceTest extends BackEndApplicationTests {
         cartVOList.add(new CartVO(1, 2));
         cartVOList.add(new CartVO(1, 1));
         cartVOList.add(new CartVO(1, 1));
-        OrderVO orderVO = new OrderVO(1, null, null, 1, cartVOList);
+        OrderVO orderVO = new OrderVO(1, null, null, 1, 2,
+                "[{\"productId\":1,\"productNum\":1}]", cartVOList);
         OrderDTO orderDTO = shopOrderService.create(orderVO);
         Assert.assertNotNull(orderDTO);
     }

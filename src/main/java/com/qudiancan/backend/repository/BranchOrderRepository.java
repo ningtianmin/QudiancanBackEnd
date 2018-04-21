@@ -55,4 +55,13 @@ public interface BranchOrderRepository extends JpaRepository<BranchOrderPO, Inte
      * @return 门店订单列表
      */
     List<BranchOrderPO> findByBranchIdAndCreateTimeBetween(Integer branchId, Timestamp startTime, Timestamp endTime);
+
+    /**
+     * 按门店分页查询订单
+     *
+     * @param branchId 门店id
+     * @param pageable 分页参数
+     * @return 分页订单
+     */
+    Page<BranchOrderPO> findByBranchIdOrderByCreateTimeDesc(Integer branchId, Pageable pageable);
 }

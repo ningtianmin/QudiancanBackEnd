@@ -1,6 +1,7 @@
 package com.qudiancan.backend.service.shop;
 
 import com.qudiancan.backend.pojo.dto.shop.OrderStatistics;
+import com.qudiancan.backend.pojo.dto.shop.TableStatistics;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,4 +29,15 @@ public interface StatisticsService {
      * @return 订单统计列表
      */
     List<OrderStatistics> orderStatisticsDay(int accountId, int branchId, LocalDate date);
+
+    /**
+     * 桌台统计（时段）
+     *
+     * @param accountId 账号id
+     * @param branchId  门店id
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @return 桌台统计列表
+     */
+    List<TableStatistics> tableStatisticsPeriod(int accountId, int branchId, LocalDate startDate, LocalDate endDate);
 }

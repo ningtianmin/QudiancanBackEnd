@@ -15,5 +15,6 @@ import java.util.List;
 public class AddProductsVO {
     private Integer orderId;
     private String note;
+    private String cartJson;
     private List<CartVO> cart;
 }

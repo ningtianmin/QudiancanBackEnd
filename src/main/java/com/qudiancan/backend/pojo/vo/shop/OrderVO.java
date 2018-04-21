@@ -17,5 +17,7 @@ public class OrderVO {
     private Integer branchTableId;
     private String note;
     private Integer memberId;
+    private Integer customerNum;
+    private String cartJson;
     private List<CartVO> cart;
 }

@@ -33,6 +33,7 @@ public class OrderDTO {
     private String payMethod;
     private String payStatus;
     private String orderStatus;
+    private Integer customerNum;
     @JsonSerialize(using = JsonTimeStampSerializer.class)
     private Timestamp createTime;
     private String branchName;

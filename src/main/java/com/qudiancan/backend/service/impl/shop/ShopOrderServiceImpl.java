@@ -11,6 +11,7 @@ import com.qudiancan.backend.pojo.vo.shop.AddProductsVO;
 import com.qudiancan.backend.pojo.vo.shop.CartVO;
 import com.qudiancan.backend.pojo.vo.shop.OrderVO;
 import com.qudiancan.backend.repository.*;
+import com.qudiancan.backend.service.shop.ShopBranchService;
 import com.qudiancan.backend.service.shop.ShopOrderService;
 import com.qudiancan.backend.service.shop.ShopTableService;
 import com.qudiancan.backend.service.util.shop.ShopOrderServiceUtil;
@@ -28,6 +29,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -39,6 +41,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ShopOrderServiceImpl implements ShopOrderService {
+    private static final int DEFAULT_CUSTOMER_NUM = 2;
     @Autowired
     private BranchRepository branchRepository;
     @Autowired
@@ -55,6 +58,10 @@ public class ShopOrderServiceImpl implements ShopOrderService {
     private WechatCartService wechatCartService;
     @Autowired
     private ShopTableService shopTableService;
+    @Autowired
+    private ShopBranchService shopBranchService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     @Transactional(rollbackOn = {Exception.class})
@@ -67,7 +74,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         if (Objects.isNull(branchPO)) {
             throw new ShopException(ResponseEnum.PARAM_INVALID, "branchId");
         }
-        if (!ShopBranchStatus.NORMAL.name().equals(branchPO.getStatus())) {
+        if (!ShopBranchStatus.NORMAL.getKey().equals(branchPO.getStatus())) {
             throw new ShopException(ResponseEnum.BRANCH_STATUS_UNUSUAL, branchPO.getStatus());
         }
         List<BranchProductPO> productPOList = branchProductRepository.findByIdIn(orderVO.getCart().stream()
@@ -88,7 +95,7 @@ public class ShopOrderServiceImpl implements ShopOrderService {
             if (Objects.isNull(branchTablePO) || !branchPO.getId().equals(branchTablePO.getBranchId())) {
                 throw new ShopException(ResponseEnum.PARAM_INVALID, "branchTableId");
             }
-            if (!ShopBranchTableStatus.LEISURE.name().equals(branchTablePO.getStatus())) {
+            if (!ShopBranchTableStatus.LEISURE.getKey().equals(branchTablePO.getStatus())) {
                 throw new ShopException(ResponseEnum.BRANCH_TABLE_STATUS_UNUSUAL, branchTablePO.getStatus());
             }
         }
@@ -102,8 +109,8 @@ public class ShopOrderServiceImpl implements ShopOrderService {
         }
 
         // 添加订单
-        BranchOrderPO branchOrderPO = new BranchOrderPO(null, orderVO.getBranchId(), branchPO.getName(), orderVO.getBranchTableId(), orderVO.getMemberId(), KeyUtil.generateOrderNumber(), totalSum.get(), null, null, null,
-                branchTablePO == null ? null : branchTablePO.getName(), orderVO.getNote() == null ? "" : orderVO.getNote(), null, OrderPayStatus.UNPAID.toString(), OrderStatus.NEW.name(), Timestamp.valueOf(LocalDateTime.now()), 2);
+        BranchOrderPO branchOrderPO = new BranchOrderPO(null, orderVO.getBranchId(), branchPO.getName(), orderVO.getBranchTableId(), orderVO.getMemberId(), KeyUtil.generateOrderNumber(), totalSum.get(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                branchTablePO == null ? null : branchTablePO.getName(), orderVO.getNote() == null ? "" : orderVO.getNote(), null, OrderPayStatus.UNPAID.getKey(), OrderStatus.NEW.getKey(), Timestamp.valueOf(LocalDateTime.now()), Objects.isNull(orderVO.getCustomerNum()) ? DEFAULT_CUSTOMER_NUM : orderVO.getCustomerNum());
         BranchOrderPO savedBranchOrderPO = branchOrderRepository.save(branchOrderPO);
 
         // 添加订单产品
@@ -343,6 +350,66 @@ public class ShopOrderServiceImpl implements ShopOrderService {
                 })
                 .sorted(((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void payByCash(Integer accountId, String shopId, Integer branchId, String orderNumber) {
+        log.info("【现金支付订单】orderNumber：{}", orderNumber);
+        if (StringUtils.isEmpty(orderNumber)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE, "orderNumber");
+        }
+        BranchOrderPO branchOrderPO = branchOrderRepository.findByOrderNumber(orderNumber);
+        if (Objects.isNull(branchOrderPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "orderNumber");
+        }
+        if (!OrderStatus.NEW.getKey().equals(branchOrderPO.getOrderStatus()) || !OrderPayStatus.UNPAID.getKey().equals(branchOrderPO.getPayStatus())) {
+            throw new ShopException(ResponseEnum.ORDER_STATUS_UNUSUAL, branchOrderPO.getOrderStatus() + branchOrderPO.getPayStatus());
+        }
+        if (!shopBranchService.canManageBranch(accountId, shopId, branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        branchOrderPO.setPayStatus(OrderPayStatus.PAID.getKey());
+        branchOrderPO.setPayMethod(OrderPayMethod.CASH.getKey());
+        // TODO: 18/04/20 折扣金额和抹零金额依赖于会员中心
+        branchOrderPO.setDiscountSum(BigDecimal.ZERO);
+        BigDecimal chargeSum = branchOrderPO.getTotalSum().setScale(0, RoundingMode.DOWN);
+        branchOrderPO.setWipeSum(branchOrderPO.getTotalSum().subtract(chargeSum));
+        branchOrderPO.setChargeSum(chargeSum);
+        branchOrderRepository.save(branchOrderPO);
+        shopTableService.leisureTable(branchOrderPO.getId());
+    }
+
+    @Override
+    public Page<OrderDTO> pageOrderByBranch(Integer accountId, Integer branchId, Pageable pageable) {
+        log.info("【分页查询订单】accountId：{}，branchId：{}，pageable：{}", accountId, branchId, pageable);
+        if (Objects.isNull(accountId) || Objects.isNull(branchId) || Objects.isNull(pageable)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE);
+        }
+        AccountPO accountPO = accountRepository.findOne(accountId);
+        if (Objects.isNull(accountPO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "accountId");
+        }
+        if (!shopBranchService.canManageBranch(accountId, accountPO.getShopId(), branchId)) {
+            throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
+        }
+        Page<BranchOrderPO> branchOrderPOPage = branchOrderRepository.findByBranchIdOrderByCreateTimeDesc(branchId, pageable);
+        List<OrderProductPO> orderProductPOList = orderProductRepository.findByOrderIdIn(branchOrderPOPage.getContent().stream()
+                .map(BranchOrderPO::getId)
+                .collect(Collectors.toList()));
+        Map<Integer, List<OrderProductPO>> orderProductPOMap = orderProductPOList.stream()
+                .collect(Collectors.groupingBy(OrderProductPO::getOrderId));
+        List<OrderDTO> orderDTOList = branchOrderPOPage.getContent().stream()
+                .map(o -> {
+                    OrderDTO orderDTO = new OrderDTO();
+                    BeanUtils.copyProperties(o, orderDTO);
+                    List<OrderProductPO> orderProductPOS = orderProductPOMap.get(o.getId());
+                    orderProductPOS.sort(Comparator.comparingInt(OrderProductPO::getId));
+                    orderDTO.setOrderProducts(orderProductPOS);
+                    return orderDTO;
+                })
+                .sorted((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime()))
+                .collect(Collectors.toList());
+        return new PageImpl<>(orderDTOList, pageable, branchOrderPOPage.getTotalElements());
     }
 
 }

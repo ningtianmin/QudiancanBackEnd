@@ -56,4 +56,23 @@ public class MerchantStatisticsController {
         map.put("orderStatisticsList", statisticsService.orderStatisticsDay(ShopAccountHolder.get().getId(), branchId, localDate));
         return new ModelAndView("merchants/data/orderStatisticsDay", map);
     }
+
+    @GetMapping("/tableStatistics")
+    public ModelAndView tableStatistics() {
+        return new ModelAndView("merchants/data/tableStatistics");
+    }
+
+    @GetMapping("/tableStatisticsPeriod")
+    public ModelAndView tableStatisticsPeriod(@RequestParam Integer branchId, @RequestParam String datePeriod) {
+        LocalDate startDate, endDate;
+        try {
+            startDate = LocalDate.parse(datePeriod.substring(0, 10), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            endDate = LocalDate.parse(datePeriod.substring(13), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (Exception e) {
+            throw new ShopException(ResponseEnum.SHOP_PARAM_WRONG, "时间格式有误");
+        }
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("tableStatisticsList", statisticsService.tableStatisticsPeriod(ShopAccountHolder.get().getId(), branchId, startDate, endDate));
+        return new ModelAndView("merchants/data/tableStatisticsPeriod", map);
+    }
 }

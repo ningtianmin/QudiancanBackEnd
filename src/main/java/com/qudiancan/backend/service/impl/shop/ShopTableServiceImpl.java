@@ -4,13 +4,17 @@ import com.qudiancan.backend.enums.ResponseEnum;
 import com.qudiancan.backend.enums.StringPairDTO;
 import com.qudiancan.backend.enums.shop.ShopBranchTableStatus;
 import com.qudiancan.backend.exception.ShopException;
+import com.qudiancan.backend.pojo.dto.shop.OrderDTO;
+import com.qudiancan.backend.pojo.dto.wechat.TableOrderDTO;
 import com.qudiancan.backend.pojo.po.BranchTablePO;
 import com.qudiancan.backend.pojo.po.TableCategoryPO;
 import com.qudiancan.backend.pojo.vo.shop.BranchTableVO;
 import com.qudiancan.backend.pojo.vo.shop.TableCategoryVO;
+import com.qudiancan.backend.repository.BranchRepository;
 import com.qudiancan.backend.repository.BranchTableRepository;
 import com.qudiancan.backend.repository.TableCategoryRepository;
 import com.qudiancan.backend.service.shop.ShopBranchService;
+import com.qudiancan.backend.service.shop.ShopOrderService;
 import com.qudiancan.backend.service.shop.ShopTableService;
 import com.qudiancan.backend.service.util.shop.ShopTableServiceUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +41,12 @@ public class ShopTableServiceImpl implements ShopTableService {
     private ShopBranchService shopBranchService;
     @Autowired
     private BranchTableRepository branchTableRepository;
+    @Autowired
+    private ShopTableService shopTableService;
+    @Autowired
+    private BranchRepository branchRepository;
+    @Autowired
+    private ShopOrderService shopOrderService;
 
     @Override
     public TableCategoryPO createTableCategory(Integer accountId, String shopId, Integer branchId, TableCategoryVO tableCategoryVO) {
@@ -193,6 +203,22 @@ public class ShopTableServiceImpl implements ShopTableService {
             throw new ShopException(ResponseEnum.AUTHORITY_NOT_ENOUGH);
         }
         return branchTableRepository.findByBranchId(branchId);
+    }
+
+    @Override
+    public TableOrderDTO getTableOrder(Integer tableId) {
+        if (Objects.isNull(tableId)) {
+            throw new ShopException(ResponseEnum.PARAM_INCOMPLETE, "tableId");
+        }
+        BranchTablePO branchTablePO = shopTableService.getBranchTable(tableId);
+        if (Objects.isNull(branchTablePO)) {
+            throw new ShopException(ResponseEnum.PARAM_INVALID, "tableId");
+        }
+        if (Objects.isNull(branchTablePO.getOrderId())) {
+            return new TableOrderDTO(branchTablePO, null);
+        }
+        OrderDTO orderDTO = shopOrderService.findByOrderId(branchTablePO.getOrderId());
+        return new TableOrderDTO(branchTablePO, orderDTO);
     }
 
 }

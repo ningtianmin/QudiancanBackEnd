@@ -99,7 +99,19 @@ public enum ShopAuthorityEnum {
     /**
      * 账号创建
      */
-    SHOP_ACCOUNT_CREATE(23, "SHOP_ACCOUNT_CREATE");
+    SHOP_ACCOUNT_CREATE(23, "SHOP_ACCOUNT_CREATE"),
+    /**
+     * 收银中心
+     */
+    SHOP_BRANCH_CASHIER(24, "SHOP_BRANCH_CASHIER"),
+    /**
+     * 查看订单
+     */
+    BRANCH_ORDER_SHOW(25, "BRANCH_ORDER_SHOW"),
+    /**
+     * 创建订单
+     */
+    BRANCH_ORDER_CREATE(26, "BRANCH_ORDER_CREATE");
 
     private Integer id;
     private String path;
