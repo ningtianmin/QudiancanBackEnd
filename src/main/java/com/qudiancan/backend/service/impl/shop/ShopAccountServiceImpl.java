@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ShopAccountServiceImpl implements ShopAccountService {
+    public static final String COMMA = ",";
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -56,7 +57,6 @@ public class ShopAccountServiceImpl implements ShopAccountService {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private BranchRepository branchRepository;
-    public static final String COMMA = ",";
     @Autowired
     private RoleRepository roleRepository;
 

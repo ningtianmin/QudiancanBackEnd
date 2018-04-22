@@ -1,7 +1,7 @@
 package com.qudiancan.backend.pojo.po;
 
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +12,7 @@ import java.sql.Timestamp;
  */
 @Entity(name = "Shop")
 @Data
+@DynamicInsert
 public class ShopPO {
     @Id
     private String id;
@@ -22,6 +23,5 @@ public class ShopPO {
     private String telephone;
     private String introduction;
     private String status;
-    @CreatedDate
     private Timestamp createTime;
 }

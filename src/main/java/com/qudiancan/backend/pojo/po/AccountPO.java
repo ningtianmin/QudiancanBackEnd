@@ -3,7 +3,7 @@ package com.qudiancan.backend.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class AccountPO {
     @Id
     @GeneratedValue
@@ -30,6 +31,5 @@ public class AccountPO {
     private String branchIds;
     private String roleIds;
     private String isCreator;
-    @CreatedDate
     private Timestamp createTime;
 }

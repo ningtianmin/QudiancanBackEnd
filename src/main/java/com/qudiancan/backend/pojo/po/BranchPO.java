@@ -3,7 +3,7 @@ package com.qudiancan.backend.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +18,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class BranchPO {
     @Id
     @GeneratedValue
@@ -31,7 +32,6 @@ public class BranchPO {
     private String latitude;
     private String introduction;
     private String status;
-    @CreatedDate
     private Timestamp createTime;
 
     @Override

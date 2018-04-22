@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://106.15.95.97:3306/qudiancan?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username:
+    password:
+  redis:
+      host: 106.15.95.97
+      port: 6379
+      pool:
+        max-active: 500
+        max-idle: 100
+        max-wait: 10000
+  jpa:
+    show-sql: false
+  freemarker:
+    charset: utf-8
+    content-type: text/html
+    request-context-attribute: request
+    template-loader-path: classpath:/templates/
+  mvc:
+    static-path-pattern: /static/**
+  http:
+    multipart:
+      enabled: true
+      location: /tmp
+      max-file-size: 10MB
+      max-request-size: 10MB
+      resolve-lazily: false
+      file-size-threshold: 0KB
+aliyun:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  bucketName: qudiancan
+  accesskeyId:
+  accessKeySecret:
+  smsSignName: 去点餐
+  smsTemplateCode: SMS_125018336
+wechat:
+  appId:
+  appSecret:
+  grantType: authorization_code
+  accessTokenGrantType: client_credential
+  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
+  apiUrl: https://api.weixin.qq.com
+  wxacodeUrl: https://api.weixin.qq.com/wxa/getwxacode
+server:
+  context-path: /qudiancan
+  port: 8080

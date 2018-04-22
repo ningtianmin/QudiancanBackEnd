@@ -8,7 +8,9 @@
 </head>
 <body>
 <div class="layui-container">
-    <div class="layui-row layui-bg-orange"><h1 style="text-align: center;">完善店铺</h1></div>
+    <div class="layui-row"
+         style="font-size: 30px; color: #555555; font-weight: bold; line-height: 60px; text-align: center;">完善店铺
+    </div>
     <div class="layui-form">
         <div class="layui-form-item" style="display: flex;align-items:center;align-self: center;justify-content:center">
             <label class="layui-form-label" for="shopName">店铺名称</label>
