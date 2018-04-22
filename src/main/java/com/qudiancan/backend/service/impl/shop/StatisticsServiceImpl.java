@@ -153,7 +153,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                     chargeSum.divide(new BigDecimal(orderNum), 2), chargeSum.divide(new BigDecimal(customerNum), 2)));
         }
         tableStatisticsList.add(new TableStatistics("合计", totOrderNum, totCustomerNum, totChargeSum,
-                totChargeSum.divide(new BigDecimal(totOrderNum), 2), totChargeSum.divide(new BigDecimal(totCustomerNum), 2)));
+                totChargeSum.divide(new BigDecimal(totOrderNum), 2), totCustomerNum == 0 ? BigDecimal.ZERO : totChargeSum.divide(new BigDecimal(totCustomerNum), 2)));
         return tableStatisticsList;
     }
 
