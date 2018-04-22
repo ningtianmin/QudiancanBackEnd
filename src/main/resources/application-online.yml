@@ -45,3 +45,4 @@ wechat:
   wxacodeUrl: https://api.weixin.qq.com/wxa/getwxacode
 server:
   context-path: /qudiancan
+  port: 8080
