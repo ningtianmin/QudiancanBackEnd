@@ -11,6 +11,7 @@ spring:
         max-active: 500
         max-idle: 100
         max-wait: 10000
+      password:
   jpa:
     show-sql: false
   freemarker:

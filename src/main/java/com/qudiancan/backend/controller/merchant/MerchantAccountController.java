@@ -29,7 +29,7 @@ public class MerchantAccountController {
         return new ModelAndView("merchants/login");
     }
 
-    @GetMapping("constants")
+    @GetMapping("/constants")
     @ResponseBody
     public Response<Map<String, List<StringPairDTO>>> getConstants() {
         return Response.success(CommonUtil.getConstants());
