@@ -1,20 +1,19 @@
 package com.qudiancan.backend.common;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.MultipartFilter;
 
+import javax.servlet.MultipartConfigElement;
+
 /**
  * @author NINGTIANMIN
  */
 @Configuration
 public class MultipartResolverConfig {
-
-    @Autowired
-    private AliyunConfig aliyunConfig;
 
     @Bean
     public CommonsMultipartResolver multipartResolver() {
@@ -31,4 +30,11 @@ public class MultipartResolverConfig {
         return multipartFilter;
     }
 
+    @Bean
+    MultipartConfigElement multipartConfigElement() {
+        // 不添加location会导致部署在阿里云上的项目无法接收到layui上传的图片
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setLocation("d:/tmp");
+        return factory.createMultipartConfig();
+    }
 }

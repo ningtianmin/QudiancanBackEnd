@@ -163,7 +163,8 @@ public class ShopProductController {
      * @throws IOException 文件找不到
      */
     @PostMapping("/uploadImage")
-    public Response uploadImage(@RequestParam MultipartFile file) throws IOException {
+    public Response uploadImage(@RequestParam(required = false) MultipartFile file) throws IOException {
+        // required = true会导致部署在阿里云上的项目无法接收到layui上传的图片
         OSSClient ossClient = new OSSClient(aliyunConfig.getEndpoint(), aliyunConfig.getAccesskeyId(), aliyunConfig.getAccessKeySecret());
         String imageName = KeyUtil.genImageKey() + ".jpg";
         ossClient.putObject(aliyunConfig.getBucketName(), imageName, file.getInputStream());
