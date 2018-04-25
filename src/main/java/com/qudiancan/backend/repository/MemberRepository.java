@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface MemberRepository extends JpaRepository<MemberPO, Integer> {
     /**
-     * 通过店铺id和openid获取会员
+     * 通过餐厅id和openid获取会员
      *
-     * @param shopId 店铺id
+     * @param shopId 餐厅id
      * @param openid openid
      * @return 会员
      */

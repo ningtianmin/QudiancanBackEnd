@@ -10,7 +10,7 @@
 <div class="layui-container" style="width: 100%; padding: 10px;">
     <div class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label" for="shopId">店铺id</label>
+            <label class="layui-form-label" for="shopId">餐厅id</label>
             <div class="layui-input-inline">
                 <input disabled type="text" class="layui-input" name="shopId" id="shopId"
                        value="${(accountInfo.shopId)!}">

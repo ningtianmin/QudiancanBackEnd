@@ -54,10 +54,10 @@
             <p class="layui-input-inline" style="color: red;width: 5px"></p>
         </div>
         <div class="layui-form-item" style="display: flex; align-items: center; justify-content: center">
-            <label class="layui-form-label" for="shopId">店铺id</label>
+            <label class="layui-form-label" for="shopId">餐厅id</label>
             <div class="layui-input-inline">
                 <input type="text" name="shopId" id="shopId" lay-verify="required|shopId" lay-verType="tips"
-                       placeholder="请输入店铺id" autocomplete="off" class="layui-input">
+                       placeholder="请输入餐厅id" autocomplete="off" class="layui-input">
             </div>
             <p class="layui-input-inline" style="color: red;width: 5px;">*</p>
         </div>
@@ -99,7 +99,7 @@
                     return '确认密码与密码不一致';
                 }
             },
-            shopId: [/^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, '店铺id为字母开头的3位到16位字符'],
+            shopId: [/^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, '餐厅id为字母开头的3位到16位字符'],
             password: [/^[a-zA-Z0-9?.-_]{6,16}$/, '密码为6位到16位字符']
         });
         form.on('submit(register)', function (data) {

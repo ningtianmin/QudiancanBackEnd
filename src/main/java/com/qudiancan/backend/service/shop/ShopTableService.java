@@ -17,7 +17,7 @@ public interface ShopTableService {
      * 创建桌台类型
      *
      * @param accountId       账户id
-     * @param shopId          店铺id
+     * @param shopId          餐厅id
      * @param branchId        门店id
      * @param tableCategoryVO 桌台类型信息
      * @return 创建的桌台类型
@@ -28,7 +28,7 @@ public interface ShopTableService {
      * 获取桌台类型列表
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 获取的桌台类型列表
      */
@@ -38,7 +38,7 @@ public interface ShopTableService {
      * 更新桌台类型
      *
      * @param accountId       账户id
-     * @param shopId          店铺id
+     * @param shopId          餐厅id
      * @param branchId        门店id
      * @param tableCategoryId 桌台类型id
      * @param tableCategoryVO 桌台类型信息
@@ -50,7 +50,7 @@ public interface ShopTableService {
      * 创建桌台
      *
      * @param accountId     账户id
-     * @param shopId        店铺id
+     * @param shopId        餐厅id
      * @param branchId      门店id
      * @param branchTableVO 桌台信息
      * @return 创建的桌台
@@ -61,7 +61,7 @@ public interface ShopTableService {
      * 获取桌台
      *
      * @param accountId     账户id
-     * @param shopId        店铺id
+     * @param shopId        餐厅id
      * @param branchId      门店id
      * @param branchTableId 桌台id
      * @return 获取的桌台
@@ -72,7 +72,7 @@ public interface ShopTableService {
      * 更新桌台
      *
      * @param accountId     账户id
-     * @param shopId        店铺id
+     * @param shopId        餐厅id
      * @param branchId      门店id
      * @param branchTableId 桌台id
      * @param branchTableVO 桌台信息
@@ -99,7 +99,7 @@ public interface ShopTableService {
      * 获取门店桌台类目列表
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 桌台类目列表
      */
@@ -109,7 +109,7 @@ public interface ShopTableService {
      * 获取门店桌台列表
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 桌台列表
      */

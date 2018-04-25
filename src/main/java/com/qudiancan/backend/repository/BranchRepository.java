@@ -19,17 +19,17 @@ public interface BranchRepository extends JpaRepository<BranchPO, Integer> {
     BranchPO findByName(String name);
 
     /**
-     * 通过店铺id获取门店列表
+     * 通过餐厅id获取门店列表
      *
-     * @param shopId 店铺id
+     * @param shopId 餐厅id
      * @return 门店列表
      */
     List<BranchPO> findByShopId(String shopId);
 
     /**
-     * 通过店铺id查询第一个门店
+     * 通过餐厅id查询第一个门店
      *
-     * @param shopId 店铺id
+     * @param shopId 餐厅id
      * @return 门店
      */
     BranchPO findFirstByShopId(String shopId);

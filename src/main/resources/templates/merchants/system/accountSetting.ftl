@@ -15,14 +15,14 @@
     <table class="layui-table">
         <thead class="layui-table-header">
         <tr>
-            <td>店铺id</td>
+            <td>餐厅id</td>
             <td>登录id</td>
             <td>名称</td>
             <td>邮箱</td>
             <td>手机号</td>
             <td>所属门店</td>
             <td>所属角色</td>
-            <td>是否店铺创建者</td>
+            <td>是否餐厅创建者</td>
             <td>创建时间</td>
         </tr>
         </thead>

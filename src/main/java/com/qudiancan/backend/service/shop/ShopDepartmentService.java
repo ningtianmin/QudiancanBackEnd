@@ -15,7 +15,7 @@ public interface ShopDepartmentService {
      * 创建出品部门
      *
      * @param accountId    账户id
-     * @param shopId       店铺id
+     * @param shopId       餐厅id
      * @param branchId     门店id
      * @param departmentVO 出品部门信息
      * @return 创建的出品部门
@@ -26,7 +26,7 @@ public interface ShopDepartmentService {
      * 获取出品部门
      *
      * @param accountId    账户id
-     * @param shopId       店铺id
+     * @param shopId       餐厅id
      * @param branchId     门店id
      * @param departmentId 出品部门id
      * @return 获取的出品部门
@@ -37,7 +37,7 @@ public interface ShopDepartmentService {
      * 更新出品部门
      *
      * @param accountId    账户id
-     * @param shopId       店铺id
+     * @param shopId       餐厅id
      * @param branchId     门店id
      * @param departmentId 出品部门id
      * @param departmentVO 出品部门信息
@@ -49,7 +49,7 @@ public interface ShopDepartmentService {
      * 获取出品部门列表
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 出品部门列表
      */
@@ -59,7 +59,7 @@ public interface ShopDepartmentService {
      * 获取门店的出品部门枚举
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 出品部门枚举
      */

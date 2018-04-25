@@ -78,7 +78,7 @@
                     <a href="javascript:;">系统中心</a>
                     <dl class="layui-nav-child">
                         <dd style="text-align: center"><a href="javascript:;"
-                                                          onclick="changeMainBody('/merchants/shopSetting')">店铺设置</a>
+                                                          onclick="changeMainBody('/merchants/shopSetting')">餐厅设置</a>
                         </dd>
                         <dd style="text-align: center"><a href="javascript:;"
                                                           onclick="changeMainBody('/merchants/branchSetting?branchId=${currentBranchId}')">门店设置</a>
@@ -100,7 +100,7 @@
     </div>
 </div>
 <#else>
-<button class="layui-btn layui-bg-green" onclick="perfectShopSkip()">前去完善店铺信息</button>
+<button class="layui-btn layui-bg-green" onclick="perfectShopSkip()">前去完善餐厅信息</button>
 </#if>
 
 <!--layui script-->

@@ -4,19 +4,19 @@
     <link rel="stylesheet" href="${basePath!}/static/layui/css/layui.css">
     <script src="${basePath!}/static/jquery-3.3.1.min.js"></script>
     <script src="${basePath!}/static/layui/layui.js"></script>
-    <title>完善店铺</title>
+    <title>完善餐厅</title>
 </head>
 <body>
 <div class="layui-container">
     <div class="layui-row"
-         style="font-size: 30px; color: #555555; font-weight: bold; line-height: 60px; text-align: center;">完善店铺
+         style="font-size: 30px; color: #555555; font-weight: bold; line-height: 60px; text-align: center;">完善餐厅
     </div>
     <div class="layui-form">
         <div class="layui-form-item" style="display: flex;align-items:center;align-self: center;justify-content:center">
-            <label class="layui-form-label" for="shopName">店铺名称</label>
+            <label class="layui-form-label" for="shopName">餐厅名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="shopName" name="shopName" lay-verify="required|shopName" lay-verType="tips"
-                       placeholder="请输入店铺名称" autocomplete="off" class="layui-input">
+                       placeholder="请输入餐厅名称" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item"
@@ -47,12 +47,12 @@
             </div>
         </div>
         <div class="layui-form-item" style="display: flex; align-items: center; justify-content: center">
-            <label class="layui-form-label" for="shopIntroduction">店铺介绍</label>
+            <label class="layui-form-label" for="shopIntroduction">餐厅介绍</label>
             <div class=" layui-input-inline">
                 <input type="text" name="shopIntroduction" id="shopIntroduction"
                        lay-verify="required|shopIntroduction"
                        lay-verType="tips"
-                       placeholder="请输入店铺介绍" autocomplete="off" class="layui-input">
+                       placeholder="请输入餐厅介绍" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" style="display: flex; align-items: center; justify-content: center">
@@ -124,7 +124,7 @@
         </div>
         <div class="layui-form-item" style="display: flex;align-items: center; justify-content: center">
             <div class="layui-form-label">
-                <button class="layui-btn layui-bg-orange" lay-submit lay-filter="perfect">完善店铺</button>
+                <button class="layui-btn layui-bg-orange" lay-submit lay-filter="perfect">完善餐厅</button>
             </div>
             <div class="layui-form-label">
                 <button class="layui-btn layui-bg-green"><a href="${basePath!}/merchants/login">登录账户</a></button>

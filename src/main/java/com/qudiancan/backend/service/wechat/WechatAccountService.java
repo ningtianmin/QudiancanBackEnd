@@ -23,7 +23,7 @@ public interface WechatAccountService {
     String getAccessToken(String appid, String secret);
 
     /**
-     * 成为店铺会员
+     * 成为餐厅会员
      *
      * @param branchId 门店id
      * @param openid   微信用户openid

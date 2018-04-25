@@ -51,7 +51,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopPO getShop(Integer accountId, String shopId) {
-        log.info("[获取店铺]accountId:{},shopId:{}", accountId, shopId);
+        log.info("[获取餐厅]accountId:{},shopId:{}", accountId, shopId);
         if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId");
         }
@@ -67,7 +67,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ShopPO updateShop(Integer accountId, String shopId, ShopVO shopVO, Set<String> fieldNames) {
-        log.info("[更新店铺]accountId:{},shopId:{},shopVO:{}", accountId, shopId, shopVO);
+        log.info("[更新餐厅]accountId:{},shopId:{},shopVO:{}", accountId, shopId, shopVO);
         if (Objects.isNull(accountId) || StringUtils.isEmpty(shopId) || Objects.isNull(shopVO)) {
             throw new ShopException(ResponseEnum.SHOP_INCOMPLETE_PARAM, "accountId,shopId, shopVO");
         }
@@ -87,7 +87,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     @Transactional(rollbackOn = {Exception.class})
     public BranchPO perfectShop(Integer accountId, PerfectShopVO perfectShopVO) {
-        log.info("【完善店铺】accountId：{}，perfectShopVO：{}", accountId, perfectShopVO);
+        log.info("【完善餐厅】accountId：{}，perfectShopVO：{}", accountId, perfectShopVO);
         if (Objects.isNull(accountId)) {
             throw new ShopException(ResponseEnum.PARAM_INCOMPLETE, "accountId");
         }

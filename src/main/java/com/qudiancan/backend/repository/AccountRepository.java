@@ -18,9 +18,9 @@ public interface AccountRepository extends JpaRepository<AccountPO, Integer> {
     AccountPO findByPhone(String phone);
 
     /**
-     * 通过店铺id,登录id,密码查找账户
+     * 通过餐厅id,登录id,密码查找账户
      *
-     * @param shopId   店铺id
+     * @param shopId   餐厅id
      * @param loginId  登录id
      * @param password 密码
      * @return 账户
@@ -28,9 +28,9 @@ public interface AccountRepository extends JpaRepository<AccountPO, Integer> {
     AccountPO findByShopIdAndLoginIdAndPassword(String shopId, String loginId, String password);
 
     /**
-     * 通过店铺id查询账户列表
+     * 通过餐厅id查询账户列表
      *
-     * @param shopId 店铺id
+     * @param shopId 餐厅id
      * @return 账户列表
      */
     List<AccountPO> findByShopId(String shopId);

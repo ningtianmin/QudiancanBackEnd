@@ -41,10 +41,10 @@ public class ShopController {
     private RoleService roleService;
 
     /**
-     * 获取店铺
+     * 获取餐厅
      *
-     * @param shopId 店铺id
-     * @return 获取的店铺
+     * @param shopId 餐厅id
+     * @return 获取的餐厅
      */
     @GetMapping("/{shopId}")
     @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_SHOP_SHOW)
@@ -53,10 +53,10 @@ public class ShopController {
     }
 
     /**
-     * 更新店铺
+     * 更新餐厅
      *
-     * @param shopVO 店铺信息
-     * @return 更新后的店铺
+     * @param shopVO 餐厅信息
+     * @return 更新后的餐厅
      */
     @PostMapping("/{shopId}")
     @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_SHOP_UPDATE)
@@ -71,10 +71,10 @@ public class ShopController {
     }
 
     /**
-     * 更新店铺名和介绍
+     * 更新餐厅名和介绍
      *
-     * @param shopVO 店铺信息
-     * @return 更新后的店铺
+     * @param shopVO 餐厅信息
+     * @return 更新后的餐厅
      */
     @PostMapping("/{shopId}/nameIntroductionUpdate")
     @ShopRequiredAuthority(ShopAuthorityEnum.SHOP_SHOP_UPDATE)
@@ -93,9 +93,9 @@ public class ShopController {
     }
 
     /**
-     * 完善店铺
+     * 完善餐厅
      *
-     * @param perfectShopVO 店铺和第一个门店信息
+     * @param perfectShopVO 餐厅和第一个门店信息
      * @return 请求状态
      */
     @PostMapping("/perfect")

@@ -14,7 +14,7 @@ public interface ShopBranchService {
      * 判断是否可以管理指定门店
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 可以:true,不可以:false
      */
@@ -24,7 +24,7 @@ public interface ShopBranchService {
      * 创建门店
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchVO  门店信息
      * @return 创建的门店
      */
@@ -34,7 +34,7 @@ public interface ShopBranchService {
      * 更新门店
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @param branchVO  门店信息
      * @return 更新后的门店
@@ -45,7 +45,7 @@ public interface ShopBranchService {
      * 获取门店
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @param branchId  门店id
      * @return 获取的门店
      */
@@ -55,7 +55,7 @@ public interface ShopBranchService {
      * 获取门店列表
      *
      * @param accountId 账户id
-     * @param shopId    店铺id
+     * @param shopId    餐厅id
      * @return 获取的门店列表
      */
     List<BranchPO> listBranch(Integer accountId, String shopId);

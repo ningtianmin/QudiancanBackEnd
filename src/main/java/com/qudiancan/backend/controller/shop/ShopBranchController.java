@@ -39,7 +39,7 @@ public class ShopBranchController {
     /**
      * 更新门店
      *
-     * @param shopId   店铺id
+     * @param shopId   餐厅id
      * @param branchId 门店id
      * @param branchVO 门店信息
      * @return 更新后的门店
@@ -53,7 +53,7 @@ public class ShopBranchController {
     /**
      * 获取门店
      *
-     * @param shopId   店铺id
+     * @param shopId   餐厅id
      * @param branchId 门店id
      * @return 获取的门店
      */
@@ -66,7 +66,7 @@ public class ShopBranchController {
     /**
      * 获取门店列表
      *
-     * @param shopId 店铺id
+     * @param shopId 餐厅id
      * @return 获取的门店列表
      */
     @GetMapping("/{shopId}/branches")

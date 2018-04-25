@@ -9,11 +9,11 @@ import lombok.Getter;
 public enum ShopAuthorityEnum {
 
     /**
-     * 查看店铺
+     * 查看餐厅
      */
     SHOP_SHOP_SHOW(1, "SHOP_SHOP_SHOW"),
     /**
-     * 更新店铺
+     * 更新餐厅
      */
     SHOP_SHOP_UPDATE(2, "SHOP_SHOP_UPDATE"),
     /**

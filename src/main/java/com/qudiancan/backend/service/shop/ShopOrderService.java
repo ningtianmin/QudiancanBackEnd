@@ -89,7 +89,7 @@ public interface ShopOrderService {
      * 现金支付订单
      *
      * @param accountId   账户id
-     * @param shopId      店铺id
+     * @param shopId      餐厅id
      * @param branchId    门店id
      * @param orderNumber 订单编号
      */

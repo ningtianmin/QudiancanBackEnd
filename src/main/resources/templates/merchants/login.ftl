@@ -13,17 +13,17 @@
     </div>
     <div class="layui-form">
         <div class="layui-form-item" style="display: flex; justify-content: center">
-            <label class="layui-form-label" for="shopId">店铺id</label>
+            <label class="layui-form-label" for="shopId">餐厅id</label>
             <div class="layui-input-inline">
                 <input type="text" name="shopId" id="shopId" lay-verify="required|shopId" lay-verType="tips"
-                       placeholder="请输入店铺id" autocomplete="off" class="layui-input">
+                       placeholder="请输入餐厅id" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" style="display: flex; justify-content: center">
             <label class="layui-form-label" for="loginId">登录id</label>
             <div class="layui-input-inline">
                 <input type="text" name="loginId" id="loginId" lay-verify="required|loginId" lay-verType="tips"
-                       placeholder="管理员登录id和店铺id一致"
+                       placeholder="管理员登录id和餐厅id一致"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -55,7 +55,7 @@
         var form = layui.form;
         form.verify({
             loginId: [/^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, '登录id为字母开头的3位到16位字符'],
-            shopId: [/^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, '店铺id为字母开头的3位到16位字符'],
+            shopId: [/^[a-zA-Z][a-zA-Z0-9_-]{2,15}$/, '餐厅id为字母开头的3位到16位字符'],
             password: [/^[a-zA-Z0-9?.-_]{6,16}$/, '密码为6位到16位字符']
         });
         form.on('submit(login)', function (data) {

@@ -32,14 +32,14 @@ public class WechatAccountController {
     }
 
     /**
-     * 成为店铺会员
+     * 成为餐厅会员
      *
      * @param branchId 门店id
      * @param openid   微信用户openid
      */
     @PostMapping("/beShopMember")
     public Response beShopMember(Integer branchId, String openid) {
-        log.info("【成为店铺会员】branchId：{}，openid：{}", branchId, openid);
+        log.info("【成为餐厅会员】branchId：{}，openid：{}", branchId, openid);
         wechatAccountService.beShopMember(branchId, openid);
         return Response.success();
     }

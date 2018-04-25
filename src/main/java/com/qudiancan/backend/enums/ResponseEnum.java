@@ -17,9 +17,9 @@ public enum ResponseEnum {
      */
     FAILURE(-1, "FAILURE"),
     /**
-     * 店铺待完善
+     * 餐厅待完善
      */
-    SHOP_REMAIN_PERFECT(1000, "店铺待完善"),
+    SHOP_REMAIN_PERFECT(1000, "餐厅待完善"),
     /**
      * 服务器内部错误
      */
@@ -65,9 +65,9 @@ public enum ResponseEnum {
      */
     SHOP_WRONG_EMAIL_PATTERN(2008, "邮箱格式有误"),
     /**
-     * 该店铺ID被占用
+     * 该餐厅ID被占用
      */
-    SHOP_ID_OCCUPIED(2009, "该店铺ID被占用"),
+    SHOP_ID_OCCUPIED(2009, "该餐厅ID被占用"),
     /**
      * 登录失败
      */

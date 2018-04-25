@@ -10,7 +10,7 @@ public enum ShopRoleEnum {
     /**
      * 管理员
      */
-    SHOP_ADMIN("管理员", "店铺管理员"),
+    SHOP_ADMIN("管理员", "餐厅管理员"),
     /**
      * 店长
      */
